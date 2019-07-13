@@ -1,8 +1,8 @@
 ﻿using System;
-using static M5.Common.Preconditions;
+using static Pineapple.Common.Preconditions;
 // ReSharper disable UnusedMember.Global
 
-namespace M5.Common
+namespace Pineapple.Common
 {
     public struct ShortGuid
     {

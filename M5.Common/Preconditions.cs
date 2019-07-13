@@ -2,12 +2,9 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
 // ReSharper disable UnusedMember.Global
-
-//using System.Runtime.CompilerServices;
-//using System.Threading;
 // ReSharper disable InconsistentNaming
 
-namespace M5.Common
+namespace Pineapple.Common
 {
     public static class Preconditions
     {

@@ -5,7 +5,7 @@ Pineapple is a set of core libraries that includes utilities, primitives, helper
 
 We plan to offer Pineapple in two flavors.
 
-1) A NuGet library downloadable as a .NET Core library known as M5.Common [Available]
+1) A NuGet library downloadable as a .NET Core library known asPineapple.Common [Available]
 2) A Shared Class library of internal classes which can be embedded into your assemblies [Planned]
 
 Initial Release
@@ -17,4 +17,3 @@ Preconditions - A helper class for requirements that must be met when entering a
 Check         - A helper class for checking IsAlive or IsRunning conditions (i.e. network, web, process, etc.)
 
 ShortGuid     - A class that encapsulates a Guid into a shorter textual representation (i.e. 22 vs. 36 characters)
-

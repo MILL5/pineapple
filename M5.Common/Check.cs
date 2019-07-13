@@ -3,11 +3,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using static M5.Common.Preconditions;
-using static M5.Common.Cleanup;
+using static Pineapple.Common.Preconditions;
+using static Pineapple.Common.Cleanup;
 // ReSharper disable UnusedMember.Global
 
-namespace M5.Common
+namespace Pineapple.Common
 {
     public static class Check
     {
