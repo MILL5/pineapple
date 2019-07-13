@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Company>MILL5</Company>
@@ -7,19 +6,25 @@
     <Authors>MILL5</Authors>
     <Copyright>Copyright 2019</Copyright>
     <LangVersion>default</LangVersion>
-    <Description>Pineapple is a set of core libraries that includes utilities, primitives, helper classes and more!  The inspiration for Pineapple comes from Google's Guava framework.
+    <Description>Pineapple is a set of core libraries that includes utilities, primitives, helper classes for .NET!  The inspiration for Pineapple comes from Google's Guava framework.
 </Description>
+    <Title>Pineapple</Title>
     <PackageProjectUrl>https://github.com/MILL5/pineapple</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MILL5/pineapple</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>precondition;check;shortguid;cleanup</PackageTags>
     <PackageReleaseNotes>Initial Release
 
-Cleanup       - A helper class that is meant to improve your error handling by safeguarding your Exception blocks or your Dispose and Finalizer methods.
-Preconditions - A helper class for requirements that must be met when entering a method or property.
-Check         - A helper class for checking IsAlive or IsRunning conditions (i.e. network, web, process, etc.)
-ShortGuid     - A class that encapsulates a Guid into a shorter textual representation (i.e. 22 vs. 36 characters)</PackageReleaseNotes>
+Cleanup, a helper class that is meant to improve your error handling by safeguarding your Exception blocks or your Dispose and Finalizer methods
+
+Preconditions, a helper class for requirements that must be met when entering a method or property.
+
+Check, a helper class for checking IsAlive or IsRunning conditions (i.e. network, web, process, etc.)
+
+ShortGuid, a class that encapsulates a Guid into a shorter textual representation (i.e. 22 vs. 36 characters)</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
