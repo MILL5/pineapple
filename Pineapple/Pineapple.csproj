@@ -13,15 +13,7 @@
     <RepositoryUrl>https://github.com/MILL5/pineapple</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>precondition;check;shortguid;cleanup</PackageTags>
-    <PackageReleaseNotes>Initial Release
-
-Cleanup, a helper class that is meant to improve your error handling by safeguarding your Exception blocks or your Dispose and Finalizer methods
-
-Preconditions, a helper class for requirements that must be met when entering a method or property.
-
-Check, a helper class for checking IsAlive or IsRunning conditions (i.e. network, web, process, etc.)
-
-ShortGuid, a class that encapsulates a Guid into a shorter textual representation (i.e. 22 vs. 36 characters)</PackageReleaseNotes>
+    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
