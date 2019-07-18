@@ -17,7 +17,11 @@ namespace Pineapple.Common
         {
             if (string.IsNullOrWhiteSpace(paramName))
             {
-                ThrowException(new ArgumentNullException(nameof(paramName), $"{nameof(paramName)} cannot be null, empty or whitespace."));
+                var ex = paramName == null
+                    ? new ArgumentNullException(nameof(paramName), $"{nameof(paramName)} cannot be null.")
+                    : new ArgumentException(nameof(paramName), $"{nameof(paramName)} cannot be empty or whitespace.");
+
+                ThrowException(ex);
             }
         }
 
@@ -63,6 +67,20 @@ namespace Pineapple.Common
             }
         }
 
+        public static void CheckIsCondition(string paramName, Func<bool> condition, Func<string> message)
+        {
+            CheckParamName(paramName);
+            CheckIsNotNull(nameof(message), message);
+
+            if (!condition())
+            {
+                var messageToSend = message();
+
+                CheckIsNotNull(nameof(messageToSend), messageToSend);
+                ThrowException(new ArgumentException($"{paramName} {messageToSend}"));
+            }
+        }
+
         public static void CheckIsCondition(string paramName, bool condition, Func<string> message)
         {
             CheckParamName(paramName);
@@ -77,12 +95,37 @@ namespace Pineapple.Common
             }
         }
 
-        public static void CheckIsNotNull(string paramName, string value)        {
+        public static void CheckIsCondition(string paramName, Func<bool> condition, string message)
+        {
+            CheckParamName(paramName);
+            CheckIsNotNull(nameof(message), message);
+
+            if (!condition())
+            {
+                CheckIsNotNull(nameof(message), message);
+                ThrowException(new ArgumentException($"{paramName} {message}"));
+            }
+        }
+
+        public static void CheckIsCondition(string paramName, bool condition, string message)
+        {
+            CheckParamName(paramName);
+            CheckIsNotNull(nameof(message), message);
+
+            if (!condition)
+            {
+                CheckIsNotNull(nameof(message), message);
+                ThrowException(new ArgumentException($"{paramName} {message}"));
+            }
+        }
+
+        public static void CheckIsNotNull(string paramName, string value)
+        {
             CheckParamName(paramName);
 
             if (value == null)
             {
-                ThrowException(new ArgumentException($"{paramName} cannot be null."));
+                ThrowException(new ArgumentNullException($"{paramName} cannot be null."));
             }
         }
 
@@ -92,7 +135,7 @@ namespace Pineapple.Common
 
             if (value == null)
             {
-                ThrowException(new ArgumentException($"{paramName} cannot be null."));
+                ThrowException(new ArgumentNullException($"{paramName} cannot be null."));
             }
         }
 
@@ -147,7 +190,11 @@ namespace Pineapple.Common
             CheckParamName(paramName);
 
             if (string.IsNullOrWhiteSpace(value))
-                ThrowException(new ArgumentNullException(paramName, $"{paramName} cannot be null, empty or whitespace."));
+            {
+                ThrowException(value == null
+                    ? new ArgumentNullException(paramName, $@"{paramName} cannot be null.")
+                    : new ArgumentException(paramName, $"{paramName} cannot be empty or whitespace."));
+            }
         }
 
         public static void CheckIsNotWhitespace(string paramName, string value)
@@ -155,7 +202,9 @@ namespace Pineapple.Common
             CheckParamName(paramName);
 
             if (string.IsNullOrWhiteSpace(value) && value != null)
+            {
                 ThrowException(new ArgumentNullException(paramName, $"{paramName} cannot be empty or whitespace."));
+            }
         }
 
         public static void CheckIsNotEmptyGuid(string paramName, Guid value)

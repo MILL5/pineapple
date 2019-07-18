@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using static Pineapple.Common.Preconditions;
 using static Pineapple.Common.Cleanup;
 // ReSharper disable UnusedMember.Global
 
-namespace Pineapple.Common
+namespace Pineapple.Health
 {
     public static class Check
     {
@@ -20,9 +19,13 @@ namespace Pineapple.Common
 
             try
             {
-                if (procs.Any(p => p.ProcessName.Contains(processName)))
+                foreach (var p in procs)
                 {
-                    isRunning = true;
+                    if (p.ProcessName.Contains(processName))
+                    {
+                        isRunning = true;
+                        break;
+                    }
                 }
             }
             finally
@@ -63,8 +66,10 @@ namespace Pineapple.Common
             return isAvailable;
         }
 
-        public static bool IsUrlAvailable(string url, int timeoutInMs)
+        public static bool IsUrlAvailable(this Uri url, int timeoutInMs)
         {
+            CheckIsNotLessThanOrEqualTo(nameof(timeoutInMs), timeoutInMs, 0);
+
             var isAvailable = false;
 
             try
@@ -81,6 +86,13 @@ namespace Pineapple.Common
             }
 
             return isAvailable;
+        }
+
+        public static bool IsUrlAvailable(string url, int timeoutInMs)
+        {
+            CheckIsWellFormedUri(nameof(url), url);
+
+            return new Uri(url).IsUrlAvailable(timeoutInMs);
         }
     }
 }
