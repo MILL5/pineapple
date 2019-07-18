@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using static Pineapple.Common.Preconditions;
 
 namespace Pineapple.Threading
 {
