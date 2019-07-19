@@ -48,7 +48,7 @@ namespace Pineapple.Common
             {
                 var messageToSend = message();
 
-                CheckIsNotNull(nameof(messageToSend), messageToSend);
+                CheckIsNotNullOrWhitespace(nameof(messageToSend), messageToSend);
                 ThrowException(new ArgumentException($"{paramName} {messageToSend}"));
             }
         }
@@ -62,8 +62,30 @@ namespace Pineapple.Common
             {
                 var messageToSend = message();
 
-                CheckIsNotNull(nameof(messageToSend), messageToSend);
+                CheckIsNotNullOrWhitespace(nameof(messageToSend), messageToSend);
                 ThrowException(new ArgumentException($"{paramName} {messageToSend}"));
+            }
+        }
+
+        public static void CheckIsNotCondition(string paramName, Func<bool> condition, string message)
+        {
+            CheckParamName(paramName);
+            CheckIsNotNullOrWhitespace(nameof(message), message);
+
+            if (condition())
+            {
+                ThrowException(new ArgumentException($"{paramName} {message}"));
+            }
+        }
+
+        public static void CheckIsNotCondition(string paramName, bool condition, string message)
+        {
+            CheckParamName(paramName);
+            CheckIsNotNullOrWhitespace(nameof(message), message);
+
+            if (condition)
+            {
+                ThrowException(new ArgumentException($"{paramName} {message}"));
             }
         }
 

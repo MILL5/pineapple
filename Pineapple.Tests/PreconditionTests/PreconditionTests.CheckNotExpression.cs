@@ -20,10 +20,10 @@ namespace Pineapple.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsNotConditionTrueNullMessageTest()
         {
-            CheckIsNotCondition(nameof(SomeString), true, null);
+            CheckIsNotCondition(nameof(SomeString), true, "Some condition was not met.");
         }
 
         [TestMethod]
