@@ -6,6 +6,8 @@
     <IsPackable>false</IsPackable>
 
     <LangVersion>8.0</LangVersion>
+
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
