@@ -268,7 +268,28 @@ namespace Pineapple.Common
                 ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be greater than {greaterThanThis}. Value: {value}"));
         }
 
-        public static void CheckIsNotLessThan(string paramName, int value, int lessThanThis)
+		public static void CheckIsNotGreaterThan(string paramName, ushort value, ushort greaterThanThis)
+		{
+			CheckParamName(paramName);
+			if (value > greaterThanThis)
+				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be greater than {greaterThanThis}. Value: {value}"));
+		}
+
+		public static void CheckIsNotGreaterThan(string paramName, uint value, uint greaterThanThis)
+		{
+			CheckParamName(paramName);
+			if (value > greaterThanThis)
+				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be greater than {greaterThanThis}. Value: {value}"));
+		}
+
+		public static void CheckIsNotGreaterThan(string paramName, ulong value, ulong greaterThanThis)
+		{
+			CheckParamName(paramName);
+			if (value > greaterThanThis)
+				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be greater than {greaterThanThis}. Value: {value}"));
+		}
+
+		public static void CheckIsNotLessThan(string paramName, int value, int lessThanThis)
         {
             CheckParamName(paramName);
 
@@ -283,7 +304,30 @@ namespace Pineapple.Common
                 ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be less than {lessThanThis}. Value: {value}"));
         }
 
-        public static void CheckIsNotLessThanOrEqualTo(string paramName, int value, int lessThanOrEqualToThis)
+		public static void CheckIsNotLessThan(string paramName, ushort value, ushort lessThanThis)
+		{
+			CheckParamName(paramName);
+
+			if (value < lessThanThis)
+				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be less than {lessThanThis}. Value: {value}"));
+		}
+
+		public static void CheckIsNotLessThan(string paramName, uint value, uint lessThanThis)
+		{
+			CheckParamName(paramName);
+
+			if (value < lessThanThis)
+				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be less than {lessThanThis}. Value: {value}"));
+		}
+
+		public static void CheckIsNotLessThan(string paramName, ulong value, ulong lessThanThis)
+		{
+			CheckParamName(paramName);
+			if (value < lessThanThis)
+				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be less than {lessThanThis}. Value: {value}"));
+		}
+
+		public static void CheckIsNotLessThanOrEqualTo(string paramName, int value, int lessThanOrEqualToThis)
         {
             CheckParamName(paramName);
 
@@ -299,7 +343,31 @@ namespace Pineapple.Common
                 ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be less than or equal to {lessThanOrEqualToThis}. Value: {value}"));
         }
 
-        public static void CheckIsNotNegative(string paramName, int value)
+		public static void CheckIsNotLessThanOrEqualTo(string paramName, ushort value, ushort lessThanOrEqualToThis)
+		{
+			CheckParamName(paramName);
+
+			if (value <= lessThanOrEqualToThis)
+				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be less than or equal to {lessThanOrEqualToThis}. Value: {value}"));
+		}
+
+		public static void CheckIsNotLessThanOrEqualTo(string paramName, uint value, uint lessThanOrEqualToThis)
+		{
+			CheckParamName(paramName);
+
+			if (value <= lessThanOrEqualToThis)
+				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be less than or equal to {lessThanOrEqualToThis}. Value: {value}"));
+		}
+
+		public static void CheckIsNotLessThanOrEqualTo(string paramName, ulong value, ulong lessThanOrEqualToThis)
+		{
+			CheckParamName(paramName);
+
+			if (value <= lessThanOrEqualToThis)
+				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be less than or equal to {lessThanOrEqualToThis}. Value: {value}"));
+		}
+
+		public static void CheckIsNotNegative(string paramName, int value)
         {
             CheckParamName(paramName);
 
@@ -307,7 +375,15 @@ namespace Pineapple.Common
                 ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be negative. Value: {value}"));
         }
 
-        public static void CheckIsWellFormedUri(string paramName, string value, UriKind uriKind = UriKind.Absolute)
+		public static void CheckIsNotNegative(string paramName, long value)
+		{
+			CheckParamName(paramName);
+
+			if (value < 0)
+				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be negative. Value: {value}"));
+		}
+
+		public static void CheckIsWellFormedUri(string paramName, string value, UriKind uriKind = UriKind.Absolute)
         {
             CheckParamName(paramName);
 
