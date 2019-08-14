@@ -8,7 +8,7 @@ namespace Pineapple.Diagnostics
 {
     public class ConsoleColorScope : IDisposable
     {
-        private ConsoleColor _savedColor;
+        private readonly ConsoleColor _savedColor;
 
         public ConsoleColorScope(ConsoleColor consoleColor)
         {
