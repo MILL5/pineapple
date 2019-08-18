@@ -40,16 +40,11 @@ namespace Pineapple.Diagnostics
             if (!_isEnabled)
                 return;
 
-            TimeSpan ts;
-
             SafeMethod(() =>
             {
                 _sw.Stop();
-                ts = _sw.Elapsed;
-            })
-            .Continue(_loggingScope.Dispose)
-            .Continue(() =>
-            {
+                var ts = _sw.Elapsed;
+                _loggingScope.Dispose();
                 _logger.LogDebug($@"Operation [{_operationName}] called from [{_memberName}] took {ts.TotalMilliseconds:0.00}ms");
             }); 
         }
