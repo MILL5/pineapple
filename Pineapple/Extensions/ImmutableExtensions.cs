@@ -10,11 +10,13 @@ namespace Pineapple.Extensions
     {
         public static IImmutableList<T> Append<T>(this IImmutableList<T> list, T appendThis) where T : class
         {
-            CheckIsNotNull(nameof(list), list);
-
             var b = ImmutableList.CreateBuilder<T>();
 
-            b.AddRange(list);
+            if (list != null)
+            {
+                b.AddRange(list);
+            }
+
             b.Add(appendThis);
 
             return b.ToImmutable();
@@ -22,11 +24,13 @@ namespace Pineapple.Extensions
 
         public static IImmutableList<T> Append<T>(this IImmutableList<T> list, IEnumerable<T> appendThis) where T : class
         {
-            CheckIsNotNull(nameof(list), list);
-
             var b = ImmutableList.CreateBuilder<T>();
 
-            b.AddRange(list);
+            if (list != null)
+            {
+                b.AddRange(list);
+            }
+
             b.AddRange(appendThis);
 
             return b.ToImmutable();
