@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-using static Pineapple.Common.Preconditions;
-
 namespace Pineapple.Extensions
 {
     public static class ImmutableExtensions
@@ -35,5 +33,25 @@ namespace Pineapple.Extensions
 
             return b.ToImmutable();
         }
-    }
+
+        public static IImmutableDictionary<TKey, TValue> Append<TKey, TValue>(this IImmutableDictionary<TKey, TValue> dict, TKey key, TValue appendThis)
+                where TKey : class
+                where TValue : class
+        {
+
+            if (dict != null && dict.ContainsKey(key))
+                throw new ArgumentException("An element with the same key already exists.");
+
+            var b = ImmutableDictionary.CreateBuilder<TKey, TValue>();
+
+            if (dict != null)
+            {
+                b.AddRange(dict);
+            }
+
+            b.Add(key, appendThis);
+
+            return b.ToImmutable();
+        }
+   }
 }
