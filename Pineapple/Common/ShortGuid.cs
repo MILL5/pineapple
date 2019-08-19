@@ -124,6 +124,30 @@ namespace Pineapple.Common
             return Encode(guid);
         }
 
+        public static bool TryParse(string input, out Guid guid)
+        {
+            const int size = 22;
+
+            if (Guid.TryParse(input, out guid))
+            {
+                return true;
+            }
+
+            if (input.Length == size)
+            {
+                try
+                {
+                    guid = Decode(input);
+                    return true;
+                }
+                catch
+                {
+                }
+            }
+
+            return false;
+        }
+
         public static string Encode(Guid guid)
         {
             string encoded = Convert.ToBase64String(guid.ToByteArray());
