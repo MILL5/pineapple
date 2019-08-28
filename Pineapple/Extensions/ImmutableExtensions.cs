@@ -23,7 +23,7 @@ namespace Pineapple.Extensions
         public static IImmutableList<T> Append<T>(this IImmutableList<T> list, IEnumerable<T> appendThis) where T : class
         {
             var b = ImmutableList.CreateBuilder<T>();
-
+            
             if (list != null)
             {
                 b.AddRange(list);

@@ -7,7 +7,7 @@ using static Pineapple.Common.Preconditions;
 
 namespace Pineapple.Data
 {
-    public struct RowVersion
+    public struct RowVersion : IComparable
     {
         private readonly byte[] _rowVersion;
         private ulong? _rowVersionAsUlong;
@@ -62,6 +62,20 @@ namespace Pineapple.Data
             }
 
             return stringBuilder.ToString();
+        }
+
+        public int CompareTo(object obj)
+        {
+            if ((obj == null) || !(obj is RowVersion other))
+                return -1;
+
+            if (this < other)
+                return -1;
+
+            if (this > other)
+                return 1;
+
+            return 0;
         }
 
         public static bool operator ==(RowVersion x, RowVersion y)

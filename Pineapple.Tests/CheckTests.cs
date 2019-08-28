@@ -35,6 +35,12 @@ namespace Pineapple.Tests
         [TestMethod]
         public void CheckIsRunningVisualStudioTest()
         {
+            Assert.IsTrue(Check.IsRunning("devenv"));
+        }
+
+        [TestMethod]
+        public void CheckIsRunningVisualStudioBadNameTest()
+        {
             Assert.IsFalse(Check.IsRunning("devenv.exe"));
         }
 
@@ -49,6 +55,5 @@ namespace Pineapple.Tests
         {
             Assert.IsFalse(Check.IsRunning("not-a-real-process"));
         }
-
     }
 }
