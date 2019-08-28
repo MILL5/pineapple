@@ -289,7 +289,24 @@ namespace Pineapple.Common
 				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be greater than {greaterThanThis}. Value: {value}"));
 		}
 
-		public static void CheckIsNotLessThan(string paramName, int value, int lessThanThis)
+        public static void CheckIsEqualTo(string paramName, int value, int equalToThis)
+        {
+            CheckParamName(paramName);
+
+            if (value != equalToThis)
+                ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} must be equal to {equalToThis}. Value: {value}"));
+        }
+
+        public static void CheckIsNotEqualTo(string paramName, int value, int equalToThis)
+        {
+            CheckParamName(paramName);
+
+            if (value == equalToThis)
+                ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be equal to {equalToThis}. Value: {value}"));
+        }
+
+
+        public static void CheckIsNotLessThan(string paramName, int value, int lessThanThis)
         {
             CheckParamName(paramName);
 

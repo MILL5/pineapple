@@ -33,7 +33,13 @@ namespace Pineapple.Tests
         }
 
         [TestMethod]
-        public void CheckIsRunningTest()
+        public void CheckIsRunningVisualStudioTest()
+        {
+            Assert.IsFalse(Check.IsRunning("devenv.exe"));
+        }
+
+        [TestMethod]
+        public void CheckIsRunningTestConsoleTest()
         {
             Assert.IsTrue(Check.IsRunning("vstest.console"));
         }

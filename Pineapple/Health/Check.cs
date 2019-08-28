@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using static Pineapple.Common.Preconditions;
@@ -15,7 +16,7 @@ namespace Pineapple.Health
             CheckIsNotNullOrWhitespace(nameof(processName), processName);
 
             var isRunning = false;
-            var procs = Process.GetProcesses();
+            var procs = Process.GetProcesses().OrderBy(p => p.ProcessName);
 
             try
             {
