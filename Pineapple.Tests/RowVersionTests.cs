@@ -29,7 +29,7 @@ namespace Pineapple.Tests
         public void RowVersionCompareMin()
         {
             var min = RowVersion.MinValue;
-            var other = new RowVersion(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 });
+            var other = (RowVersion)(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 });
 
             Assert.AreEqual(min, other);
             Assert.IsTrue(min == other);
@@ -44,7 +44,7 @@ namespace Pineapple.Tests
         public void RowVersionCompareMax()
         {
             var max = RowVersion.MaxValue;
-            var other = new RowVersion(new byte[] { 255, 255, 255, 255, 255, 255, 255, 255 });
+            var other = (RowVersion)(new byte[] { 255, 255, 255, 255, 255, 255, 255, 255 });
 
             Assert.AreEqual(max, other);
             Assert.IsTrue(max == other);
@@ -60,7 +60,7 @@ namespace Pineapple.Tests
         {
             var min = RowVersion.MinValue;
             var max = RowVersion.MaxValue;
-            var other = new RowVersion(new byte[] { 255, 4, 255, 4, 255, 4, 255, 4 });
+            var other = (RowVersion)(new byte[] { 255, 4, 255, 4, 255, 4, 255, 4 });
 
             var list = new List<RowVersion> { min, max, other };
 
@@ -80,7 +80,7 @@ namespace Pineapple.Tests
         {
             var min = RowVersion.MinValue;
             var max = RowVersion.MaxValue;
-            var other = new RowVersion(new byte[] { 255, 4, 255, 4, 255, 4, 255, 4 });
+            var other = (RowVersion)(new byte[] { 255, 4, 255, 4, 255, 4, 255, 4 });
 
             var list = new List<RowVersion> { min, max, other };
 

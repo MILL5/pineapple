@@ -1,111 +1,120 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-
-using static Pineapple.Common.Preconditions;
+using System.Diagnostics;
 
 namespace Pineapple.Data
 {
-    public struct RowVersion : IComparable
+    [DebuggerDisplay("{ToString(),nq}")]
+    public struct RowVersion : IComparable, IEquatable<RowVersion>, IComparable<RowVersion>
     {
-        private readonly byte[] _rowVersion;
-        private ulong? _rowVersionAsUlong;
+        private readonly ulong _value;
 
-        public static readonly RowVersion MinValue = new RowVersion(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 });
-        public static readonly RowVersion MaxValue = new RowVersion(new byte[] { 255, 255, 255, 255, 255, 255, 255, 255 });
+        public static readonly RowVersion Zero = default;
+        public static readonly RowVersion MinValue = default;
+        public static readonly RowVersion MaxValue = (RowVersion)(new byte[] { 255, 255, 255, 255, 255, 255, 255, 255 });
 
-        public RowVersion(byte[] rowVersion)
+        private RowVersion(ulong value)
         {
-            CheckIsNotNull(nameof(rowVersion), rowVersion);
-            CheckIsEqualTo(nameof(rowVersion.Length), rowVersion.Length, 8);
-
-            _rowVersion = rowVersion;
-            _rowVersionAsUlong = null;
+            _value = value;
         }
 
-        public byte[] ToByteArray()
+        public static implicit operator RowVersion(ulong value)
         {
-            return _rowVersion;
+            return new RowVersion(value);
         }
 
-        public ulong ToUInt64()
+        public static implicit operator RowVersion(long value)
         {
-            if (_rowVersionAsUlong == null)
-            {
-                _rowVersionAsUlong = BitConverter.ToUInt64(_rowVersion, 0);
-            }
-
-            return _rowVersionAsUlong.Value;
+            return new RowVersion(unchecked((ulong)value));
+        }
+        
+        public static explicit operator RowVersion(byte[] value)
+        {
+            return new RowVersion(((ulong)value[0] << 56) | ((ulong)value[1] << 48) | ((ulong)value[2] << 40) | ((ulong)value[3] << 32) | ((ulong)value[4] << 24) | ((ulong)value[5] << 16) | ((ulong)value[6] << 8) | value[7]);
+        }
+        
+        public static explicit operator RowVersion?(byte[] value)
+        {
+            if (value == null) return null;
+            return new RowVersion(((ulong)value[0] << 56) | ((ulong)value[1] << 48) | ((ulong)value[2] << 40) | ((ulong)value[3] << 32) | ((ulong)value[4] << 24) | ((ulong)value[5] << 16) | ((ulong)value[6] << 8) | value[7]);
+        }
+        
+        public static implicit operator byte[](RowVersion RowVersion)
+        {
+            var r = new byte[8];
+            r[0] = (byte)(RowVersion._value >> 56);
+            r[1] = (byte)(RowVersion._value >> 48);
+            r[2] = (byte)(RowVersion._value >> 40);
+            r[3] = (byte)(RowVersion._value >> 32);
+            r[4] = (byte)(RowVersion._value >> 24);
+            r[5] = (byte)(RowVersion._value >> 16);
+            r[6] = (byte)(RowVersion._value >> 8);
+            r[7] = (byte)RowVersion._value;
+            return r;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is RowVersion other ? other._rowVersion.SequenceEqual(_rowVersion) : false;
+            return obj is RowVersion && Equals((RowVersion)obj);
         }
 
         public override int GetHashCode()
         {
-            return _rowVersion.GetHashCode();
+            return _value.GetHashCode();
         }
 
-        public override string ToString()
+        public bool Equals(RowVersion other)
         {
-            var value = _rowVersion;
-
-            var stringBuilder = new StringBuilder(18);
-            stringBuilder.Append("0x");
-
-            foreach (var @byte in value)
-            {
-                stringBuilder.Append(@byte.ToString("X2", CultureInfo.InvariantCulture));
-            }
-
-            return stringBuilder.ToString();
+            return other._value == _value;
         }
 
-        public int CompareTo(object obj)
+        int IComparable.CompareTo(object obj)
         {
-            if ((obj == null) || !(obj is RowVersion other))
-                return -1;
+            return obj == null ? 1 : CompareTo((RowVersion)obj);
+        }
 
-            if (this < other)
-                return -1;
-
-            if (this > other)
-                return 1;
-
-            return 0;
+        public int CompareTo(RowVersion other)
+        {
+            return _value == other._value ? 0 : _value < other._value ? -1 : 1;
         }
 
         public static bool operator ==(RowVersion x, RowVersion y)
         {
-            return x._rowVersion.SequenceEqual(y._rowVersion);
+            return x.Equals(y);
         }
 
         public static bool operator !=(RowVersion x, RowVersion y)
         {
-            return !x._rowVersion.SequenceEqual(y._rowVersion);
+            return !x.Equals(y);
         }
-
-        public static bool operator >=(RowVersion x, RowVersion y)
-        {
-            return x.ToUInt64() >= y.ToUInt64();
-        }
-
+        
         public static bool operator >(RowVersion x, RowVersion y)
         {
-            return x.ToUInt64() > y.ToUInt64();
+            return x.CompareTo(y) > 0;
         }
-
-        public static bool operator <=(RowVersion x, RowVersion y)
+        
+        public static bool operator >=(RowVersion x, RowVersion y)
         {
-            return x.ToUInt64() <= y.ToUInt64();
+            return x.CompareTo(y) >= 0;
         }
-
+        
         public static bool operator <(RowVersion x, RowVersion y)
         {
-            return x.ToUInt64() < y.ToUInt64();
+            return x.CompareTo(y) < 0;
+        }
+        
+        public static bool operator <=(RowVersion x, RowVersion y)
+        {
+            return x.CompareTo(y) <= 0;
+        }
+
+        public override string ToString()
+        {
+            return _value.ToString("x16");
+        }
+
+        public static RowVersion Max(RowVersion x, RowVersion y)
+        {
+            return x._value < y._value ? y : x;
         }
     }
 }
