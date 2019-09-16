@@ -26,29 +26,41 @@ namespace Pineapple.Data
         {
             return new RowVersion(unchecked((ulong)value));
         }
-        
+
+        private static RowVersion ByteArrayToRowVersion(byte[] value)
+        {
+            if (value.Length == 0) return RowVersion.MinValue;
+
+            if (value.Length == 1 && value[0] == 0) return RowVersion.MinValue;
+
+            return new RowVersion(((ulong)value[0] << 56) | ((ulong)value[1] << 48) | ((ulong)value[2] << 40) | ((ulong)value[3] << 32) | ((ulong)value[4] << 24) | ((ulong)value[5] << 16) | ((ulong)value[6] << 8) | value[7]);
+        }
+
         public static explicit operator RowVersion(byte[] value)
         {
-            return new RowVersion(((ulong)value[0] << 56) | ((ulong)value[1] << 48) | ((ulong)value[2] << 40) | ((ulong)value[3] << 32) | ((ulong)value[4] << 24) | ((ulong)value[5] << 16) | ((ulong)value[6] << 8) | value[7]);
+            return ByteArrayToRowVersion(value);
         }
         
         public static explicit operator RowVersion?(byte[] value)
         {
             if (value == null) return null;
-            return new RowVersion(((ulong)value[0] << 56) | ((ulong)value[1] << 48) | ((ulong)value[2] << 40) | ((ulong)value[3] << 32) | ((ulong)value[4] << 24) | ((ulong)value[5] << 16) | ((ulong)value[6] << 8) | value[7]);
+
+            return ByteArrayToRowVersion(value);
         }
-        
+
         public static implicit operator byte[](RowVersion RowVersion)
         {
+            var value = RowVersion._value;
+
             var r = new byte[8];
-            r[0] = (byte)(RowVersion._value >> 56);
-            r[1] = (byte)(RowVersion._value >> 48);
-            r[2] = (byte)(RowVersion._value >> 40);
-            r[3] = (byte)(RowVersion._value >> 32);
-            r[4] = (byte)(RowVersion._value >> 24);
-            r[5] = (byte)(RowVersion._value >> 16);
-            r[6] = (byte)(RowVersion._value >> 8);
-            r[7] = (byte)RowVersion._value;
+            r[0] = (byte)(value >> 56);
+            r[1] = (byte)(value >> 48);
+            r[2] = (byte)(value >> 40);
+            r[3] = (byte)(value >> 32);
+            r[4] = (byte)(value >> 24);
+            r[5] = (byte)(value >> 16);
+            r[6] = (byte)(value >> 8);
+            r[7] = (byte)value;
             return r;
         }
 

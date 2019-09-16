@@ -4,7 +4,7 @@ using System.Linq;
 
 using static Pineapple.Common.Preconditions;
 
-namespace Pineapple.Data
+namespace Pineapple.Common
 {
     public static class GuidExtensions
     {
