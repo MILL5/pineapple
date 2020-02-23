@@ -26,7 +26,7 @@ namespace Pineapple.Common
                 }
                 else
                 {
-                    _guid = Decode(value);
+                    _guid = DecodeShortGuidString(value);
                     _shortGuid = value;
                 }
             }
@@ -126,6 +126,9 @@ namespace Pineapple.Common
 
         public static bool TryParse(string input, out Guid guid)
         {
+            if (input == null)
+                return false;
+
             const int size = 22;
 
             if (Guid.TryParse(input, out guid))
@@ -159,6 +162,21 @@ namespace Pineapple.Common
             return encoded.Substring(0, 22);
         }
 
+        private static Guid DecodeShortGuidString(string value)
+        {
+            if (value.Length != 22)
+                throw new ArgumentOutOfRangeException("Value is not the length of a ShortGuid.");
+
+            value = value
+              .Replace("_", "/")
+              .Replace("-", "+");
+
+            var decodeThis = $@"{value}==";
+            byte[] buffer = Convert.FromBase64String(decodeThis);
+
+            return new Guid(buffer);
+        }
+
         public static Guid Decode(string value)
         {
             CheckIsNotNullOrWhitespace(nameof(value), value);
@@ -168,13 +186,7 @@ namespace Pineapple.Common
                 return g;
             }
 
-            value = value
-              .Replace("_", "/")
-              .Replace("-", "+");
-
-            byte[] buffer = Convert.FromBase64String(value + "==");
-
-            return new Guid(buffer);
+            return DecodeShortGuidString(value);
         }
 
         #region ShortGuid Operators

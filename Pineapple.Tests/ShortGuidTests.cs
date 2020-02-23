@@ -218,5 +218,67 @@ namespace Pineapple.Tests
 
             Assert.AreEqual(sg, g2);
         }
+
+        [TestMethod]
+        public void ShortGuidTryParseStringTest1()
+        {
+            // 22 character length strings are actually valid ShortGuids
+            string v = "WorkNotificationOpened";
+
+            var isShortGuid = ShortGuid.TryParse(v, out _);
+
+            Assert.IsTrue(isShortGuid);
+        }
+
+        [TestMethod]
+        public void ShortGuidTryParseStringTest2()
+        {
+            // 22 character length strings are actually valid ShortGuids
+            string v = "Abcdefghijklmnopqrstuv";
+
+            var isShortGuid = ShortGuid.TryParse(v, out _);
+
+            Assert.IsTrue(isShortGuid);
+        }
+
+        [TestMethod]
+        public void ShortGuidTryParseStringTest3()
+        {
+            string v = "Abc123";
+
+            var isShortGuid = ShortGuid.TryParse(v, out _);
+
+            Assert.IsFalse(isShortGuid);
+        }
+
+        [TestMethod]
+        public void ShortGuidTryParseStringTest4()
+        {
+            string v = string.Empty;
+
+            var isShortGuid = ShortGuid.TryParse(v, out _);
+
+            Assert.IsFalse(isShortGuid);
+        }
+
+        [TestMethod]
+        public void ShortGuidTryParseStringTest5()
+        {
+            string v = "                                          ";
+
+            var isShortGuid = ShortGuid.TryParse(v, out _);
+
+            Assert.IsFalse(isShortGuid);
+        }
+
+        [TestMethod]
+        public void ShortGuidTryParseStringTest6()
+        {
+            string v = null;
+
+            var isShortGuid = ShortGuid.TryParse(v, out _);
+
+            Assert.IsFalse(isShortGuid);
+        }
     }
 }
