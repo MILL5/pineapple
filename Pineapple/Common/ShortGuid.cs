@@ -126,8 +126,10 @@ namespace Pineapple.Common
 
         public static bool TryParse(string input, out Guid guid)
         {
-            if (input == null)
+            if (string.IsNullOrWhiteSpace(input))
+            {
                 return false;
+            }
 
             const int size = 22;
 
