@@ -5,8 +5,7 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Description>Pineapple is a set of core libraries that includes utilities, primitives, helper classes for .NET!  The inspiration for Pineapple comes from Google's Guava framework.
-</Description>
+    <Description>Pineapple.Data is a set of libraries for working with database such as SQL Server.</Description>
     <Copyright>Copyright 2019-2021</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/MILL5/pineapple</PackageProjectUrl>

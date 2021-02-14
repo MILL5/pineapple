@@ -20,7 +20,7 @@
     <PackageId>Pineapple</PackageId>
     <RootNamespace>Pineapple</RootNamespace>
     <AssemblyName>Pineapple</AssemblyName>
-    <Version>1.0.17</Version>
+    <Version>1.0.18</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
