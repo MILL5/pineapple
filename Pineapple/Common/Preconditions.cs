@@ -392,7 +392,15 @@ namespace Pineapple.Common
                 ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be negative. Value: {value}"));
         }
 
-		public static void CheckIsNotNegative(string paramName, long value)
+        public static void CheckIsNegative(string paramName, int value)
+        {
+            CheckParamName(paramName);
+
+            if (value >= 0)
+                ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be negative. Value: {value}"));
+        }
+
+        public static void CheckIsNotNegative(string paramName, long value)
 		{
 			CheckParamName(paramName);
 
@@ -400,11 +408,27 @@ namespace Pineapple.Common
 				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be negative. Value: {value}"));
 		}
 
-		public static void CheckIsWellFormedUri(string paramName, string value, UriKind uriKind = UriKind.Absolute)
+        public static void CheckIsNegative(string paramName, long value)
+        {
+            CheckParamName(paramName);
+
+            if (value >= 0)
+                ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be negative. Value: {value}"));
+        }
+
+        public static void CheckIsWellFormedUri(string paramName, string value, UriKind uriKind = UriKind.Absolute)
         {
             CheckParamName(paramName);
 
             if (!Uri.IsWellFormedUriString(value, uriKind))
+                ThrowException(new ArgumentException($"{paramName} must be well formed. Value: {value}", paramName));
+        }
+
+        public static void CheckIsNotWellFormedUri(string paramName, string value, UriKind uriKind = UriKind.Absolute)
+        {
+            CheckParamName(paramName);
+
+            if (Uri.IsWellFormedUriString(value, uriKind))
                 ThrowException(new ArgumentException($"{paramName} must be well formed. Value: {value}", paramName));
         }
     }
