@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>e8e5308d-27fc-4095-907a-119c90a2a7ff</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Pineapple.Shared.Tests</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CheckTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CleanupTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PreconditionTests\PreconditionTests.CheckScalarValues.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PreconditionTests\PreconditionTests.CheckIsNotNull.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PreconditionTests\PreconditionTests.CheckNotExpression.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PreconditionTests\PreconditionTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RowVersionTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HashCodeTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ShortGuidTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SynchronizationContextScopeTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimingScopeTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)PreconditionTests\PreconditionTests.CheckIsNotNullOrWhitespace.cs" />
+    <None Include="$(MSBuildThisFileDirectory)PreconditionTests\PreconditionTests.ParameterName.cs" />
+  </ItemGroup>
+</Project>

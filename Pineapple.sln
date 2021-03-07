@@ -9,22 +9,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pineapple.Tests", "Pineapple.Tests\Pineapple.Tests.csproj", "{3C4E0E91-DF5D-412F-BADF-45E19DD2DE5B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pineapple", "Pineapple\Pineapple.csproj", "{EDF6D377-A9C0-4453-8C37-AED9DD043336}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pineapple.Data", "Pineapple.Data\Pineapple.Data.csproj", "{D15A66FE-8D9C-4E74-95E1-95EE20C60717}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pineapple.Data", "Pineapple.Data\Pineapple.Data.csproj", "{D15A66FE-8D9C-4E74-95E1-95EE20C60717}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pineapple.Core.Tests", "Pineapple.Core.Tests\Pineapple.Core.Tests.csproj", "{614597EE-3C41-451C-8938-C9F41DBFCC78}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Pineapple.Shared.Tests", "Pineapple.Shared.Tests\Pineapple.Shared.Tests.shproj", "{E8E5308D-27FC-4095-907A-119C90A2A7FF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{51782396-5165-445A-902A-8324CA6255DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pineapple.Framework.Tests", "Pineapple.Framework.Tests\Pineapple.Framework.Tests.csproj", "{B6197C5C-393C-40AC-B5E1-EA41D4FB4F71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pineapple.Net.Tests", "Pineapple.Net.Tests\Pineapple.Net.Tests.csproj", "{34609863-361F-4046-B884-14A7606A04F8}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Pineapple.Shared.Tests\Pineapple.Shared.Tests.projitems*{34609863-361f-4046-b884-14a7606a04f8}*SharedItemsImports = 5
+		Pineapple.Shared.Tests\Pineapple.Shared.Tests.projitems*{614597ee-3c41-451c-8938-c9f41dbfcc78}*SharedItemsImports = 5
+		Pineapple.Shared.Tests\Pineapple.Shared.Tests.projitems*{b6197c5c-393c-40ac-b5e1-ea41d4fb4f71}*SharedItemsImports = 4
+		Pineapple.Shared.Tests\Pineapple.Shared.Tests.projitems*{e8e5308d-27fc-4095-907a-119c90a2a7ff}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3C4E0E91-DF5D-412F-BADF-45E19DD2DE5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C4E0E91-DF5D-412F-BADF-45E19DD2DE5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C4E0E91-DF5D-412F-BADF-45E19DD2DE5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C4E0E91-DF5D-412F-BADF-45E19DD2DE5B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EDF6D377-A9C0-4453-8C37-AED9DD043336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EDF6D377-A9C0-4453-8C37-AED9DD043336}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDF6D377-A9C0-4453-8C37-AED9DD043336}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,9 +43,27 @@ Global
 		{D15A66FE-8D9C-4E74-95E1-95EE20C60717}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D15A66FE-8D9C-4E74-95E1-95EE20C60717}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D15A66FE-8D9C-4E74-95E1-95EE20C60717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{614597EE-3C41-451C-8938-C9F41DBFCC78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{614597EE-3C41-451C-8938-C9F41DBFCC78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{614597EE-3C41-451C-8938-C9F41DBFCC78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{614597EE-3C41-451C-8938-C9F41DBFCC78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6197C5C-393C-40AC-B5E1-EA41D4FB4F71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6197C5C-393C-40AC-B5E1-EA41D4FB4F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6197C5C-393C-40AC-B5E1-EA41D4FB4F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6197C5C-393C-40AC-B5E1-EA41D4FB4F71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34609863-361F-4046-B884-14A7606A04F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34609863-361F-4046-B884-14A7606A04F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34609863-361F-4046-B884-14A7606A04F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34609863-361F-4046-B884-14A7606A04F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{614597EE-3C41-451C-8938-C9F41DBFCC78} = {51782396-5165-445A-902A-8324CA6255DD}
+		{E8E5308D-27FC-4095-907A-119C90A2A7FF} = {51782396-5165-445A-902A-8324CA6255DD}
+		{B6197C5C-393C-40AC-B5E1-EA41D4FB4F71} = {51782396-5165-445A-902A-8324CA6255DD}
+		{34609863-361F-4046-B884-14A7606A04F8} = {51782396-5165-445A-902A-8324CA6255DD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D27BD3C5-4E78-4B89-A7BE-3F1F8E6EF67F}

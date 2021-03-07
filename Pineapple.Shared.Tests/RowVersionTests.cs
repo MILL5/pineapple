@@ -2,12 +2,14 @@
 using Pineapple.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
 namespace Pineapple.Tests
 {
     [TestClass]
+    [ExcludeFromCodeCoverage]
     public class RowVersionTests
     {
         [TestMethod]

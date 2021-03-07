@@ -166,12 +166,12 @@ namespace Pineapple.Tests
                 // DO NOTHING
             }
 
-            void TestFromGuid(ShortGuid sg)
+            void TestFromGuid(ShortGuid shortGuid)
             {
                 // DO NOTHING
             }
 
-            void TestFromString(ShortGuid sg)
+            void TestFromString(ShortGuid shortGuid)
             {
                 // DO NOTHING
             }
