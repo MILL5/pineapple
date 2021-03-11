@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PreconditionTests\PreconditionTests.CheckIsNotNull.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PreconditionTests\PreconditionTests.CheckNotExpression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PreconditionTests\PreconditionTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RateLimitingTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RowVersionTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HashCodeTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ShortGuidTests.cs" />
