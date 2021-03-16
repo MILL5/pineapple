@@ -7,7 +7,7 @@ using static Pineapple.Common.Preconditions;
 
 namespace Pineapple.Threading
 {
-    public class RateLimiterScope : IDisposable, IAsyncDisposable
+    public class RateLimiterScope : IRateLimiterScope
     {
         private readonly int _callsPerMinute;
         private readonly Stopwatch _sw;
