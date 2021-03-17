@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace Pineapple.Threading
 {
-    public class ResourceGovernerScope : IRateLimiterScope
+    public class ResourceGoverner : IResourceGoverner
     {
         private readonly int _maxCallsPerMinute;
         private readonly List<OperationScope> _callsInFlight = new List<OperationScope>();
@@ -94,15 +94,11 @@ namespace Pineapple.Threading
             }
         }
 
-        public ResourceGovernerScope(int maxCallsPerMinute)
+        public ResourceGoverner(int maxCallsPerMinute)
         {
             CheckIsNotLessThan(nameof(maxCallsPerMinute), maxCallsPerMinute, 1);
 
             _maxCallsPerMinute = maxCallsPerMinute;
-        }
-
-        public void Dispose()
-        {
         }
 
         public IRateLimiterScope GetOperationScope()
@@ -113,10 +109,5 @@ namespace Pineapple.Threading
         }
 
         public long TotalNumberOfCalls { get { return Interlocked.Read(ref _count); } }
-
-        public async ValueTask DisposeAsync()
-        {
-            await Task.CompletedTask;
-        }
     }
 }
