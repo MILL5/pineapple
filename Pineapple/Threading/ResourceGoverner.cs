@@ -4,6 +4,7 @@ using System.Threading;
 using System.Collections.Generic;
 using static Pineapple.Common.Preconditions;
 using static Pineapple.Common.Cleanup;
+using System.Linq;
 
 namespace Pineapple.Threading
 {
@@ -12,19 +13,27 @@ namespace Pineapple.Threading
         private const int DEFAULT_TIMEOUT_SECS = 10;
 
         private readonly int _maxCallsPerMinute;
-        private readonly double _timeOutMs;
+        private readonly int _timeOutMs;
         private readonly List<OperationScope> _callsInFlight = new List<OperationScope>();
         private readonly object _calllock = new List<OperationScope>();
 
         private long _count;
+
+        private enum OperationStatus
+        {
+            Unknown = 0,
+            Running = 1,
+            Complete = 2
+        }
 
         private class OperationScope : IRateLimiterScope
         {
             private readonly List<OperationScope> _operations;
             private readonly object _calllock;
             private readonly DateTime _start;
+            private OperationStatus _status = OperationStatus.Running;
 
-            public OperationScope(List<OperationScope> operations, object calllock, int maxCallsPerMinute, double timeoutInMs)
+            public OperationScope(List<OperationScope> operations, object calllock, int maxCallsPerMinute, int timeoutInMs)
             {
                 _operations = operations;
                 _calllock = calllock;
@@ -40,7 +49,8 @@ namespace Pineapple.Threading
                     lock (_calllock)
                     {
                         _start = DateTime.Now;
-                        var count = operations.Count;
+                        var expiration = DateTime.Now.AddMinutes(-1.0);
+                        var count = _operations.Where(x => x.Start > expiration).Count();
 
                         if (count > 0)
                         {
@@ -55,7 +65,7 @@ namespace Pineapple.Threading
                     {
                         var elapsed = (DateTime.Now - timeoutStart).TotalMilliseconds;
 
-                        if (elapsed > timeoutInMs)
+                        if (elapsed > (timeoutInMs + 100))
                             throw new TimeoutException();
 
                         Thread.Sleep(1);
@@ -75,7 +85,14 @@ namespace Pineapple.Threading
                 {
                     lock (_calllock)
                     {
-                        _operations.Remove(this);
+                        _status = OperationStatus.Complete;
+                        var expiration = DateTime.Now.AddMinutes(-1.0);
+                        var expiredOperations = _operations.Where(x => x._status == OperationStatus.Complete &&
+                                                                        x.Start <= expiration).ToList();
+                        foreach (var operation in expiredOperations)
+                        {
+                            _operations.Remove(operation);
+                        }
                     }
                 });
             }
@@ -86,7 +103,14 @@ namespace Pineapple.Threading
                 {
                     lock (_calllock)
                     {
-                        _operations.Remove(this);
+                        _status = OperationStatus.Complete;
+                        var expiration = DateTime.Now.AddMinutes(-1.0);
+                        var expiredOperations = _operations.Where(x => x._status == OperationStatus.Complete &&
+                                                                        x.Start <= expiration).ToList();
+                        foreach (var operation in expiredOperations)
+                        {
+                            _operations.Remove(operation);
+                        }
                     }
                 });
 
@@ -100,7 +124,7 @@ namespace Pineapple.Threading
 
             _maxCallsPerMinute = maxCallsPerMinute;
 
-            double adjustedTimeout = 60 / maxCallsPerMinute;
+            int adjustedTimeout = Convert.ToInt32(Math.Ceiling(60.0 / maxCallsPerMinute));
             if (adjustedTimeout > DEFAULT_TIMEOUT_SECS)
             {
                 _timeOutMs = adjustedTimeout * 1000;
