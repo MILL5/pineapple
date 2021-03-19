@@ -32,10 +32,6 @@ namespace Pineapple.Threading
                 bool wait = true;
 
                 DateTime timeoutStart = DateTime.Now;
-                DateTime oldest;
-                double minutes;
-                double currentCallsPerMinute;
-                int count;
 
                 while (wait)
                 {
@@ -44,13 +40,13 @@ namespace Pineapple.Threading
                     lock (_calllock)
                     {
                         _start = DateTime.Now;
-                        count = operations.Count;
+                        var count = operations.Count;
 
                         if (count > 0)
                         {
-                            oldest = operations[0].Start;
-                            minutes = (_start - oldest).TotalMilliseconds / 60000.0;
-                            currentCallsPerMinute = count / minutes;
+                            var oldest = operations[0].Start;
+                            var minutes = (_start - oldest).TotalMilliseconds / 60000.0;
+                            var currentCallsPerMinute = (count + 1) / minutes;
                             wait = currentCallsPerMinute > maxCallsPerMinute;
                         }
                     }
