@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using static Pineapple.Common.Preconditions;
 using static Pineapple.Common.Cleanup;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Pineapple.Threading
 {
@@ -26,58 +27,122 @@ namespace Pineapple.Threading
             Complete = 2
         }
 
+        private enum InitState
+        {
+            Unknown = 0,
+            Waiting = 1,
+            Timeout = 2,
+            Continue = 3
+        }
+
         private class OperationScope : IRateLimiterScope
         {
             private readonly List<OperationScope> _operations;
             private readonly object _calllock;
             private readonly DateTime _start;
+            private DateTime? _completed = null;
+
             private OperationStatus _status = OperationStatus.Running;
+            
+            /// <summary>
+            /// DateTime is not precise and cannot be easily used for timeouts
+            /// 
+            /// GetNotWithoutMs strips the milliseconds from now. It it okay
+            /// to use this version of now in comparisons such as Now > Expiration.
+            /// </summary>
+            /// <returns>Now without Milliseconds</returns>
+            private DateTime GetNowWithoutMs()
+            {
+                var n = DateTime.Now;
+                return n.AddMilliseconds(-n.Millisecond);
+            }
+
+            /// <summary>
+            /// DateTime is not precise and cannot be easily used for timeouts
+            /// 
+            /// GetExpiration strips the milliseconds from now and adds 1 second.
+            /// It it okay to use this version of now in comparisons such as
+            /// Now > Expiration.
+            /// </summary>
+            /// <returns>Now without Milliseconds</returns>
+            private DateTime GetExpiration(int timeoutInMs)
+            {
+                var e = DateTime.Now.AddMilliseconds(timeoutInMs);
+                return e.AddSeconds(1).AddMilliseconds(-e.Millisecond);
+            }
 
             public OperationScope(List<OperationScope> operations, object calllock, int maxCallsPerMinute, int timeoutInMs)
             {
                 _operations = operations;
                 _calllock = calllock;
 
-                bool wait = true;
+                var lookbackExpiration = DateTime.Now.AddMinutes(-1);
+                var timeoutExpiration = GetExpiration(timeoutInMs);
 
-                DateTime timeoutStart = DateTime.Now;
+                var initState = InitState.Waiting;
 
-                while (wait)
+                while (initState == InitState.Waiting)
                 {
-                    wait = false;
-
                     lock (_calllock)
                     {
-                        _start = DateTime.Now;
-                        var expiration = DateTime.Now.AddMinutes(-1.0);
-                        var count = _operations.Where(x => x.Start > expiration).Count();
+                        var lookback = _operations.Where(x => x.Start > lookbackExpiration).ToList();
+                        var count = lookback.Count();
 
                         if (count > 0)
                         {
-                            var oldest = operations[0].Start;
-                            var minutes = (_start - oldest).TotalMilliseconds / 60000.0;
-                            var currentCallsPerMinute = (count + 1) / minutes;
-                            wait = currentCallsPerMinute > maxCallsPerMinute;
+                            var oldest = lookback.Min(x => x.Start);
+
+                            var now = GetNowWithoutMs();
+                            var diff = (now - timeoutExpiration).TotalMilliseconds;
+
+                            if (diff > 0)
+                            {
+                                initState = InitState.Timeout;
+                            }
+                            else
+                            {
+                                var elapsedMins = Convert.ToDecimal((DateTime.Now - oldest).TotalMinutes);
+
+                                if (elapsedMins > 0)
+                                {
+                                    var totalOpsPerMinute = count * 1.0m / elapsedMins;
+
+                                    initState = (totalOpsPerMinute > maxCallsPerMinute) ?
+                                        InitState.Waiting : InitState.Continue;
+
+                                    if (initState == InitState.Continue)
+                                        Debug.WriteLine("");
+                                }
+                                else
+                                {
+                                    initState = InitState.Waiting;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            initState = InitState.Continue;
                         }
                     }
 
-                    if (wait)
+                    if (initState == InitState.Timeout)
                     {
-                        var elapsed = (DateTime.Now - timeoutStart).TotalMilliseconds;
-
-                        if (elapsed > (timeoutInMs + 100))
-                            throw new TimeoutException();
-
+                        throw new TimeoutException();
+                    }
+                    else if (initState == InitState.Waiting)
+                    {
                         Thread.Sleep(1);
                     }
-                    else
+                    else if (initState == InitState.Continue)
                     {
+                        _start = DateTime.Now;
                         operations.Add(this);
                     }
                 }
             }
 
             public DateTime Start => _start;
+            public DateTime? Completed => _completed;
 
             public void Dispose()
             {
@@ -86,6 +151,8 @@ namespace Pineapple.Threading
                     lock (_calllock)
                     {
                         _status = OperationStatus.Complete;
+                        _completed = DateTime.Now;
+
                         var expiration = DateTime.Now.AddMinutes(-1.0);
                         var expiredOperations = _operations.Where(x => x._status == OperationStatus.Complete &&
                                                                         x.Start <= expiration).ToList();
@@ -104,6 +171,8 @@ namespace Pineapple.Threading
                     lock (_calllock)
                     {
                         _status = OperationStatus.Complete;
+                        _completed = DateTime.Now;
+                        
                         var expiration = DateTime.Now.AddMinutes(-1.0);
                         var expiredOperations = _operations.Where(x => x._status == OperationStatus.Complete &&
                                                                         x.Start <= expiration).ToList();

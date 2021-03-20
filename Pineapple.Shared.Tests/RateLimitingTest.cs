@@ -71,21 +71,39 @@ namespace Pineapple.Shared.Tests
 
             Assert.AreEqual(MAX_CALLS_PER_MINUTE, resourceGoverner.TotalNumberOfCalls);
 
-            var callsPerMinute = callCount / (sw.ElapsedMilliseconds / 60000.00);
-            callsPerMinute.ShouldBeLessThan(MAX_CALLS_PER_MINUTE);
+            var callsPerMinute = callCount / (sw.ElapsedMilliseconds / 60000.00m);
+            callsPerMinute.ShouldBeLessThanOrEqualTo(MAX_CALLS_PER_MINUTE);
 
             await Task.CompletedTask;
         }
 
         [TestMethod]
-        public async Task ResourceGovernerTimeOutAdjustmentAsync()
+        public async Task ResourceGovernerTimeOutAdjustmentMaxCallsPlusOneAsync()
         {
             // With low calls per minute this test should complete without timing out.
             const int MAX_CALLS_PER_MINUTE = 2;
 
             var resourceGoverner = new ResourceGoverner(MAX_CALLS_PER_MINUTE);
 
-            for (int i = 0; i < (MAX_CALLS_PER_MINUTE + 1); i++)
+            for (int i = 0; i < MAX_CALLS_PER_MINUTE + 1; i++)
+            {
+                using (resourceGoverner.GetOperationScope())
+                {
+                }
+            }
+
+            await Task.CompletedTask;
+        }
+
+        [TestMethod]
+        public async Task ResourceGovernerTimeOutAdjustmentMaxCallsAsync()
+        {
+            // With low calls per minute this test should complete without timing out.
+            const int MAX_CALLS_PER_MINUTE = 2;
+
+            var resourceGoverner = new ResourceGoverner(MAX_CALLS_PER_MINUTE);
+
+            for (int i = 0; i < MAX_CALLS_PER_MINUTE; i++)
             {
                 using (resourceGoverner.GetOperationScope())
                 {
