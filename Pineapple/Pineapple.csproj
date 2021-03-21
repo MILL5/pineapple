@@ -13,20 +13,20 @@
     <RepositoryUrl>https://github.com/MILL5/pineapple</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>precondition;check;shortguid;cleanup;extensions;quality</PackageTags>
-    <PackageReleaseNotes>Enhancements for ShortGuid, ImmutableList Extensions, IServiceCollection Extensions</PackageReleaseNotes>
+    <PackageReleaseNotes>Rate limiting and resource governers</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageId>Pineapple</PackageId>
     <RootNamespace>Pineapple</RootNamespace>
     <AssemblyName>Pineapple</AssemblyName>
-    <Version>1.0.24-alpha</Version>
+    <Version>1.0.26-alpha</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageIcon>pineapple.png</PackageIcon>
-    <AssemblyVersion>1.0.24.0</AssemblyVersion>
-    <FileVersion>1.0.24.0</FileVersion>
+    <AssemblyVersion>1.0.26.0</AssemblyVersion>
+    <FileVersion>1.0.26.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -59,7 +59,7 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <None Include="..\LICENSE">
+    <None Include="..\LICENSE" Link="LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

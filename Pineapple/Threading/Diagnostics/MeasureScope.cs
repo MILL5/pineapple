@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using static Pineapple.Common.Preconditions;
 
 namespace Pineapple.Threading
 {
@@ -15,10 +16,13 @@ namespace Pineapple.Threading
 
         public MeasureScope([CallerMemberName] string token = null)
         {
+            CheckIsNotNullOrWhitespace(nameof(token), token);
+
             _token = token ?? nameof(MeasureScope);
             _sw = new Stopwatch();
             _sw.Start();
         }
+
         public void Count(Action countThis)
         {
             try
