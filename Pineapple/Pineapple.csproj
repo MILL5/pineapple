@@ -20,13 +20,13 @@
     <PackageId>Pineapple</PackageId>
     <RootNamespace>Pineapple</RootNamespace>
     <AssemblyName>Pineapple</AssemblyName>
-    <Version>1.0.28-alpha</Version>
+    <Version>1.0.29-alpha</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageIcon>pineapple.png</PackageIcon>
-    <AssemblyVersion>1.0.28.0</AssemblyVersion>
-    <FileVersion>1.0.28.0</FileVersion>
+    <AssemblyVersion>1.0.29.0</AssemblyVersion>
+    <FileVersion>1.0.29.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

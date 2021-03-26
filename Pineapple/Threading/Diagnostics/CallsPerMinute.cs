@@ -21,7 +21,7 @@ namespace Pineapple.Threading
             {
                 _calllog.Add(DateTime.Now);
 
-                var nonExpired = _calllog.Where(x => x < DateTime.Now.AddMinutes(-1));
+                var nonExpired = _calllog.Where(x => x >= DateTime.Now.AddMinutes(-1));
                 var count = nonExpired.Count();
 
                 if (count > 1)
@@ -31,7 +31,7 @@ namespace Pineapple.Threading
                 }
                 else
                 {
-                    _cpm = double.NaN;
+                    _cpm = 1;
                 }
 
                 var removeThese = _calllog.Where(x => x < DateTime.Now.AddMinutes(-1)).ToList();
