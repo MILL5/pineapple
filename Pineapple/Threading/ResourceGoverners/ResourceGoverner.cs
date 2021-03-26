@@ -36,7 +36,7 @@ namespace Pineapple.Threading
             return Math.Max(adjustedTimeout, DEFAULT_TIMEOUT_SECS) * 1000;
         }
 
-        public override IRateLimiterScope GetOperationScope()
+        public override async Task<IRateLimiterScope> GetOperationScopeAsync()
         {
             Operation nextOperation = null;
 
@@ -97,9 +97,11 @@ namespace Pineapple.Threading
                     // We only check for timeout if we are waiting
                     //
                     timeout.EnsureNotTimedOut();
-                    delay.Wait();
+                    await delay.WaitAsync();
                 }
             }
+
+            _cpm.Add();
 
             return nextOperation;
         }

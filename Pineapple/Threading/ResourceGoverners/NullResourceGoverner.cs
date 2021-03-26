@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using static Pineapple.Common.Cleanup;
+﻿using System.Threading.Tasks;
 
 namespace Pineapple.Threading
 {
     public class NullResourceGoverner : BaseResourceGoverner
     {
-        public override IRateLimiterScope GetOperationScope()
+        public override async Task<IRateLimiterScope> GetOperationScopeAsync()
         {
             Operation nextOperation = null;
 
@@ -17,6 +12,10 @@ namespace Pineapple.Threading
             {
                 nextOperation = new Operation(_operations);
             }
+
+            _cpm.Add();
+
+            await Task.CompletedTask;
 
             return nextOperation;
         }
