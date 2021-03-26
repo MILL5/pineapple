@@ -101,6 +101,8 @@ namespace Pineapple.Threading
                 }
             }
 
+            _cpm.Add();
+
             return nextOperation;
         }
     }

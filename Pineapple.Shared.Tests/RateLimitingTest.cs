@@ -88,9 +88,18 @@ namespace Pineapple.Shared.Tests
 
             for (i = 0; i < maxCallsPerMinute; i++)
             {
-                using (resourceGoverner.GetOperationScope())
+                using (var rg = resourceGoverner.GetOperationScope())
                 {
                     callCount++;
+                    var cpm = resourceGoverner.CallsPerMinute;
+
+                    if (!double.IsNaN(cpm))
+                    {
+                        if (cpm > maxCallsPerMinute)
+                            Debugger.Break();
+
+                        cpm.ShouldBeLessThan(maxCallsPerMinute);
+                    }
                 }
             }
 

@@ -7,6 +7,7 @@ namespace Pineapple.Threading
         TimeSpan AverageTime { get; }
         long TotalCount { get; }
         TimeSpan TotalTime { get; }
+        double CallsPerMinute { get; }
 
         IRateLimiterScope GetOperationScope();
     }

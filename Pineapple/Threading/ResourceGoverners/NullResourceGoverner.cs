@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using static Pineapple.Common.Cleanup;
-
-namespace Pineapple.Threading
+﻿namespace Pineapple.Threading
 {
     public class NullResourceGoverner : BaseResourceGoverner
     {
@@ -17,6 +10,8 @@ namespace Pineapple.Threading
             {
                 nextOperation = new Operation(_operations);
             }
+
+            _cpm.Add();
 
             return nextOperation;
         }
