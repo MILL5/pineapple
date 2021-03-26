@@ -1,8 +1,10 @@
-﻿namespace Pineapple.Threading
+﻿using System.Threading.Tasks;
+
+namespace Pineapple.Threading
 {
     public class NullResourceGoverner : BaseResourceGoverner
     {
-        public override IRateLimiterScope GetOperationScope()
+        public override async Task<IRateLimiterScope> GetOperationScopeAsync()
         {
             Operation nextOperation = null;
 
@@ -12,6 +14,8 @@
             }
 
             _cpm.Add();
+
+            await Task.CompletedTask;
 
             return nextOperation;
         }

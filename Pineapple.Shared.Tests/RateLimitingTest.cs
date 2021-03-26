@@ -88,7 +88,7 @@ namespace Pineapple.Shared.Tests
 
             for (i = 0; i < maxCallsPerMinute; i++)
             {
-                using (var rg = resourceGoverner.GetOperationScope())
+                using (var rg = await resourceGoverner.GetOperationScopeAsync())
                 {
                     callCount++;
                     var cpm = resourceGoverner.CallsPerMinute;
@@ -131,7 +131,7 @@ namespace Pineapple.Shared.Tests
 
             for (int i = 0; i < MAX_CALLS_PER_MINUTE; i++)
             {
-                using (resourceGoverner.GetOperationScope())
+                using (await resourceGoverner.GetOperationScopeAsync())
                 {
                 }
             }
@@ -152,7 +152,7 @@ namespace Pineapple.Shared.Tests
 
             for (int i = 0; i < MAX_CALLS_PER_MINUTE; i++)
             {
-                using (resourceGoverner.GetOperationScope())
+                using (await resourceGoverner.GetOperationScopeAsync())
                 {
                 }
             }

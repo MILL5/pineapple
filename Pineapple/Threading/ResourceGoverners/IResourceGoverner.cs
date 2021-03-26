@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Pineapple.Threading
 {
@@ -9,6 +10,6 @@ namespace Pineapple.Threading
         TimeSpan TotalTime { get; }
         double CallsPerMinute { get; }
 
-        IRateLimiterScope GetOperationScope();
+        Task<IRateLimiterScope> GetOperationScopeAsync();
     }
 }
