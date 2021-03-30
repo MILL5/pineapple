@@ -3,10 +3,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using HashCode = Pineapple.Common.HashCode;
-// ReSharper disable StringLiteralTypo
-// ReSharper disable AssignmentIsFullyDiscarded
-// ReSharper disable UnusedParameter.Local
-// ReSharper disable VariableHidesOuterVariable
 
 namespace Pineapple.Tests
 {
