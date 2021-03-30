@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using static Pineapple.Common.Preconditions;
 
 namespace Pineapple.Threading
 {
-
     public class ResourceGoverner : BaseResourceGoverner
     {
         private enum InitState
@@ -76,7 +74,7 @@ namespace Pineapple.Threading
                         if (potentialOpsPerMinute > _maxCallsPerMinute)
                             initState = InitState.Waiting;
 
-                        Debug.WriteLine($"[{DateTime.Now.ToString("hh:mm:ss.fff")}]:State:{initState}:Ops Per Minute:{potentialOpsPerMinute}");
+                        Debug.WriteLine($"[{DateTime.Now:hh:mm:ss.fff}]:State:{initState}:Ops Per Minute:{potentialOpsPerMinute}");
                     }
 
                     //

@@ -2,6 +2,7 @@
 using Pineapple.Threading;
 using Shouldly;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pineapple.Shared.Tests
@@ -45,6 +46,22 @@ namespace Pineapple.Shared.Tests
         }
 
         [TestMethod]
+        public async Task ResourceGoverner12000ParallelAsync()
+        {
+            const int MAX_CALLS_PER_MINUTE = 12000;
+
+            await ResourceGovernerParallelAsync(MAX_CALLS_PER_MINUTE);
+        }
+
+        [TestMethod]
+        public async Task ResourceGoverner1200ParallelAsync()
+        {
+            const int MAX_CALLS_PER_MINUTE = 1200;
+
+            await ResourceGovernerParallelAsync(MAX_CALLS_PER_MINUTE);
+        }
+
+        [TestMethod]
         public async Task ResourceGoverner1200Async()
         {
             const int MAX_CALLS_PER_MINUTE = 1200;
@@ -76,21 +93,42 @@ namespace Pineapple.Shared.Tests
             await ResourceGovernerAsync(MAX_CALLS_PER_MINUTE);
         }
 
-        private async Task ResourceGovernerAsync(int maxCallsPerMinute)
+        private async Task ResourceGovernerParallelAsync(int maxCallsPerMinute)
         {
             var resourceGoverner = new ResourceGoverner(maxCallsPerMinute);
-            var callCount = 0;
 
             var sw = new Stopwatch();
             sw.Start();
 
-            int i;
-
-            for (i = 0; i < maxCallsPerMinute; i++)
+            Parallel.For(0, maxCallsPerMinute, async (i) =>
             {
                 using (var rg = await resourceGoverner.GetOperationScopeAsync())
                 {
-                    callCount++;
+                    var cpm = resourceGoverner.CallsPerMinute;
+
+                    if (!double.IsNaN(cpm))
+                    {
+                        cpm.ShouldBeLessThan(maxCallsPerMinute);
+                    }
+                }
+            });
+
+            sw.Stop();
+
+            await Task.CompletedTask;
+        }
+
+        private async Task ResourceGovernerAsync(int maxCallsPerMinute)
+        {
+            var resourceGoverner = new ResourceGoverner(maxCallsPerMinute);
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            for (int i = 0; i < maxCallsPerMinute; i++)
+            {
+                using (var rg = await resourceGoverner.GetOperationScopeAsync())
+                {
                     var cpm = resourceGoverner.CallsPerMinute;
 
                     if (!double.IsNaN(cpm))
@@ -105,7 +143,7 @@ namespace Pineapple.Shared.Tests
 
             sw.Stop();
 
-            var callsPerMinute = callCount / (sw.ElapsedMilliseconds / 60000.00);
+            var callsPerMinute = maxCallsPerMinute / sw.ElapsedMilliseconds * 60000.00;
             callsPerMinute.ShouldBeLessThanOrEqualTo(maxCallsPerMinute);
 
             var efficiency = maxCallsPerMinute * 0.95;
