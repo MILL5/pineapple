@@ -85,6 +85,11 @@ namespace Pineapple.Common
                 var value = Convert.ToChar(item);
                 hash.Add(value);
             }
+            else if (item is bool)
+            {
+                var value = Convert.ToBoolean(item);
+                hash.Add(value);
+            }
             else
             {
                 throw new NotSupportedException($"{item.GetType().Name} not supported.");
@@ -273,6 +278,12 @@ namespace Pineapple.Common
         }
 
         public static void Add(this XXH32 hash, char item)
+        {
+            var bytes = BitConverter.GetBytes(item);
+            hash.Update(bytes);
+        }
+
+        public static void Add(this XXH32 hash, bool item)
         {
             var bytes = BitConverter.GetBytes(item);
             hash.Update(bytes);
