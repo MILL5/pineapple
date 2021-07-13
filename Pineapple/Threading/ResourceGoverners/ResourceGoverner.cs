@@ -56,7 +56,7 @@ namespace Pineapple.Threading
                     // therefore we look back a minute
                     //
                     var lookback = _operations.GetCurrent(expiration);
-                    var count = lookback.Count();
+                    var count = lookback.Count;
 
                     initState = InitState.Continue;
 
@@ -76,7 +76,7 @@ namespace Pineapple.Threading
                         if (potentialOpsPerMinute > _maxCallsPerMinute)
                             initState = InitState.Waiting;
 
-                        Debug.WriteLine($"[{DateTime.Now.ToString("hh:mm:ss.fff")}]:State:{initState}:Ops Per Minute:{potentialOpsPerMinute}");
+                        Debug.WriteLine($"[{DateTime.Now:hh:mm:ss.fff}]:State:{initState}:Ops Per Minute:{potentialOpsPerMinute}");
                     }
 
                     //
