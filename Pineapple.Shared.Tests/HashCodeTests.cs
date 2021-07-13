@@ -368,6 +368,20 @@ namespace Pineapple.Tests
         }
 
         [TestMethod]
+        public void HashCodeBoolTest()
+        {
+            bool b = true;
+
+            var hc1 = new HashCode();
+            hc1.Add(b);
+            int v1 = hc1.ToHashCode();
+
+            var v2 = HashCode.ToHashCode(b);
+
+            Assert.AreEqual(v1, v2);
+        }
+
+        [TestMethod]
         public void HashCodeNullableIntTest()
         {
             int? i = 5;

@@ -1,0 +1,39 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "10:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: DiffEngine
+    versions:
+    - 6.5.9
+    - 6.6.0
+    - 6.6.1
+  - dependency-name: MSTest.TestAdapter
+    versions:
+    - 2.2.1
+    - 2.2.2
+  - dependency-name: Microsoft.EntityFrameworkCore
+    versions:
+    - 5.0.4
+  - dependency-name: Microsoft.EntityFrameworkCore.SqlServer
+    versions:
+    - 5.0.4
+  - dependency-name: Microsoft.NETCore.Platforms
+    versions:
+    - 5.0.1
+  - dependency-name: Microsoft.Data.SqlClient
+    versions:
+    - 2.1.2
+  - dependency-name: MSTest.TestFramework
+    versions:
+    - 2.2.1
+  - dependency-name: Microsoft.NET.Test.Sdk
+    versions:
+    - 16.9.1
+  - dependency-name: Pineapple
+    versions:
+    - 1.0.18
