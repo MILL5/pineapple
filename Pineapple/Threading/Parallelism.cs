@@ -6,13 +6,46 @@ namespace Pineapple.Threading
 {
     public class Parallelism : IParallelism
     {
+        private readonly int? _requestedDegreeOfParallelism;
+
+        public Parallelism(int? requestedDegreeOfParallelism = null)
+        {
+            if (requestedDegreeOfParallelism.HasValue)
+            {
+                CheckIsNotLessThanOrEqualTo(nameof(requestedDegreeOfParallelism), requestedDegreeOfParallelism.Value, 0);
+            }
+
+            _requestedDegreeOfParallelism = requestedDegreeOfParallelism;
+        }
+
+        public virtual decimal Factor
+        {
+            get
+            {
+                return 2.0m / 3.0m;
+            }
+        }
+        protected virtual int CalculatedDegreeOfParallelism()
+        {
+            int maxCpusToUse = Convert.ToInt32(Math.Floor(Environment.ProcessorCount * Factor));
+            int minParallelism = maxCpusToUse > 1 ? 2 : 1;
+
+            // Ensure a minimum level of parallelism (i.e. maximum)
+            int calculatedMaximum = Math.Max(maxCpusToUse, minParallelism);
+
+            // Ensure we respect the wishes of the caller
+            int calculatedDegreeOfParallelism = _requestedDegreeOfParallelism.HasValue ?
+                        Math.Min(calculatedMaximum, _requestedDegreeOfParallelism.Value) :
+                        calculatedMaximum;
+
+            return calculatedDegreeOfParallelism;
+        }
+
         public ParallelOptions Options
         {
             get
             {
-                int maxDegreeOfParallelism = MaxDegreeOfParallelism;
-
-                return new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism };
+                return new ParallelOptions { MaxDegreeOfParallelism = CalculatedDegreeOfParallelism() };
             }
         }
 
@@ -20,36 +53,8 @@ namespace Pineapple.Threading
         {
             get
             {
-                int maxCpusToUse = Convert.ToInt32(Math.Floor(Environment.ProcessorCount * 2.0 / 3.0));
-                int minParallelism = maxCpusToUse > 1 ? 2 : 1;
-
-                return Math.Max(maxCpusToUse, minParallelism);
+                return CalculatedDegreeOfParallelism();
             }
-        }
-
-        public int GetMaxDegreeOfParallelism(int? maxDegreeOfParallelism)
-        {
-            int value;
-
-            if (maxDegreeOfParallelism.HasValue)
-            {
-                CheckIsNotLessThanOrEqualTo(nameof(maxDegreeOfParallelism), maxDegreeOfParallelism.Value, 0);
-
-                value = Math.Min(MaxDegreeOfParallelism, maxDegreeOfParallelism.Value);
-            }
-            else
-            {
-                value = MaxDegreeOfParallelism;
-            }
-
-            return value;
-        }
-
-        public ParallelOptions GetOptions(int? maxDegreeOfParallelism)
-        {
-            int degreeOfParallelism = GetMaxDegreeOfParallelism(maxDegreeOfParallelism);
-
-            return new ParallelOptions { MaxDegreeOfParallelism = degreeOfParallelism };
         }
     }
 }
