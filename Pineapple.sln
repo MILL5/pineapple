@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{51782396
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pineapple.Framework.Tests", "Pineapple.Framework.Tests\Pineapple.Framework.Tests.csproj", "{B6197C5C-393C-40AC-B5E1-EA41D4FB4F71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pineapple.Net.Tests", "Pineapple.Net.Tests\Pineapple.Net.Tests.csproj", "{34609863-361F-4046-B884-14A7606A04F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pineapple.Net.Tests", "Pineapple.Net.Tests\Pineapple.Net.Tests.csproj", "{34609863-361F-4046-B884-14A7606A04F8}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
