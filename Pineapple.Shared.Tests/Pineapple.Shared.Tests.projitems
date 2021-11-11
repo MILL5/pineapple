@@ -9,6 +9,7 @@
     <Import_RootNamespace>Pineapple.Shared.Tests</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)HttpExceptionTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CheckTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CleanupTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PreconditionTests\PreconditionTests.CheckScalarValues.cs" />
