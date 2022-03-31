@@ -65,7 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DiffEngine">
-      <Version>7.1.0</Version>
+      <Version>9.0.6</Version>
     </PackageReference>
     <PackageReference Include="K4os.Hash.xxHash">
       <Version>1.0.6</Version>
