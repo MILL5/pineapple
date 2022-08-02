@@ -1,0 +1,56 @@
+name: CI - Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+
+  test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    env:
+      PolygonApiKey: ${{ secrets.POLYGON_API_KEY }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache SonarCloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v1
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+
+      - name: Install SonarCloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Begin SonarCloud Scanner
+        run: dotnet-sonarscanner begin /k:"MILL5_pineapple" /o:"mill5-sonarcloud" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.scm.disabled=false /d:sonar.scm.provider=git /d:sonar.links.scm="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git" /d:sonar.cs.opencover.reportsPaths='**/coverage.opencover.xml'
+
+      - name: Restore Dependencies
+        run: dotnet restore Pineapple.sln
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute="Obsolete"
+
+      - name: End SonarCloud Scanner
+        run: dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
