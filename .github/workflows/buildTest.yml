@@ -15,7 +15,6 @@ jobs:
     name: Build and Test
     runs-on: ubuntu-latest
     env:
-      PolygonApiKey: ${{ secrets.POLYGON_API_KEY }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:
