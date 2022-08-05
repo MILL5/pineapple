@@ -53,6 +53,7 @@ jobs:
         run: dotnet build --no-restore --configuration Release
 
       - name: Test
+        continue-on-error: true
         run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute="Obsolete"
 
       - name: End SonarCloud Scanner
