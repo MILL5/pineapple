@@ -13,7 +13,7 @@ on:
 jobs:
   test:
     name: Build and Test
-    runs-on: ubuntu-latest
+    runs-on: windows-2019
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
