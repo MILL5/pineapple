@@ -13,11 +13,15 @@ public class Parallelism : IParallelism
         if (requestedDegreeOfParallelism.HasValue)
         {
             CheckIsNotLessThanOrEqualTo(nameof(requestedDegreeOfParallelism), requestedDegreeOfParallelism.Value, 0);
+
+            _requestedDegreeOfParallelism = requestedDegreeOfParallelism;
         }
 
         if (factor.HasValue)
         {
             CheckIsNotLessThanOrEqualTo(nameof(factor), factor.Value, 0.0m);
+
+            Factor = factor.Value;
         }
         else
         {

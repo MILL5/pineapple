@@ -16,7 +16,7 @@
 Entity Framework model for Information Schema
 SQL Server Serverless IsAvailable Check</PackageReleaseNotes>
     <PackageTags>information;schema;serverless;sqlserver;sql</PackageTags>
-    <Version>1.0.1</Version>
+    <Version>1.0.41</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIcon>pineapple.png</PackageIcon>
   </PropertyGroup>
