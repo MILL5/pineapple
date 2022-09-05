@@ -21,13 +21,13 @@
 		<PackageId>Pineapple</PackageId>
 		<RootNamespace>Pineapple</RootNamespace>
 		<AssemblyName>Pineapple</AssemblyName>
-		<Version>1.0.36</Version>
+		<Version>1.0.40</Version>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<PackageIcon>pineapple.png</PackageIcon>
-		<AssemblyVersion>1.0.35.0</AssemblyVersion>
-		<FileVersion>1.0.35.0</FileVersion>
+		<AssemblyVersion>1.0.40.0</AssemblyVersion>
+		<FileVersion>1.0.40.0</FileVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -37,14 +37,14 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="BrotliSharpLib" Version="0.3.3" />
-		<PackageReference Include="K4os.Hash.xxHash" Version="1.0.6" />
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+		<PackageReference Include="K4os.Hash.xxHash" Version="1.0.7" />
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+		<PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\pineapple.png">

@@ -337,14 +337,29 @@ namespace Pineapple.Common
 				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be less than {lessThanThis}. Value: {value}"));
 		}
 
-		public static void CheckIsNotLessThan(string paramName, ulong value, ulong lessThanThis)
+        public static void CheckIsNotLessThan(string paramName, decimal value, decimal lessThanThis)
+        {
+            CheckParamName(paramName);
+            if (value < lessThanThis)
+                ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be less than {lessThanThis}. Value: {value}"));
+        }
+		
+        public static void CheckIsNotLessThan(string paramName, ulong value, ulong lessThanThis)
 		{
 			CheckParamName(paramName);
 			if (value < lessThanThis)
 				ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be less than {lessThanThis}. Value: {value}"));
 		}
 
-		public static void CheckIsNotLessThanOrEqualTo(string paramName, int value, int lessThanOrEqualToThis)
+        public static void CheckIsNotLessThanOrEqualTo(string paramName, decimal value, decimal lessThanOrEqualToThis)
+        {
+            CheckParamName(paramName);
+
+            if (value <= lessThanOrEqualToThis)
+                ThrowException(new ArgumentOutOfRangeException(paramName, $"{paramName} cannot be less than or equal to {lessThanOrEqualToThis}. Value: {value}"));
+        }
+        
+        public static void CheckIsNotLessThanOrEqualTo(string paramName, int value, int lessThanOrEqualToThis)
         {
             CheckParamName(paramName);
 
