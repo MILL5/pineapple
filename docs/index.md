@@ -1,9 +1,9 @@
 ---
-description: Pineapple is a free, open-source C# library for .NET 8 and .NET 10 with guard clauses, ShortGuid, deterministic xxHash HashCode, SQL Server RowVersion, rate limiting, timeouts, and backoff.
+description: Pineapple is a free, open-source C# library for .NET 8 and .NET 10 with guard clauses, ShortGuid, deterministic xxHash HashCode, SQL Server RowVersion, and timing scopes.
 wide: true
 faq:
   - q: What is Pineapple for .NET?
-    a: Pineapple is a free, open-source (Apache 2.0) C# library from MILL5 that provides core utilities for .NET 8 and .NET 10 — guard clauses, ShortGuid, a deterministic HashCode, a SQL Server RowVersion type, rate limiting, resource governors, timeouts, exponential backoff, and timing scopes. It is inspired by Google's Guava library for Java.
+    a: Pineapple is a free, open-source (Apache 2.0) C# library from MILL5 that provides core utilities for .NET 8 and .NET 10 — guard clauses, ShortGuid, a deterministic HashCode, a SQL Server RowVersion type, structured timing scopes, and exception-safe cleanup. It is inspired by Google's Guava library for Java.
   - q: How do I install Pineapple?
     a: "Run `dotnet add package Pineapple`. For SQL Server and Entity Framework Core helpers, also run `dotnet add package Pineapple.Data`."
   - q: Which .NET versions does Pineapple support?
@@ -17,7 +17,7 @@ faq:
 <section class="hero">
   <div>
     <h1>Pineapple: Guava-inspired core utilities for .NET</h1>
-    <p class="lead"><strong>Pineapple is a free, open-source C# library of small, well-tested building blocks for .NET 8 and .NET 10</strong> — guard clauses, URL-safe ShortGuids, a deterministic hash code, SQL Server row versions, rate limiting, timeouts, and backoff. Stop rewriting the same helpers in every project.</p>
+    <p class="lead"><strong>Pineapple is a free, open-source C# library of small, well-tested building blocks for .NET 8 and .NET 10</strong> — guard clauses, URL-safe ShortGuids, a deterministic hash code, SQL Server row versions, and structured timing. Stop rewriting the same helpers in every project.</p>
     <p class="byline">Built by <a href="{{ site.author.url }}">Richard Crane</a>, Microsoft MVP, at <a href="{{ site.org.url }}">MILL5</a> · 110K+ NuGet downloads</p>
     <div class="actions">
       <a class="button" href="{{ '/getting-started/' | relative_url }}">Get started</a>
@@ -43,11 +43,10 @@ dotnet add package Pineapple
   <div class="card"><a href="{{ '/guides/shortguid/' | relative_url }}"><h3>ShortGuid</h3></a><p>A Guid as 22 URL-safe characters, with implicit conversions to Guid and string.</p></div>
   <div class="card"><a href="{{ '/guides/hashcode/' | relative_url }}"><h3>Deterministic HashCode</h3></a><p>xxHash32 hashes that are identical across processes, machines, and restarts.</p></div>
   <div class="card"><a href="{{ '/guides/rowversion/' | relative_url }}"><h3>RowVersion</h3></a><p>Compare and convert SQL Server <code>rowversion</code> values as a 64-bit struct.</p></div>
-  <div class="card"><a href="{{ '/guides/rate-limiting/' | relative_url }}"><h3>Rate limiting</h3></a><p>Cap calls per minute to an API or database with scopes and resource governors.</p></div>
-  <div class="card"><a href="{{ '/guides/timeouts-and-backoff/' | relative_url }}"><h3>Timeouts &amp; backoff</h3></a><p>Deadlines, exponential waits, and CPU-aware degrees of parallelism.</p></div>
-  <div class="card"><a href="{{ '/guides/diagnostics/' | relative_url }}"><h3>Diagnostics</h3></a><p>Time operations with <code>ILogger</code> using a single <code>using</code> block.</p></div>
+  <div class="card"><a href="{{ '/guides/diagnostics/' | relative_url }}"><h3>Diagnostics</h3></a><p>Structured, source-generated <code>ILogger</code> timing in one <code>using</code> block.</p></div>
   <div class="card"><a href="{{ '/guides/cleanup-and-async/' | relative_url }}"><h3>Cleanup &amp; async</h3></a><p>Exception-safe cleanup and synchronization-context scopes.</p></div>
-  <div class="card"><a href="{{ '/guides/health-and-networking/' | relative_url }}"><h3>Health &amp; networking</h3></a><p>Probe ports, URLs, and processes; decompress Brotli responses.</p></div>
+  <div class="card"><a href="{{ '/guides/timeouts-and-backoff/' | relative_url }}"><h3>Parallelism</h3></a><p>CPU-aware <code>ParallelOptions</code> for <code>Parallel.ForEach</code> loops.</p></div>
+  <div class="card"><a href="{{ '/guides/migration/' | relative_url }}"><h3>Upgrading to 2.0</h3></a><p>Built-in .NET replacements for the APIs deprecated in 2.0.</p></div>
   <div class="card"><a href="{{ '/guides/data/' | relative_url }}"><h3>Pineapple.Data</h3></a><p>Query SQL Server <code>INFORMATION_SCHEMA</code> with EF Core and check availability.</p></div>
 </div>
 

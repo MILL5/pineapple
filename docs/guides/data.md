@@ -45,6 +45,9 @@ foreach (var pk in await primaryKeys.ToListAsync())
 
 ## `SqlClient.Check.IsSqlServerAvailable`
 
+> **Deprecated in 2.0 (PINE006).** Use `EnableRetryOnFailure` to wake serverless databases and `AspNetCore.HealthChecks.SqlServer` for health checks. See the [migration guide]({{ '/guides/migration/#PINE006' | relative_url }}).
+{: .callout}
+
 Parses the server and port (default 1433) from a connection string and probes the TCP endpoint up to three times — handy for waking a paused Azure SQL serverless database before the first query.
 
 ```csharp

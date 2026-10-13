@@ -14,6 +14,9 @@ faq:
 
 ## `Health.Check`
 
+> **Deprecated in 2.0 (PINE006).** Use `Microsoft.Extensions.Diagnostics.HealthChecks` with the `AspNetCore.HealthChecks.*` packages. See the [migration guide]({{ '/guides/migration/#PINE006' | relative_url }}).
+{: .callout}
+
 **`Pineapple.Health.Check` provides quick yes/no probes for dependencies** — useful in startup checks, CLI tools, and test fixtures.
 
 ```csharp
@@ -28,6 +31,9 @@ bool apiUp      = new Uri("https://api.contoso.com/ping").IsUrlAvailable(2_000);
 All probes return `false` instead of throwing when the target is unreachable. For ASP.NET Core readiness and liveness endpoints, use these inside a [`IHealthCheck`](https://learn.microsoft.com/aspnet/core/host-and-deploy/health-checks).
 
 ## `BrotliCompressionHandler`
+
+> **Deprecated in 2.0 (PINE001).** Set `AutomaticDecompression = DecompressionMethods.All` on the primary handler instead. See the [migration guide]({{ '/guides/migration/#PINE001' | relative_url }}).
+{: .callout}
 
 **A `DelegatingHandler` that decompresses `Content-Encoding: br` responses** with `System.IO.Compression.BrotliStream`, for `IHttpClientFactory` pipelines.
 

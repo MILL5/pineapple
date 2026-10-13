@@ -26,6 +26,10 @@ public Invoice(string customerId, decimal amount, DateTime issuedOn, string webh
 }
 ```
 
+## Relationship to .NET's `ThrowIf` helpers
+
+Since 2.0, the null, whitespace, and numeric checks call the helpers built into .NET 8 — `ArgumentNullException.ThrowIfNull`, `ArgumentException.ThrowIfNullOrWhiteSpace`, and `ArgumentOutOfRangeException.ThrowIfLessThan`, `ThrowIfLessThanOrEqual`, `ThrowIfGreaterThan`, `ThrowIfEqual`, `ThrowIfNotEqual`, and `ThrowIfNegative` — so exceptions carry the correct `ParamName` and standard messages. The date, URI, GUID, type, condition, and synchronization-context checks have no built-in equivalent.
+
 ## Null and string checks
 
 | Method | Fails when | Throws |

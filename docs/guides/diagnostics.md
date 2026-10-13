@@ -9,7 +9,7 @@ last_reviewed: 2026-10-13
 
 ## `TimingScope`
 
-**`Pineapple.Diagnostics.TimingScope` logs the elapsed time of a `using` block through `Microsoft.Extensions.Logging.ILogger` at `Debug` level.** It records the calling member automatically and opens a logging scope `Caller=[member]`. When `Debug` is disabled, it does nothing — no stopwatch, no allocation of a log message.
+**`Pineapple.Diagnostics.TimingScope` logs the elapsed time of a `using` block through `Microsoft.Extensions.Logging.ILogger` at `Debug` level.** It records the calling member automatically, opens a logging scope `Caller=[member]`, and writes a source-generated structured event (EventId 1) with `OperationName`, `MemberName`, and `ElapsedMilliseconds` fields you can query in Application Insights, Seq, or any structured log store. When `Debug` is disabled, it does nothing — no stopwatch, no allocation of a log message.
 
 ```csharp
 using Pineapple.Diagnostics;
@@ -25,6 +25,9 @@ public async Task<IReadOnlyList<Customer>> LoadAsync()
 ```
 
 ## `MeasureScope`
+
+> **Deprecated in 2.0 (PINE004).** Use `System.Diagnostics.Metrics` counters and histograms; `MeasureScope` and `CallsPerMinute` are removed in 3.0. See the [migration guide]({{ '/guides/migration/#PINE004' | relative_url }}).
+{: .callout}
 
 Counts successful calls made through `Count(Action)` and writes the total to `Debug.WriteLine` on dispose.
 

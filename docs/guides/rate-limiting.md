@@ -5,7 +5,7 @@ breadcrumb: Rate limiting
 last_reviewed: 2026-10-13
 faq:
   - q: How do I limit calls per minute in C#?
-    a: "Create one Pineapple ResourceGoverner per dependency, for example `new ResourceGoverner(maxCallsPerMinute: 600)`, and wrap each call in `await using (await governor.GetOperationScopeAsync()) { ... }`. The governor waits until starting the call would keep the rate under the limit."
+    a: "On .NET 7 and later, use System.Threading.RateLimiting: `new SlidingWindowRateLimiter(new() { PermitLimit = 600, Window = TimeSpan.FromMinutes(1), SegmentsPerWindow = 6, QueueLimit = int.MaxValue })`, then `using var lease = await limiter.AcquireAsync();` before each call. Pineapple's ResourceGoverner does the same job but is deprecated in Pineapple 2.0."
   - q: What is the difference between Pineapple's ResourceGoverner and System.Threading.RateLimiting?
     a: System.Threading.RateLimiting (built into .NET 7+) offers token-bucket, fixed-window, sliding-window, and concurrency limiters with lease semantics. Pineapple's ResourceGoverner is a simpler calls-per-minute governor with built-in exponential backoff, a timeout, and call statistics. Use the built-in limiters for ASP.NET Core request throttling; use ResourceGoverner for simple outbound throttling.
   - q: What happens if a ResourceGoverner cannot get a slot?
@@ -13,6 +13,9 @@ faq:
 ---
 
 # Rate limiting and resource governors
+
+> **Deprecated in 2.0 (PINE002).** Use `System.Threading.RateLimiting`, built into .NET 7 and later. These types keep working in 2.x and are removed in 3.0. See the [migration guide]({{ '/guides/migration/#PINE002' | relative_url }}).
+{: .callout}
 
 **Pineapple offers three ways to cap how often code runs, all measured in calls per minute:** a per-call pacing scope, a cross-thread pacing scope keyed by caller, and an async sliding-window governor. All live in `Pineapple.Threading`.
 

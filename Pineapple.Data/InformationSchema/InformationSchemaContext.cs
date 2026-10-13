@@ -34,8 +34,6 @@ namespace Pineapple.Data.InformationSchema
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
-
             modelBuilder.Entity<Column>(entity =>
             {
                 entity.ToTable("COLUMNS", "INFORMATION_SCHEMA");

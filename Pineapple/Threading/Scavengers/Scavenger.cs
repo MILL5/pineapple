@@ -4,6 +4,7 @@ using static Pineapple.Common.Preconditions;
 
 namespace Pineapple.Threading
 {
+    [Obsolete("Use System.Threading.PeriodicTimer.", DiagnosticId = "PINE005", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     public class Scavenger
     {
         private readonly Timer _timer;

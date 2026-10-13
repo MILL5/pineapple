@@ -1,18 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
     <PackageId>Pineapple</PackageId>
     <RootNamespace>Pineapple</RootNamespace>
     <AssemblyName>Pineapple</AssemblyName>
     <Title>Pineapple — Guava-inspired core utilities for .NET</Title>
-    <Description>Pineapple is a Guava-inspired set of core utilities for .NET: guard clauses (preconditions), ShortGuid, deterministic xxHash-based HashCode, SQL Server RowVersion, rate limiting and resource governors, timing scopes, timeouts, exponential backoff, and safe cleanup helpers.</Description>
-    <PackageTags>guava;guard;guard-clauses;preconditions;shortguid;hashcode;xxhash;rowversion;rate-limiting;throttling;resource-governor;backoff;timeout;utilities;dotnet</PackageTags>
-    <PackageReleaseNotes>2.0.0: Targets .NET 8 and .NET 10. Drops netstandard2.0. Brotli handler now uses System.IO.Compression. Health checks use HttpClient. All dependencies upgraded. See https://github.com/MILL5/pineapple/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <Description>Pineapple is a Guava-inspired set of core utilities for .NET: guard clauses (preconditions), ShortGuid, deterministic xxHash-based HashCode, SQL Server RowVersion, structured timing scopes, CPU-aware parallelism, and safe cleanup helpers.</Description>
+    <PackageTags>guava;guard;guard-clauses;preconditions;shortguid;hashcode;xxhash;rowversion;timing;logging;parallelism;utilities;dotnet;dotnet8;dotnet10</PackageTags>
+    <PackageReleaseNotes>2.0.0: Targets .NET 8 and .NET 10; drops netstandard2.0. HashCode uses System.IO.Hashing (same hash values). Preconditions use the .NET ThrowIf helpers. APIs with built-in .NET replacements are [Obsolete] (PINE001-PINE008). All dependencies upgraded. See https://github.com/MILL5/pineapple/blob/main/CHANGELOG.md</PackageReleaseNotes>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="K4os.Hash.xxHash" />
+    <PackageReference Include="System.IO.Hashing" />
+    <PackageReference Include="Microsoft.Bcl.Memory" Condition="'$(TargetFramework)' == 'net8.0'" />
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>

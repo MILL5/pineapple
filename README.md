@@ -7,7 +7,7 @@
 [![CI](https://github.com/MILL5/pineapple/actions/workflows/ci.yml/badge.svg)](https://github.com/MILL5/pineapple/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/MILL5/pineapple/blob/main/LICENSE)
 
-**Pineapple is an open-source C# library of core utilities for .NET 8 and .NET 10, inspired by Google's Guava.** It gives you guard clauses (preconditions), URL-safe 22-character `ShortGuid`s, a deterministic xxHash `HashCode`, a SQL Server `RowVersion` type, calls-per-minute rate limiting and resource governors, timeouts, exponential backoff, timing scopes, and exception-safe cleanup helpers — small, dependency-light building blocks you would otherwise rewrite in every project.
+**Pineapple is an open-source C# library of core utilities for .NET 8 and .NET 10, inspired by Google's Guava.** It gives you guard clauses (preconditions), URL-safe 22-character `ShortGuid`s, a deterministic xxHash `HashCode`, a SQL Server `RowVersion` type, structured timing scopes, CPU-aware parallelism, and exception-safe cleanup helpers — small, dependency-light building blocks you would otherwise rewrite in every project.
 
 📖 **Documentation:** https://mill5.github.io/pineapple/
 
@@ -20,21 +20,19 @@ dotnet add package Pineapple.Data   # optional: SQL Server / EF Core helpers
 
 | Package | Targets | What's inside |
 | --- | --- | --- |
-| `Pineapple` | .NET 8, .NET 10 | Preconditions, ShortGuid, HashCode, RowVersion, Cleanup, threading, diagnostics, health checks, Brotli handler |
+| `Pineapple` | .NET 8, .NET 10 | Preconditions, ShortGuid, HashCode, RowVersion, TimingScope, Parallelism, Cleanup |
 | `Pineapple.Data` | .NET 8 (EF Core 8), .NET 10 (EF Core 10) | EF Core model for `INFORMATION_SCHEMA`, SQL Server availability check |
 
 ## Quick start
 
 ```csharp
 using Pineapple.Common;
-using Pineapple.Threading;
+using Pineapple.Diagnostics;
 using static Pineapple.Common.Preconditions;
+using HashCode = Pineapple.Common.HashCode;
 
-public sealed class OrderService(IOrderRepository repository)
+public sealed class OrderService(IOrderRepository repository, ILogger<OrderService> logger)
 {
-    // One governor per downstream dependency: at most 600 calls per minute.
-    private static readonly ResourceGoverner Governor = new(maxCallsPerMinute: 600);
-
     public async Task<Order> GetAsync(string orderId, int quantity)
     {
         // Guard clauses throw ArgumentException-family exceptions with useful messages.
@@ -44,9 +42,13 @@ public sealed class OrderService(IOrderRepository repository)
         // A ShortGuid is a Guid encoded as 22 URL-safe characters.
         ShortGuid id = orderId;
 
-        await using (await Governor.GetOperationScopeAsync())
+        // Deterministic hash: the same cache key on every machine and after every restart.
+        var cacheKey = HashCode.Combine("order", id.Guid.ToString(), quantity);
+
+        // Logs "Operation [LoadOrder] called from [GetAsync] took 12.34ms" at Debug level.
+        using (new TimingScope("LoadOrder", logger))
         {
-            return await repository.GetAsync(id.Guid);
+            return await repository.GetAsync(id.Guid, cacheKey);
         }
     }
 }
@@ -60,16 +62,28 @@ public sealed class OrderService(IOrderRepository repository)
 | **Identifiers** | `ShortGuid`, `GuidExtensions` | Shorten GUIDs for URLs; sort GUIDs the way SQL Server does |
 | **Hashing** | `HashCode` | Combine values into a hash that is **stable across processes** (xxHash32), unlike `System.HashCode` |
 | **Concurrency tokens** | `RowVersion` | Compare, order, and convert SQL Server `rowversion`/`timestamp` values |
-| **Rate limiting** | `RateLimiterScope`, `SafeRateLimiterScope`, `ResourceGoverner` | Cap calls per minute to an API or database |
-| **Timing & retry** | `AccurateTimeout`, `SimpleTimeout`, `ExponentialWait`, `Parallelism` | Enforce deadlines, back off, size parallel loops |
-| **Diagnostics** | `TimingScope`, `MeasureScope`, `ConsoleColorScope` | Log how long an operation took with `ILogger` |
+| **Parallelism** | `Parallelism` | Size `Parallel.ForEach` loops to the machine's CPUs |
+| **Diagnostics** | `TimingScope`, `ConsoleColorScope` | Log how long an operation took with structured `ILogger` events |
 | **Async plumbing** | `SynchronizationContextScope`, `SuppressSynchronizationContextScope` | Avoid sync-over-async deadlocks |
 | **Cleanup** | `Cleanup.SafeMethod` | Run cleanup code that must never throw |
-| **Health** | `Health.Check`, `Data.SqlClient.Check` | Probe TCP ports, URLs, processes, SQL Server |
-| **Networking** | `BrotliCompressionHandler` | Decompress `br` responses in `HttpClient` pipelines |
 | **Schema** | `InformationSchemaContext` | Query SQL Server `INFORMATION_SCHEMA` with LINQ |
 
 See the [documentation site](https://mill5.github.io/pineapple/) for a guide to each area.
+
+### Deprecated in 2.0
+
+.NET now ships built-in replacements for these, so they are marked `[Obsolete]` (diagnostics `PINE001`–`PINE008`) and will be removed in 3.0. The [migration guide](https://mill5.github.io/pineapple/guides/migration/) shows each replacement.
+
+| Deprecated | Use instead |
+| --- | --- |
+| `BrotliCompressionHandler` | `AutomaticDecompression = DecompressionMethods.All` |
+| `ResourceGoverner`, `RateLimiterScope`, `SafeRateLimiterScope`, `SemaphoreRateLimiterScope` | `System.Threading.RateLimiting` |
+| `AccurateTimeout`, `SimpleTimeout`, `ExponentialWait` | `CancellationTokenSource`, `Task.WaitAsync`, Polly retry |
+| `MeasureScope`, `CallsPerMinute` | `System.Diagnostics.Metrics` |
+| `Scavenger` | `PeriodicTimer` |
+| `Health.Check`, `Data.SqlClient.Check` | `Microsoft.Extensions.Diagnostics.HealthChecks` |
+| `ImmutableExtensions` | `ImmutableList.Add` / `AddRange` |
+| `ServiceCollectionExtensions` | `TryAddSingleton` |
 
 ## FAQ
 

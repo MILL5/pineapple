@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 
 namespace Pineapple.Extensions
 {
+    [Obsolete("Use ImmutableList.Add/AddRange, ImmutableDictionary.Add, or collection expressions such as [..list, item].", DiagnosticId = "PINE007", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     public static class ImmutableExtensions
     {
         public static IImmutableList<T> Append<T>(this IImmutableList<T> list, T appendThis) where T : class
