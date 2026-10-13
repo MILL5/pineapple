@@ -1,59 +1,22 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
-		<Company>MILL5</Company>
-		<Product>Pineapple</Product>
-		<Authors>MILL5</Authors>
-		<Copyright>Copyright 2019-2021</Copyright>
-		<LangVersion>default</LangVersion>
-		<Description>
-			Pineapple is a set of core libraries that includes utilities, primitives, helper classes for .NET!  The inspiration for Pineapple comes from Google's Guava framework.
-		</Description>
-		<Title>Pineapple</Title>
-		<PackageProjectUrl>https://github.com/MILL5/pineapple</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/MILL5/pineapple</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>precondition;check;shortguid;cleanup;extensions;quality</PackageTags>
-		<PackageReleaseNotes>Rate limiting and resource governers</PackageReleaseNotes>
-		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageId>Pineapple</PackageId>
-		<RootNamespace>Pineapple</RootNamespace>
-		<AssemblyName>Pineapple</AssemblyName>
-		<Version>1.0.41</Version>
-		<PublishRepositoryUrl>true</PublishRepositoryUrl>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<PackageIcon>pineapple.png</PackageIcon>
-		<AssemblyVersion>1.0.41.0</AssemblyVersion>
-		<FileVersion>1.0.41.0</FileVersion>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="BrotliSharpLib" Version="0.3.3" />
-		<PackageReference Include="K4os.Hash.xxHash" Version="1.0.7" />
-		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="..\pineapple.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
-		<None Include="..\LICENSE" Link="LICENSE">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
-	</ItemGroup>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <PackageId>Pineapple</PackageId>
+    <RootNamespace>Pineapple</RootNamespace>
+    <AssemblyName>Pineapple</AssemblyName>
+    <Title>Pineapple — Guava-inspired core utilities for .NET</Title>
+    <Description>Pineapple is a Guava-inspired set of core utilities for .NET: guard clauses (preconditions), ShortGuid, deterministic xxHash-based HashCode, SQL Server RowVersion, rate limiting and resource governors, timing scopes, timeouts, exponential backoff, and safe cleanup helpers.</Description>
+    <PackageTags>guava;guard;guard-clauses;preconditions;shortguid;hashcode;xxhash;rowversion;rate-limiting;throttling;resource-governor;backoff;timeout;utilities;dotnet</PackageTags>
+    <PackageReleaseNotes>2.0.0: Targets .NET 8 and .NET 10. Drops netstandard2.0. Brotli handler now uses System.IO.Compression. Health checks use HttpClient. All dependencies upgraded. See https://github.com/MILL5/pineapple/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="K4os.Hash.xxHash" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Pineapple.Tests" />
+  </ItemGroup>
 </Project>

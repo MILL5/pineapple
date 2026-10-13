@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en-US' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  {% seo %}
+  <meta name="keywords" content="pineapple, .net utilities, c# guard clauses, preconditions c#, shortguid, deterministic hashcode .net, xxhash c#, sql server rowversion c#, rate limiting c#, exponential backoff .net, guava for .net, .net 10, nuget, richard crane, mill5">
+  <link rel="icon" type="image/png" href="{{ '/assets/pineapple.png' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+  <link rel="alternate" type="text/plain" title="LLM summary" href="{{ '/llms.txt' | relative_url }}">
+  {% include structured-data.html %}
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="{{ '/' | relative_url }}">
+        <img src="{{ '/assets/pineapple.png' | relative_url }}" alt="" width="32" height="32">
+        <span>Pineapple</span>
+      </a>
+      <nav aria-label="Primary">
+        {% for item in site.nav %}
+        <a href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a>
+        {% endfor %}
+        <a href="{{ site.github_repo }}">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap{% if page.wide %} wide{% endif %}">
+    {% if page.breadcrumb %}
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{{ '/' | relative_url }}">Home</a> › <a href="{{ '/guides/' | relative_url }}">Guides</a> › <span>{{ page.breadcrumb }}</span>
+    </nav>
+    {% endif %}
+    <article>
+      {{ content }}
+    </article>
+    {% if page.last_reviewed %}
+    <p class="meta">Last reviewed {{ page.last_reviewed | date: "%B %-d, %Y" }} · Pineapple {{ site.version }}</p>
+    {% endif %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <nav class="footer-links" aria-label="Footer">
+        <a href="{{ site.github_repo }}">GitHub</a>
+        <a href="{{ site.nuget_url }}">NuGet</a>
+        <a href="{{ '/llms.txt' | relative_url }}">llms.txt</a>
+        <a href="{{ site.org.url }}">MILL5</a>
+        <a href="{{ site.author.url }}">Microsoft MVP</a>
+        <a href="{{ site.podcast.url }}/">{{ site.podcast.name }}</a>
+        <a href="mailto:{{ site.author.email }}">Contact</a>
+      </nav>
+      <p>&copy; 2019–{{ site.time | date: '%Y' }} <a href="{{ site.org.url }}">{{ site.org.legal_name }}</a>. Pineapple is licensed under <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a>.</p>
+      <p>Powered by <a href="{{ site.org.url }}">MILL5</a> · Built by <a href="{{ site.author.url }}">{{ site.author.name }}</a>, Microsoft MVP</p>
+    </div>
+  </footer>
+</body>
+</html>

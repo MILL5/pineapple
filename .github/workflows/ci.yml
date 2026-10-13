@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - run: dotnet restore Pineapple.slnx
+      - run: dotnet build Pineapple.slnx -c Release --no-restore
+      - run: dotnet test --solution Pineapple.slnx -c Release --no-build
+      - run: dotnet pack Pineapple.slnx -c Release --no-build -o artifacts
+        if: matrix.os == 'ubuntu-latest'
+

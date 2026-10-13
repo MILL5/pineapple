@@ -1,0 +1,10 @@
+{%- comment -%} Renders `faq:` front matter as visible Q&A so on-page text matches the FAQPage JSON-LD. {%- endcomment -%}
+<section class="faq" aria-labelledby="faq-heading">
+  <h2 id="faq-heading">{{ include.heading | default: "Frequently asked questions" }}</h2>
+  {% for q in page.faq %}
+  <details{% if forloop.first %} open{% endif %}>
+    <summary><h3>{{ q.q }}</h3></summary>
+    {{ q.a | markdownify }}
+  </details>
+  {% endfor %}
+</section>

@@ -1,52 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Description>Pineapple.Data is a set of libraries for working with database such as SQL Server.</Description>
-    <Copyright>Copyright 2019-2021</Copyright>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/MILL5/pineapple</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/MILL5/pineapple</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>The initial release of ...
-
-Entity Framework model for Information Schema
-SQL Server Serverless IsAvailable Check</PackageReleaseNotes>
-    <PackageTags>information;schema;serverless;sqlserver;sql</PackageTags>
-    <Version>1.0.41</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageIcon>pineapple.png</PackageIcon>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <PackageId>Pineapple.Data</PackageId>
+    <Title>Pineapple.Data — SQL Server helpers for .NET</Title>
+    <Description>Pineapple.Data adds SQL Server helpers to Pineapple: an Entity Framework Core model for INFORMATION_SCHEMA (tables, columns, key columns, constraints) and a SQL Server availability check for serverless and Azure SQL databases.</Description>
+    <PackageTags>sqlserver;azure-sql;information-schema;entity-framework-core;efcore;serverless;sql;health-check</PackageTags>
+    <PackageReleaseNotes>2.0.0: Targets .NET 8 (EF Core 8) and .NET 10 (EF Core 10). Microsoft.Data.SqlClient 7. See https://github.com/MILL5/pineapple/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
   </ItemGroup>
-
-
-  <ItemGroup>
-
-    <PackageReference Include="Pineapple" Version="1.0.40" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\pineapple.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Pineapple\Pineapple.csproj" />
   </ItemGroup>
-
 </Project>

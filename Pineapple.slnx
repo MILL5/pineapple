@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Pineapple.Data/Pineapple.Data.csproj" />
+  <Project Path="Pineapple.Tests/Pineapple.Tests.csproj" />
+  <Project Path="Pineapple/Pineapple.csproj" />
+</Solution>

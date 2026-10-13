@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <OutputType>Exe</OutputType>
+    <EnableMSTestRunner>true</EnableMSTestRunner>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="PreconditionTests\PreconditionTests.CheckIsNotNullOrWhitespace.cs;PreconditionTests\PreconditionTests.ParameterName.cs" />
+    <None Include="PreconditionTests\PreconditionTests.CheckIsNotNullOrWhitespace.cs;PreconditionTests\PreconditionTests.ParameterName.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MSTest" />
+    <PackageReference Include="Shouldly" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pineapple\Pineapple.csproj" />
+  </ItemGroup>
+</Project>
