@@ -31,6 +31,8 @@ bool same = parsed == id;             // true
 
 ## Encoding rules
 
+Since 2.0, encoding and decoding use .NET's allocation-free `System.Buffers.Text.Base64Url`. The output is identical to 1.x, and decoding still accepts standard Base64 `+` and `/`. `default(ShortGuid)` now behaves like `ShortGuid.Empty` instead of throwing.
+
 1. Take `Guid.ToByteArray()` (16 bytes).
 2. Base64-encode it (24 characters).
 3. Replace `/` with `_` and `+` with `-`.
@@ -48,6 +50,8 @@ bool same = parsed == id;             // true
 | `ShortGuid.Decode(string)` | Short or standard string → `Guid` |
 | `ShortGuid.TryParse(string, out Guid)` | Non-throwing parse |
 | `Equals(object)` | Equal to another `ShortGuid`, a `Guid`, or either string form |
+
+`GuidExtensions` uses `System.Data.SqlTypes.SqlGuid` for comparison, so ordering matches SQL Server exactly.
 
 ## Sorting GUIDs like SQL Server
 

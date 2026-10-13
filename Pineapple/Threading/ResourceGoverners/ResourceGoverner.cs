@@ -8,6 +8,7 @@ using static Pineapple.Common.Preconditions;
 namespace Pineapple.Threading
 {
 
+    [Obsolete("Use System.Threading.RateLimiting (SlidingWindowRateLimiter, TokenBucketRateLimiter, ConcurrencyLimiter) or Microsoft.Extensions.Http.Resilience.", DiagnosticId = "PINE002", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     public class ResourceGoverner : BaseResourceGoverner
     {
         private enum InitState
@@ -22,12 +23,36 @@ namespace Pineapple.Threading
         protected readonly int _maxCallsPerMinute;
         protected readonly int _timeOutMs;
 
+        // Scheduling uses the monotonic Stopwatch clock; wall-clock adjustments must not shift slots.
+        private static readonly long OneMinute = Stopwatch.Frequency * 60;
+        private readonly long _interval;
+        private long? _nextAllowed;
+        private long _lastStart;
+
         public ResourceGoverner(int maxCallsPerMinute)
         {
             CheckIsNotLessThan(nameof(maxCallsPerMinute), maxCallsPerMinute, 1);
 
             _maxCallsPerMinute = maxCallsPerMinute;
             _timeOutMs = GetAdjustedTimeout(maxCallsPerMinute);
+            _interval = OneMinute / maxCallsPerMinute;
+        }
+
+        //
+        // Timers can fire up to ~16ms late (Windows timer resolution), which matters when slots are
+        // only tens of milliseconds apart. Sleep until just before the slot, then yield until it opens.
+        //
+        private static readonly TimeSpan TimerResolution = TimeSpan.FromMilliseconds(16);
+
+        private static async Task WaitAsync(TimeSpan wait)
+        {
+            var target = Stopwatch.GetTimestamp() + (long)(wait.TotalSeconds * Stopwatch.Frequency);
+
+            if (wait > TimerResolution)
+                await Task.Delay(wait - TimerResolution).ConfigureAwait(false);
+
+            while (Stopwatch.GetTimestamp() < target)
+                Thread.Yield();
         }
 
         private static int GetAdjustedTimeout(int maxCallsPerMinute)
@@ -40,55 +65,47 @@ namespace Pineapple.Threading
         {
             Operation nextOperation = null;
 
-            var expiration = DateTime.Now.AddMinutes(-1);
             var initState = InitState.Waiting;
 
             var timeout = new AccurateTimeout(_timeOutMs);
-            var delay = new ExponentialWait(1, 3, Math.Min(_timeOutMs, 10000));
+            var wait = TimeSpan.Zero;
 
             while (initState == InitState.Waiting)
             {
                 lock (_operations.OperationLock)
                 {
-                    //
-                    // We lookback at only those operations in the last minute.
-                    // Our governing is done on a calls per minute basis,
-                    // therefore we look back a minute
-                    //
-                    var lookback = _operations.GetCurrent(expiration);
-                    var count = lookback.Count;
+                    var now = Stopwatch.GetTimestamp();
 
-                    initState = InitState.Continue;
+                    //
+                    // Calls are scheduled one interval (60s / maxCallsPerMinute) apart, so no rolling
+                    // minute ever holds more than maxCallsPerMinute calls. After a quiet minute the first
+                    // call starts immediately and the next waits two intervals, so the first N calls
+                    // take N intervals and throughput never exceeds the maximum.
+                    //
+                    var isIdle = !_nextAllowed.HasValue || now - _lastStart >= OneMinute;
 
-                    if (count > 0)
+                    if (isIdle || now >= _nextAllowed.Value)
                     {
-                        var oldest = lookback.Min(x => x.Start);
+                        initState = InitState.Continue;
 
                         //
-                        // We ount the next operation in the count when calculating
-                        // the potentialOpsPerMinute. We never want the potential operations
-                        // per minute to exceed the maximum operations per minute.
+                        // Schedule from the actual start, never from a missed slot: catching up would let a
+                        // caller that runs slower than the limit build up credit and then burst past it.
                         //
+                        _nextAllowed = now + (isIdle ? _interval + _interval : _interval);
+                        _lastStart = now;
 
-                        var difference = DateTime.Now - oldest;
-                        var potentialOpsPerMinute = (count + 1) / (difference.TotalSeconds / 60);
-
-                        if (potentialOpsPerMinute > _maxCallsPerMinute)
-                            initState = InitState.Waiting;
-
-                        Debug.WriteLine($"[{DateTime.Now:hh:mm:ss.fff}]:State:{initState}:Ops Per Minute:{potentialOpsPerMinute}");
+                        //
+                        // Create the operation inside the lock so the next caller sees it.
+                        //
+                        nextOperation = new Operation(_operations, DateTime.UtcNow);
                     }
-
-                    //
-                    // We do this here (i.e. inside lock) since this operation
-                    // is supposed to start and we want to make sure the next
-                    // operation includes this operation in the count when it
-                    // does the operations per minute calculation.
-                    //
-                    if (initState == InitState.Continue)
+                    else
                     {
-                        nextOperation = new Operation(_operations);
+                        wait = Stopwatch.GetElapsedTime(now, _nextAllowed.Value);
                     }
+
+                    Debug.WriteLine($"[{DateTime.Now:hh:mm:ss.fff}]:State:{initState}:Wait:{wait.TotalMilliseconds:0}ms");
                 }
 
                 if (initState == InitState.Waiting)
@@ -97,11 +114,13 @@ namespace Pineapple.Threading
                     // We only check for timeout if we are waiting
                     //
                     timeout.EnsureNotTimedOut();
-                    await delay.WaitAsync();
+
+                    var remaining = TimeSpan.FromMilliseconds(Math.Max(1, timeout.RemainingInMilliseconds + 1));
+                    await WaitAsync(wait > remaining ? remaining : wait);
                 }
             }
 
-            _cpm.Add();
+            _cpm.Add(nextOperation.Start);
 
             return nextOperation;
         }

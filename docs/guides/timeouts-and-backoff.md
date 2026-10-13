@@ -14,6 +14,9 @@ faq:
 
 ## Timeouts
 
+> **Deprecated in 2.0 (PINE003).** Use `CancellationTokenSource(TimeSpan)`, `Task.WaitAsync`, or a Polly retry. `Parallelism` is not deprecated. See the [migration guide]({{ '/guides/migration/#PINE003' | relative_url }}).
+{: .callout}
+
 **`AccurateTimeout` and `SimpleTimeout` (in `Pineapple.Threading`) track a deadline and throw `TimeoutException` from `EnsureNotTimedOut()` once it passes.** Both implement `ITimeout`.
 
 ```csharp

@@ -37,5 +37,6 @@ int linesHash = hc.ToHashCode();
 
 ## Notes
 
-- Integer values are hashed in machine byte order (little-endian on every platform .NET 8+ supports).
+- Since 2.0, hashing uses Microsoft's [`System.IO.Hashing.XxHash32`](https://learn.microsoft.com/dotnet/api/system.io.hashing.xxhash32) and hashes primitive values without boxing. Every value produces exactly the same hash as in 1.x; a test suite of recorded 1.x hashes guards this.
+- Integer values are hashed as little-endian bytes.
 - `HashCode` instances are accumulators: `Equals` and `GetHashCode` on the instance are deliberately unsupported.

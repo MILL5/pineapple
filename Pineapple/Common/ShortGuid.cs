@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Text;
 using static Pineapple.Common.Preconditions;
 // ReSharper disable UnusedMember.Global
 
@@ -6,9 +7,14 @@ namespace Pineapple.Common
 {
     public struct ShortGuid
     {
+        private static readonly GuidValue EmptyValue = new(Guid.Empty);
+
         public static readonly ShortGuid Empty = new ShortGuid(Guid.Empty);
 
         private GuidValue _guidValue;
+
+        // default(ShortGuid) has no GuidValue; treat it as Empty instead of throwing NullReferenceException.
+        private readonly GuidValue Current => _guidValue ?? EmptyValue;
 
         private class GuidValue
         {
@@ -57,19 +63,19 @@ namespace Pineapple.Common
 
         public Guid Guid
         {
-            get => _guidValue.Guid;
+            get => Current.Guid;
             set => _guidValue = new GuidValue(value);
         }
 
         public string Value
         {
-            get => _guidValue.Value;
+            get => Current.Value;
             set => _guidValue = new GuidValue(value);
         }
 
         public override string ToString()
         {
-            return _guidValue.Value;
+            return Current.Value;
         }
 
         public override bool Equals(object obj)
@@ -79,7 +85,7 @@ namespace Pineapple.Common
                 if (GetHashCode() != guidAsShortGuid.GetHashCode())
                     return false;
 
-                return _guidValue.Guid.Equals(guidAsShortGuid.Guid);
+                return Current.Guid.Equals(guidAsShortGuid.Guid);
             }
 
             if (obj is Guid guid)
@@ -142,14 +148,7 @@ namespace Pineapple.Common
 
             if (input.Length == size)
             {
-                try
-                {
-                    guid = Decode(input);
-                    return true;
-                }
-                catch
-                {
-                }
+                return TryDecodeShortGuidString(input, out guid);
             }
 
             return false;
@@ -157,13 +156,10 @@ namespace Pineapple.Common
 
         public static string Encode(Guid guid)
         {
-            string encoded = Convert.ToBase64String(guid.ToByteArray());
+            Span<byte> bytes = stackalloc byte[16];
+            guid.TryWriteBytes(bytes);
 
-            encoded = encoded
-              .Replace("/", "_")
-              .Replace("+", "-");
-
-            return encoded.Substring(0, 22);
+            return Base64Url.EncodeToString(bytes);
         }
 
         private static Guid DecodeShortGuidString(string value)
@@ -171,14 +167,48 @@ namespace Pineapple.Common
             if (value.Length != 22)
                 throw new ArgumentOutOfRangeException("Value is not the length of a ShortGuid.");
 
-            value = value
-              .Replace("_", "/")
-              .Replace("-", "+");
+            if (!TryDecodeShortGuidString(value, out var guid))
+                throw new FormatException($"'{value}' is not a valid ShortGuid.");
 
-            var decodeThis = $@"{value}==";
-            byte[] buffer = Convert.FromBase64String(decodeThis);
+            return guid;
+        }
 
-            return new Guid(buffer);
+        private static bool TryDecodeShortGuidString(string value, out Guid guid)
+        {
+            guid = Guid.Empty;
+
+            if (value.Length != 22)
+                return false;
+
+            // Accept the standard Base64 '+' and '/' as well, as 1.x did.
+            Span<char> chars = stackalloc char[22];
+
+            for (var i = 0; i < chars.Length; i++)
+            {
+                var c = value[i];
+                chars[i] = c switch
+                {
+                    '+' => '-',
+                    '/' => '_',
+                    _ => c
+                };
+
+                if (!(char.IsAsciiLetterOrDigit(chars[i]) || chars[i] is '-' or '_'))
+                    return false;
+            }
+
+            // 22 characters carry 132 bits; the last 4 are padding. Clear them like Convert.FromBase64String did,
+            // because Base64Url rejects non-zero padding bits (e.g. "WorkNotificationOpened").
+            const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+            chars[21] = Alphabet[Alphabet.IndexOf(chars[21]) & 0b110000];
+
+            Span<byte> bytes = stackalloc byte[16];
+
+            if (!Base64Url.TryDecodeFromChars(chars, bytes, out var written) || written != 16)
+                return false;
+
+            guid = new Guid(bytes);
+            return true;
         }
 
         public static Guid Decode(string value)

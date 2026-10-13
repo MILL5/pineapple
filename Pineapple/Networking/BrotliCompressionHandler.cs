@@ -1,3 +1,4 @@
+﻿using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Pineapple.Networking
     /// A <see cref="DelegatingHandler"/> that transparently decompresses <c>Content-Encoding: br</c> responses
     /// using <see cref="BrotliStream"/>.
     /// </summary>
+    [Obsolete("Use AutomaticDecompression = DecompressionMethods.All on HttpClientHandler or SocketsHttpHandler.", DiagnosticId = "PINE001", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     public class BrotliCompressionHandler : DelegatingHandler
     {
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)

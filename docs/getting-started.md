@@ -1,6 +1,6 @@
 ---
 title: Getting started with Pineapple for .NET
-description: Install the Pineapple NuGet package, add guard clauses, ShortGuids, and rate limiting to a .NET 8 or .NET 10 project in five minutes.
+description: Install the Pineapple NuGet package, add guard clauses, ShortGuids, and deterministic hashes to a .NET 8 or .NET 10 project in five minutes.
 last_reviewed: 2026-10-13
 ---
 
@@ -41,20 +41,12 @@ string slug = id;                 // 22 URL-safe characters
 Guid back = new ShortGuid(slug);  // round-trips to the same Guid
 ```
 
-## 4. Rate-limit a dependency
+## 4. Hash values the same way on every machine
 
 ```csharp
-using Pineapple.Threading;
+using HashCode = Pineapple.Common.HashCode;
 
-var governor = new ResourceGoverner(maxCallsPerMinute: 120);
-
-foreach (var item in items)
-{
-    await using (await governor.GetOperationScopeAsync())
-    {
-        await api.SendAsync(item);
-    }
-}
+int shard = (HashCode.Combine(tenantId, customerId) & 0x7fffffff) % 16;   // same shard after every restart
 ```
 
 ## 5. Time an operation
@@ -73,4 +65,4 @@ using (new TimingScope("LoadCustomers", logger))
 
 - Browse the [guides]({{ '/guides/' | relative_url }}) for every feature area.
 - Read the [FAQ]({{ '/faq/' | relative_url }}).
-- Upgrading from 1.x? See the [changelog]({{ '/changelog/' | relative_url }}).
+- Upgrading from 1.x? See the [migration guide]({{ '/guides/migration/' | relative_url }}) and the [changelog]({{ '/changelog/' | relative_url }}).
