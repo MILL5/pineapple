@@ -7,24 +7,30 @@ namespace Pineapple.Tests
     public partial class PreconditionTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CheckParameterNameNullTest()
         {
-            CheckIsNotNull(NullString, AnObject);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                CheckIsNotNull(NullString, AnObject);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckParameterNameEmptyTest()
         {
-            CheckIsNotNull(string.Empty, AnObject);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsNotNull(string.Empty, AnObject);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckParameterNameWhitespaceTest()
         {
-            CheckIsNotNull(WhitespaceString, AnObject);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsNotNull(WhitespaceString, AnObject);
+            });
         }
 
         [TestMethod]

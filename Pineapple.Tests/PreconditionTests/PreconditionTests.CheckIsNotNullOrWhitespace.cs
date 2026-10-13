@@ -7,24 +7,30 @@ namespace Pineapple.Tests
     public partial class PreconditionTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CheckIsNotNullOrWhitespaceNullStringTest()
         {
-            CheckIsNotNullOrWhitespace(nameof(NullString), NullString);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                CheckIsNotNullOrWhitespace(nameof(NullString), NullString);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsNotNullOrWhitespaceEmptyStringTest()
         {
-            CheckIsNotNullOrWhitespace(nameof(EmptyString), EmptyString);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsNotNullOrWhitespace(nameof(EmptyString), EmptyString);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsNotNullOrWhitespaceWhitespaceStringTest()
         {
-            CheckIsNotNullOrWhitespace(nameof(WhitespaceString), WhitespaceString);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsNotNullOrWhitespace(nameof(WhitespaceString), WhitespaceString);
+            });
         }
     }
 }

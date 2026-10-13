@@ -23,10 +23,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotGreaterThanIntFalseTest()
 		{
-			CheckIsNotGreaterThan(nameof(SomeInt), SomeInt+1, SomeInt);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotGreaterThan(nameof(SomeInt), SomeInt+1, SomeInt);
+			});
 		}
 
 		public void CheckIsNotGreaterThanLongTest()
@@ -35,10 +37,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotGreaterThanLongFalseTest()
 		{
-			CheckIsNotGreaterThan(nameof(SomeLong), SomeLong+1, SomeLong);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotGreaterThan(nameof(SomeLong), SomeLong+1, SomeLong);
+			});
 		}
 
 		[TestMethod]
@@ -48,10 +52,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotGreaterThanUShortFalseTest()
 		{
-			CheckIsNotGreaterThan(nameof(SomeUShort), SomeUShort + 1, SomeUShort);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotGreaterThan(nameof(SomeUShort), SomeUShort + 1, SomeUShort);
+			});
 		}
 
 		[TestMethod]
@@ -61,10 +67,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotGreaterThanUIntFalseTest()
 		{
-			CheckIsNotGreaterThan(nameof(SomeUInt), SomeUInt+1, SomeUInt);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotGreaterThan(nameof(SomeUInt), SomeUInt+1, SomeUInt);
+			});
 		}
 
 		public void CheckIsNotGreaterThanULongTest()
@@ -73,10 +81,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotGreaterThanULongFalseTest()
 		{
-			CheckIsNotGreaterThan(nameof(SomeULong), SomeULong + 1, SomeULong);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotGreaterThan(nameof(SomeULong), SomeULong + 1, SomeULong);
+			});
 		}
 
 		#endregion CheckIsNotGreaterThan
@@ -90,10 +100,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotLessThanIntFalseTest()
 		{
-			CheckIsNotLessThan(nameof(SomeInt), SomeInt-1, SomeInt);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotLessThan(nameof(SomeInt), SomeInt-1, SomeInt);
+			});
 		}
 
 		public void CheckIsNotLessThanLongTest()
@@ -102,10 +114,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotLessThanLongFalseTest()
 		{
-			CheckIsNotLessThan(nameof(SomeLong), SomeLong-1, SomeLong);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotLessThan(nameof(SomeLong), SomeLong-1, SomeLong);
+			});
 		}
 
 		[TestMethod]
@@ -115,10 +129,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotLessThanUShortFalseTest()
 		{
-			CheckIsNotLessThan(nameof(SomeUShort), SomeUShort-1, SomeUShort);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotLessThan(nameof(SomeUShort), SomeUShort-1, SomeUShort);
+			});
 		}
 
 		[TestMethod]
@@ -128,10 +144,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotLessThanUIntFalseTest()
 		{
-			CheckIsNotLessThan(nameof(SomeUInt), SomeUInt-1, SomeUInt);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotLessThan(nameof(SomeUInt), SomeUInt-1, SomeUInt);
+			});
 		}
 
 		public void CheckIsNotLessThanULongTest()
@@ -140,10 +158,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotLessThanULongFalseTest()
 		{
-			CheckIsNotLessThan(nameof(SomeULong), SomeULong-1, SomeULong);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotLessThan(nameof(SomeULong), SomeULong-1, SomeULong);
+			});
 		}
 
 		#endregion CheckIsNotLessThan
@@ -157,10 +177,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotLessThanOrEqualToIntFalseTest()
 		{
-			CheckIsNotLessThanOrEqualTo(nameof(SomeInt), SomeInt, SomeInt);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotLessThanOrEqualTo(nameof(SomeInt), SomeInt, SomeInt);
+			});
 		}
 
 		public void CheckIsNotLessThanOrEqualToLongTest()
@@ -169,10 +191,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotLessThanOrEqualToLongFalseTest()
 		{
-			CheckIsNotLessThanOrEqualTo(nameof(SomeLong), SomeLong, SomeLong);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotLessThanOrEqualTo(nameof(SomeLong), SomeLong, SomeLong);
+			});
 		}
 
 		[TestMethod]
@@ -182,10 +206,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotLessThanOrEqualToUShortFalseTest()
 		{
-			CheckIsNotLessThanOrEqualTo(nameof(SomeUShort), SomeUShort, SomeUShort);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotLessThanOrEqualTo(nameof(SomeUShort), SomeUShort, SomeUShort);
+			});
 		}
 
 		[TestMethod]
@@ -195,10 +221,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotLessThanOrEqualToUIntFalseTest()
 		{
-			CheckIsNotLessThanOrEqualTo(nameof(SomeUInt), SomeUInt, SomeUInt);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotLessThanOrEqualTo(nameof(SomeUInt), SomeUInt, SomeUInt);
+			});
 		}
 
 		public void CheckIsNotLessThanOrEqualToULongTest()
@@ -207,10 +235,12 @@ namespace Pineapple.Tests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CheckIsNotLessThanOrEqualToULongFalseTest()
 		{
-			CheckIsNotLessThanOrEqualTo(nameof(SomeULong), SomeULong, SomeULong);
+			Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			{
+				CheckIsNotLessThanOrEqualTo(nameof(SomeULong), SomeULong, SomeULong);
+			});
 		}
 
 		#endregion CheckIsNotLessThanOrEqualTo

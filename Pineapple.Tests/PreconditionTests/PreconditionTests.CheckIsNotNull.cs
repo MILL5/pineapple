@@ -7,10 +7,12 @@ namespace Pineapple.Tests
     public partial class PreconditionTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CheckIsNotNullNullObjectTest()
         {
-            CheckIsNotNull(nameof(NullObject), NullObject);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                CheckIsNotNull(nameof(NullObject), NullObject);
+            });
         }
 
         [TestMethod]
@@ -20,10 +22,12 @@ namespace Pineapple.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CheckIsNotNullNullStringTest()
         {
-            CheckIsNotNull(nameof(NullString), NullString);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                CheckIsNotNull(nameof(NullString), NullString);
+            });
         }
 
         [TestMethod]

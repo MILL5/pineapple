@@ -536,22 +536,26 @@ namespace Pineapple.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception), AllowDerivedTypes = true)]
         public void HashCodeEqualsTest()
         {
-            var hc1 = new HashCode();
-            var hc2 = new HashCode();
+            Assert.Throws<Exception>(() =>
+            {
+                var hc1 = new HashCode();
+                var hc2 = new HashCode();
 
-            hc1.Equals(hc2);
+                hc1.Equals(hc2);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception), AllowDerivedTypes = true)]
         public void HashCodeGetHashCodeTest()
         {
-            var hc1 = new HashCode();
+            Assert.Throws<Exception>(() =>
+            {
+                var hc1 = new HashCode();
 
-            hc1.GetHashCode();
+                hc1.GetHashCode();
+            });
         }
     }
 }

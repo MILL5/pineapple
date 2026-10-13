@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
+using System.Threading;
 using static Pineapple.Common.Preconditions;
 using static Pineapple.Common.Cleanup;
 // ReSharper disable UnusedMember.Global
@@ -11,6 +13,8 @@ namespace Pineapple.Health
 {
     public static class Check
     {
+        private static readonly HttpClient _httpClient = new() { Timeout = System.Threading.Timeout.InfiniteTimeSpan };
+
         public static bool IsRunning(string processName)
         {
             CheckIsNotNullOrWhitespace(nameof(processName), processName);
@@ -75,11 +79,10 @@ namespace Pineapple.Health
 
             try
             {
-                var request = (HttpWebRequest)WebRequest.Create(url);
-                request.Timeout = timeoutInMs;
-                request.Method = WebRequestMethods.Http.Get;
-                using (var response = (HttpWebResponse)request.GetResponse())
-                    isAvailable = response.StatusCode == HttpStatusCode.OK;
+                using var request = new HttpRequestMessage(HttpMethod.Get, url);
+                using var cts = new CancellationTokenSource(timeoutInMs);
+                using var response = _httpClient.Send(request, HttpCompletionOption.ResponseHeadersRead, cts.Token);
+                isAvailable = response.StatusCode == HttpStatusCode.OK;
             }
             catch
             {

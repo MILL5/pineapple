@@ -1,0 +1,32 @@
+---
+layout: null
+sitemap: false
+---
+# Pineapple
+
+> Pineapple is a free, open-source (Apache-2.0) C# library from MILL5 with Guava-inspired core utilities for .NET 8 and .NET 10. Install with `dotnet add package Pineapple`. SQL Server / EF Core helpers ship separately as `Pineapple.Data`.
+
+Key facts:
+- NuGet: Pineapple, Pineapple.Data — version {{ site.version }}
+- Targets: net8.0, net10.0 (1.0.41 is the last netstandard2.0 release)
+- Namespaces: Pineapple.Common, Pineapple.Data, Pineapple.Threading, Pineapple.Diagnostics, Pineapple.Health, Pineapple.Networking, Pineapple.Extensions
+- Source: https://github.com/MILL5/pineapple
+
+## Docs
+
+- [Getting started]({{ '/getting-started/' | absolute_url }}): install and first use
+- [Guard clauses (Preconditions)]({{ '/guides/preconditions/' | absolute_url }}): CheckIsNotNull, CheckIsNotNullOrWhitespace, CheckIsNotLessThan, CheckIsValidDateRange, CheckIsWellFormedUri, CheckIsCondition
+- [ShortGuid]({{ '/guides/shortguid/' | absolute_url }}): 22-char URL-safe Guid encoding; SQL Server GUID ordering (OrderByGuid, SqlCompareTo)
+- [HashCode]({{ '/guides/hashcode/' | absolute_url }}): deterministic xxHash32 hash combining, stable across processes
+- [RowVersion]({{ '/guides/rowversion/' | absolute_url }}): SQL Server rowversion as a comparable struct
+- [Rate limiting]({{ '/guides/rate-limiting/' | absolute_url }}): ResourceGoverner (async calls-per-minute), RateLimiterScope, SafeRateLimiterScope
+- [Timeouts and backoff]({{ '/guides/timeouts-and-backoff/' | absolute_url }}): AccurateTimeout, SimpleTimeout, ExponentialWait, Parallelism
+- [Diagnostics]({{ '/guides/diagnostics/' | absolute_url }}): TimingScope (ILogger), MeasureScope, CallsPerMinute, ConsoleColorScope
+- [Cleanup and async]({{ '/guides/cleanup-and-async/' | absolute_url }}): Cleanup.SafeMethod, SynchronizationContextScope, ImmutableExtensions
+- [Health and networking]({{ '/guides/health-and-networking/' | absolute_url }}): Check.IsAlive, Check.IsUrlAvailable, BrotliCompressionHandler
+- [Pineapple.Data]({{ '/guides/data/' | absolute_url }}): InformationSchemaContext (EF Core), SqlClient.Check
+
+## Optional
+
+- [FAQ]({{ '/faq/' | absolute_url }})
+- [Changelog]({{ '/changelog/' | absolute_url }})

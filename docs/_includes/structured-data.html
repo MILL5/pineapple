@@ -1,0 +1,72 @@
+{%- comment -%}
+  JSON-LD for search engines and answer engines.
+  Every page gets SoftwareSourceCode + Organization; the home page adds SoftwareApplication;
+  pages with `faq:` front matter add FAQPage; guide pages add TechArticle + BreadcrumbList.
+{%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "{{ site.author.url }}#org",
+      "name": "MILL5",
+      "url": "{{ site.author.url }}",
+      "sameAs": ["https://github.com/MILL5"]
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": "{{ site.url }}{{ site.baseurl }}/#code",
+      "name": "Pineapple",
+      "description": {{ site.description | strip | jsonify }},
+      "codeRepository": "{{ site.github_repo }}",
+      "programmingLanguage": "C#",
+      "runtimePlatform": [".NET 8", ".NET 10"],
+      "license": "https://www.apache.org/licenses/LICENSE-2.0",
+      "version": "{{ site.version }}",
+      "author": { "@id": "{{ site.author.url }}#org" },
+      "keywords": "C#, .NET, Guava, guard clauses, preconditions, ShortGuid, xxHash, HashCode, RowVersion, rate limiting, resource governor, exponential backoff, NuGet"
+    }{% if page.url == "/" %},
+    {
+      "@type": "SoftwareApplication",
+      "name": "Pineapple",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Windows, Linux, macOS",
+      "softwareVersion": "{{ site.version }}",
+      "downloadUrl": "{{ site.nuget_url }}",
+      "installUrl": "{{ site.nuget_url }}",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "publisher": { "@id": "{{ site.author.url }}#org" }
+    }{% endif %}{% if page.breadcrumb %},
+    {
+      "@type": "TechArticle",
+      "headline": {{ page.title | jsonify }},
+      "description": {{ page.description | jsonify }},
+      "url": "{{ page.url | absolute_url }}",
+      {% if page.last_reviewed %}"dateModified": "{{ page.last_reviewed | date_to_xmlschema }}",{% endif %}
+      "proficiencyLevel": "Intermediate",
+      "about": { "@id": "{{ site.url }}{{ site.baseurl }}/#code" },
+      "author": { "@id": "{{ site.author.url }}#org" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ '/' | absolute_url }}" },
+        { "@type": "ListItem", "position": 2, "name": "Guides", "item": "{{ '/guides/' | absolute_url }}" },
+        { "@type": "ListItem", "position": 3, "name": {{ page.breadcrumb | jsonify }}, "item": "{{ page.url | absolute_url }}" }
+      ]
+    }{% endif %}{% if page.faq %},
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {% for q in page.faq %}{
+          "@type": "Question",
+          "name": {{ q.q | jsonify }},
+          "acceptedAnswer": { "@type": "Answer", "text": {{ q.a | strip | jsonify }} }
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]
+    }{% endif %}
+  ]
+}
+</script>

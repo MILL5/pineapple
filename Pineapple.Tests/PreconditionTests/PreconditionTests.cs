@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,10 +25,12 @@ namespace Pineapple.Tests
 
         #region CheckIsNotCondition using Func<bool> Tests
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsNotConditionFuncTrueTest()
         {
-            CheckIsNotCondition(nameof(SomeString), () => true, () => "Condition was met.");
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsNotCondition(nameof(SomeString), () => true, () => "Condition was met.");
+            });
         }
 
         [TestMethod]
@@ -38,42 +40,53 @@ namespace Pineapple.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsNotConditionFuncTrueNullMessageTest()
         {
-            CheckIsNotCondition(nameof(SomeString), () => true, "Some condition was met");
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsNotCondition(nameof(SomeString), () => true, "Some condition was met");
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CheckIsNotConditionFuncTrueNullMessageFromFuncTest()
         {
-            CheckIsNotCondition(nameof(SomeString), () => true, () => null);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                CheckIsNotCondition(nameof(SomeString), () => true, () => null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsNotConditionFuncTrueEmptyMessageFromFuncTest()
         {
-            CheckIsNotCondition(nameof(SomeString), () => true, () => EmptyString);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsNotCondition(nameof(SomeString), () => true, () => EmptyString);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsNotConditionFuncTrueWhitespaceMessageFromFuncTest()
         {
-            CheckIsNotCondition(nameof(SomeString), () => true, () => WhitespaceString);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsNotCondition(nameof(SomeString), () => true, () => WhitespaceString);
+            });
         }
 
         #endregion
 
         #region CheckNotExpression Tests
-        [TestMethod] [ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
         public void CheckNotExpressionFalseTest()
         {
-            bool value = true;
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                bool value = true;
 
-            CheckNotExpression(nameof(SomeString), value);
+                CheckNotExpression(nameof(SomeString), value);
+            });
         }
 
         [TestMethod]
@@ -109,21 +122,23 @@ namespace Pineapple.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
         public void CheckIsNotOnSynchronizationContextWithContextTest()
         {
-            SynchronizationContext saved = SynchronizationContext.Current;
-
-            SynchronizationContext.SetSynchronizationContext(new TestSynchronizationContext());
-
-            try
+            Assert.ThrowsExactly<Exception>(() =>
             {
-                CheckIsNotOnSynchronizationContext();
-            }
-            finally
-            {
-                SynchronizationContext.SetSynchronizationContext(saved);
-            }
+                SynchronizationContext saved = SynchronizationContext.Current;
+
+                SynchronizationContext.SetSynchronizationContext(new TestSynchronizationContext());
+
+                try
+                {
+                    CheckIsNotOnSynchronizationContext();
+                }
+                finally
+                {
+                    SynchronizationContext.SetSynchronizationContext(saved);
+                }
+            });
         }
 
         #endregion
@@ -131,31 +146,39 @@ namespace Pineapple.Tests
         #region CheckIsWellFormedUri Tests
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsWellFormedUriDefaultTest()
         {
-            CheckIsWellFormedUri(nameof(BadUri), BadUri);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsWellFormedUri(nameof(BadUri), BadUri);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsWellFormedUriRelativeTest()
         {
-            CheckIsWellFormedUri(nameof(BadUri), BadUri, UriKind.Relative);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsWellFormedUri(nameof(BadUri), BadUri, UriKind.Relative);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsWellFormedUriRelativeOrAbsoluteTest()
         {
-            CheckIsWellFormedUri(nameof(BadUri), BadUri, UriKind.RelativeOrAbsolute);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsWellFormedUri(nameof(BadUri), BadUri, UriKind.RelativeOrAbsolute);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsWellFormedRelativeUriDefaultTest()
         {
-            CheckIsWellFormedUri(nameof(RelativeUri), RelativeUri);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsWellFormedUri(nameof(RelativeUri), RelativeUri);
+            });
         }
 
         [TestMethod]
@@ -177,10 +200,12 @@ namespace Pineapple.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsWellFormedAbsoluteUriRelativeTest()
         {
-            CheckIsWellFormedUri(nameof(AbsoluteUri), AbsoluteUri, UriKind.Relative);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsWellFormedUri(nameof(AbsoluteUri), AbsoluteUri, UriKind.Relative);
+            });
         }
 
         [TestMethod]

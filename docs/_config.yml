@@ -1,0 +1,52 @@
+title: Pineapple
+tagline: Guava-inspired core utilities for .NET
+description: >-
+  Pineapple is an open-source C# library of core utilities for .NET 8 and .NET 10, inspired by Google's Guava:
+  guard clauses, ShortGuid, deterministic xxHash HashCode, SQL Server RowVersion, rate limiting,
+  resource governors, timeouts, exponential backoff, and timing scopes.
+url: https://mill5.github.io
+baseurl: /pineapple
+lang: en-US
+logo: /assets/pineapple.png
+author:
+  name: MILL5
+  url: https://www.mill5.com
+social:
+  name: MILL5
+  links:
+    - https://github.com/MILL5
+github_repo: https://github.com/MILL5/pineapple
+nuget_url: https://www.nuget.org/packages/Pineapple
+version: 2.0.0
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+permalink: pretty
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+      image: /assets/pineapple.png
+
+nav:
+  - title: Getting started
+    url: /getting-started/
+  - title: Guides
+    url: /guides/
+  - title: FAQ
+    url: /faq/
+  - title: Changelog
+    url: /changelog/
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor

@@ -24,24 +24,30 @@ namespace Pineapple.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ShortGuidConstructorNotGuidTest()
         {
-            _ = new ShortGuid("This Is Not A Guid");
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                _ = new ShortGuid("This Is Not A Guid");
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ShortGuidConstructorNullTest()
         {
-            _ = new ShortGuid(null);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                _ = new ShortGuid(null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ShortGuidConstructorEmptyTest()
         {
-            _ = new ShortGuid(string.Empty);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                _ = new ShortGuid(string.Empty);
+            });
         }
 
         [TestMethod]
@@ -55,7 +61,7 @@ namespace Pineapple.Tests
         {
             var sg = ShortGuid.Empty;
 
-            Assert.AreEqual(sg, Guid.Empty);
+            Assert.AreEqual<object>(sg, Guid.Empty);
             Assert.AreEqual(Guid.Empty, (Guid)sg);
         }
 
@@ -116,13 +122,13 @@ namespace Pineapple.Tests
             var g = Guid.NewGuid();
             var sg = new ShortGuid(g);
 
-            Assert.AreEqual(sg, g, "ShortGuid is not equal to Guid [Constructor]");
+            Assert.AreEqual<object>(sg, g, "ShortGuid is not equal to Guid [Constructor]");
             Assert.AreEqual(g, (Guid)sg, "ShortGuid is not equal to Guid [Constructor]");
 
             g = Guid.NewGuid();
             sg.Guid = g;
 
-            Assert.AreEqual(sg, g, "ShortGuid is not equal to Guid [Guid Property]");
+            Assert.AreEqual<object>(sg, g, "ShortGuid is not equal to Guid [Guid Property]");
             Assert.AreEqual(g, (Guid)sg, "ShortGuid is not equal to Guid [Guid Property]");
         }
 
@@ -133,8 +139,8 @@ namespace Pineapple.Tests
             var sg = new ShortGuid(g);
             var s = sg.Value;
 
-            Assert.AreEqual(sg, g, "Guid is not equal to ShortGuid");
-            Assert.AreEqual(sg, s, "String is not equal to ShortGuid");
+            Assert.AreEqual<object>(sg, g, "Guid is not equal to ShortGuid");
+            Assert.AreEqual<object>(sg, s, "String is not equal to ShortGuid");
             Assert.AreEqual(g, (Guid)sg, "Guid is not equal to ShortGuid");
             Assert.AreEqual(s, (string)sg, "String is not equal to ShortGuid");
         }
@@ -212,11 +218,11 @@ namespace Pineapple.Tests
 
             sg.Value = g1;
 
-            Assert.AreEqual(sg, g1);
+            Assert.AreEqual<object>(sg, g1);
 
             sg.Value = g2;
 
-            Assert.AreEqual(sg, g2);
+            Assert.AreEqual<object>(sg, g2);
         }
 
         [TestMethod]

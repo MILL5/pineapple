@@ -7,10 +7,12 @@ namespace Pineapple.Tests
     public partial class PreconditionTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsNotConditionTrueTest()
         {
-            CheckIsNotCondition(nameof(SomeString), true, () => "Condition was met.");
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsNotCondition(nameof(SomeString), true, () => "Condition was met.");
+            });
         }
 
         [TestMethod]
@@ -20,31 +22,39 @@ namespace Pineapple.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsNotConditionTrueNullMessageTest()
         {
-            CheckIsNotCondition(nameof(SomeString), true, "Some condition was not met.");
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsNotCondition(nameof(SomeString), true, "Some condition was not met.");
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CheckIsNotConditionTrueNullMessageFromFuncTest()
         {
-            CheckIsNotCondition(nameof(SomeString), true, () => null);
+            Assert.ThrowsExactly<ArgumentNullException>(() =>
+            {
+                CheckIsNotCondition(nameof(SomeString), true, () => null);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsNotConditionTrueEmptyMessageFromFuncTest()
         {
-            CheckIsNotCondition(nameof(SomeString), true, () => EmptyString);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsNotCondition(nameof(SomeString), true, () => EmptyString);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CheckIsNotConditionTrueWhitespaceMessageFromFuncTest()
         {
-            CheckIsNotCondition(nameof(SomeString), true, () => WhitespaceString);
+            Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                CheckIsNotCondition(nameof(SomeString), true, () => WhitespaceString);
+            });
         }
     }
 }

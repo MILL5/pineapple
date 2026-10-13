@@ -33,6 +33,7 @@ namespace Pineapple.Tests
         }
 
         [TestMethod]
+        [Ignore("Requires Visual Studio (devenv) to be running.")]
         public void CheckIsRunningVisualStudioTest()
         {
             Assert.IsTrue(Check.IsRunning("devenv"));
@@ -47,7 +48,8 @@ namespace Pineapple.Tests
         [TestMethod]
         public void CheckIsRunningTestConsoleTest()
         {
-            Assert.IsTrue(Check.IsRunning("vstest.console"));
+            // Microsoft.Testing.Platform runs tests in-process, so look for this process.
+            Assert.IsTrue(Check.IsRunning(System.Diagnostics.Process.GetCurrentProcess().ProcessName));
         }
 
         [TestMethod]
