@@ -1,0 +1,6 @@
+# Normalize all text files to LF (macOS/Linux line endings) in the repo and working tree.
+* text=auto eol=lf
+
+*.png binary
+*.ico binary
+*.snk binary

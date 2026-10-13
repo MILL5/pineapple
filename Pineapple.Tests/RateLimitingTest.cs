@@ -45,7 +45,6 @@ namespace Pineapple.Shared.Tests
         }
 
         [TestMethod]
-        [Ignore("ResourceGoverner is deprecated (PINE002) and overshoots its limit slightly; replaced by System.Threading.RateLimiting.")]
         public async Task ResourceGoverner1200Async()
         {
             const int MAX_CALLS_PER_MINUTE = 1200;
@@ -54,7 +53,6 @@ namespace Pineapple.Shared.Tests
         }
 
         [TestMethod]
-        [Ignore("ResourceGoverner is deprecated (PINE002) and overshoots its limit slightly; replaced by System.Threading.RateLimiting.")]
         public async Task ResourceGoverner120Async()
         {
             const int MAX_CALLS_PER_MINUTE = 120;
@@ -63,7 +61,6 @@ namespace Pineapple.Shared.Tests
         }
 
         [TestMethod]
-        [Ignore("ResourceGoverner is deprecated (PINE002) and overshoots its limit slightly; replaced by System.Threading.RateLimiting.")]
         public async Task ResourceGoverner12Async()
         {
             const int MAX_CALLS_PER_MINUTE = 12;
@@ -72,7 +69,6 @@ namespace Pineapple.Shared.Tests
         }
 
         [TestMethod]
-        [Ignore("ResourceGoverner is deprecated (PINE002) and overshoots its limit slightly; replaced by System.Threading.RateLimiting.")]
         public async Task ResourceGoverner6Async()
         {
             const int MAX_CALLS_PER_MINUTE = 6;

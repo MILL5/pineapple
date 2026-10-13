@@ -18,12 +18,19 @@ namespace Pineapple.Threading
     internal class Operation : IRateLimiterScope
     {
         private readonly Operations _operations;
-        private readonly DateTime _start = DateTime.Now;
+        private readonly DateTime _start;
         private DateTime? _completed = null;
         private OperationStatus _status = OperationStatus.Running;
 
         public Operation(Operations operations)
+            : this(operations, DateTime.UtcNow)
         {
+        }
+
+        // The governor passes the same timestamp it used for its window check.
+        public Operation(Operations operations, DateTime startUtc)
+        {
+            _start = startUtc;
             CheckIsNotNull(nameof(operations), operations);
 
             _operations = operations;
@@ -49,7 +56,7 @@ namespace Pineapple.Threading
             SafeMethod(() =>
             {
                 _status = OperationStatus.Complete;
-                _completed = DateTime.Now;
+                _completed = DateTime.UtcNow;
             });
         }
 

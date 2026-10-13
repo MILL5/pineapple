@@ -15,7 +15,7 @@ namespace Pineapple.Threading
                 nextOperation = new Operation(_operations);
             }
 
-            _cpm.Add();
+            _cpm.Add(nextOperation.Start);
 
             await Task.CompletedTask;
 

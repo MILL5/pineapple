@@ -38,7 +38,7 @@ namespace Pineapple.Threading
 
         private void Scavenge()
         {
-            var expiration = DateTime.Now.AddMinutes(-1.0);
+            var expiration = DateTime.UtcNow.AddMinutes(-1.0);
             var expiredOperations = _operations.Where(x => x.Status == OperationStatus.Complete &&
                                                            x.Start < expiration).ToList();
             

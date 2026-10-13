@@ -23,12 +23,18 @@ namespace Pineapple.Threading
         protected readonly int _maxCallsPerMinute;
         protected readonly int _timeOutMs;
 
+        private static readonly TimeSpan OneMinute = TimeSpan.FromMinutes(1);
+        private readonly TimeSpan _interval;
+        private DateTime? _nextAllowedUtc;
+        private DateTime _lastStartUtc;
+
         public ResourceGoverner(int maxCallsPerMinute)
         {
             CheckIsNotLessThan(nameof(maxCallsPerMinute), maxCallsPerMinute, 1);
 
             _maxCallsPerMinute = maxCallsPerMinute;
             _timeOutMs = GetAdjustedTimeout(maxCallsPerMinute);
+            _interval = TimeSpan.FromTicks(OneMinute.Ticks / maxCallsPerMinute);
         }
 
         private static int GetAdjustedTimeout(int maxCallsPerMinute)
@@ -41,55 +47,43 @@ namespace Pineapple.Threading
         {
             Operation nextOperation = null;
 
-            var expiration = DateTime.Now.AddMinutes(-1);
             var initState = InitState.Waiting;
 
             var timeout = new AccurateTimeout(_timeOutMs);
-            var delay = new ExponentialWait(1, 3, Math.Min(_timeOutMs, 10000));
+            var wait = TimeSpan.Zero;
 
             while (initState == InitState.Waiting)
             {
                 lock (_operations.OperationLock)
                 {
-                    //
-                    // We lookback at only those operations in the last minute.
-                    // Our governing is done on a calls per minute basis,
-                    // therefore we look back a minute
-                    //
-                    var lookback = _operations.GetCurrent(expiration);
-                    var count = lookback.Count;
+                    var now = DateTime.UtcNow;
 
-                    initState = InitState.Continue;
+                    //
+                    // Calls are scheduled one interval (60s / maxCallsPerMinute) apart, so no rolling
+                    // minute ever holds more than maxCallsPerMinute calls. After a quiet minute the first
+                    // call starts immediately and the next waits two intervals, so the first N calls
+                    // take N intervals and throughput never exceeds the maximum.
+                    //
+                    var isIdle = !_nextAllowedUtc.HasValue || now - _lastStartUtc >= OneMinute;
 
-                    if (count > 0)
+                    if (isIdle || now >= _nextAllowedUtc.Value)
                     {
-                        var oldest = lookback.Min(x => x.Start);
+                        initState = InitState.Continue;
+
+                        _nextAllowedUtc = now + (isIdle ? _interval + _interval : _interval);
+                        _lastStartUtc = now;
 
                         //
-                        // We ount the next operation in the count when calculating
-                        // the potentialOpsPerMinute. We never want the potential operations
-                        // per minute to exceed the maximum operations per minute.
+                        // Create the operation inside the lock so the next caller sees it.
                         //
-
-                        var difference = DateTime.Now - oldest;
-                        var potentialOpsPerMinute = (count + 1) / (difference.TotalSeconds / 60);
-
-                        if (potentialOpsPerMinute > _maxCallsPerMinute)
-                            initState = InitState.Waiting;
-
-                        Debug.WriteLine($"[{DateTime.Now:hh:mm:ss.fff}]:State:{initState}:Ops Per Minute:{potentialOpsPerMinute}");
+                        nextOperation = new Operation(_operations, now);
                     }
-
-                    //
-                    // We do this here (i.e. inside lock) since this operation
-                    // is supposed to start and we want to make sure the next
-                    // operation includes this operation in the count when it
-                    // does the operations per minute calculation.
-                    //
-                    if (initState == InitState.Continue)
+                    else
                     {
-                        nextOperation = new Operation(_operations);
+                        wait = _nextAllowedUtc.Value - now;
                     }
+
+                    Debug.WriteLine($"[{now:hh:mm:ss.fff}]:State:{initState}:Wait:{wait.TotalMilliseconds:0}ms");
                 }
 
                 if (initState == InitState.Waiting)
@@ -98,11 +92,14 @@ namespace Pineapple.Threading
                     // We only check for timeout if we are waiting
                     //
                     timeout.EnsureNotTimedOut();
-                    await delay.WaitAsync();
+
+                    var remaining = TimeSpan.FromMilliseconds(Math.Max(1, timeout.RemainingInMilliseconds + 1));
+                    var minimum = TimeSpan.FromMilliseconds(1);
+                    await Task.Delay(wait < minimum ? minimum : wait > remaining ? remaining : wait);
                 }
             }
 
-            _cpm.Add();
+            _cpm.Add(nextOperation.Start);
 
             return nextOperation;
         }
