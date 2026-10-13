@@ -23,10 +23,11 @@ namespace Pineapple.Threading
         protected readonly int _maxCallsPerMinute;
         protected readonly int _timeOutMs;
 
-        private static readonly TimeSpan OneMinute = TimeSpan.FromMinutes(1);
-        private readonly TimeSpan _interval;
-        private DateTime? _nextAllowedUtc;
-        private DateTime _lastStartUtc;
+        // Scheduling uses the monotonic Stopwatch clock; wall-clock adjustments must not shift slots.
+        private static readonly long OneMinute = Stopwatch.Frequency * 60;
+        private readonly long _interval;
+        private long? _nextAllowed;
+        private long _lastStart;
 
         public ResourceGoverner(int maxCallsPerMinute)
         {
@@ -34,7 +35,24 @@ namespace Pineapple.Threading
 
             _maxCallsPerMinute = maxCallsPerMinute;
             _timeOutMs = GetAdjustedTimeout(maxCallsPerMinute);
-            _interval = TimeSpan.FromTicks(OneMinute.Ticks / maxCallsPerMinute);
+            _interval = OneMinute / maxCallsPerMinute;
+        }
+
+        //
+        // Timers can fire up to ~16ms late (Windows timer resolution), which matters when slots are
+        // only tens of milliseconds apart. Sleep until just before the slot, then yield until it opens.
+        //
+        private static readonly TimeSpan TimerResolution = TimeSpan.FromMilliseconds(16);
+
+        private static async Task WaitAsync(TimeSpan wait)
+        {
+            var target = Stopwatch.GetTimestamp() + (long)(wait.TotalSeconds * Stopwatch.Frequency);
+
+            if (wait > TimerResolution)
+                await Task.Delay(wait - TimerResolution).ConfigureAwait(false);
+
+            while (Stopwatch.GetTimestamp() < target)
+                Thread.Yield();
         }
 
         private static int GetAdjustedTimeout(int maxCallsPerMinute)
@@ -56,7 +74,7 @@ namespace Pineapple.Threading
             {
                 lock (_operations.OperationLock)
                 {
-                    var now = DateTime.UtcNow;
+                    var now = Stopwatch.GetTimestamp();
 
                     //
                     // Calls are scheduled one interval (60s / maxCallsPerMinute) apart, so no rolling
@@ -64,26 +82,30 @@ namespace Pineapple.Threading
                     // call starts immediately and the next waits two intervals, so the first N calls
                     // take N intervals and throughput never exceeds the maximum.
                     //
-                    var isIdle = !_nextAllowedUtc.HasValue || now - _lastStartUtc >= OneMinute;
+                    var isIdle = !_nextAllowed.HasValue || now - _lastStart >= OneMinute;
 
-                    if (isIdle || now >= _nextAllowedUtc.Value)
+                    if (isIdle || now >= _nextAllowed.Value)
                     {
                         initState = InitState.Continue;
 
-                        _nextAllowedUtc = now + (isIdle ? _interval + _interval : _interval);
-                        _lastStartUtc = now;
+                        //
+                        // Schedule from the actual start, never from a missed slot: catching up would let a
+                        // caller that runs slower than the limit build up credit and then burst past it.
+                        //
+                        _nextAllowed = now + (isIdle ? _interval + _interval : _interval);
+                        _lastStart = now;
 
                         //
                         // Create the operation inside the lock so the next caller sees it.
                         //
-                        nextOperation = new Operation(_operations, now);
+                        nextOperation = new Operation(_operations, DateTime.UtcNow);
                     }
                     else
                     {
-                        wait = _nextAllowedUtc.Value - now;
+                        wait = Stopwatch.GetElapsedTime(now, _nextAllowed.Value);
                     }
 
-                    Debug.WriteLine($"[{now:hh:mm:ss.fff}]:State:{initState}:Wait:{wait.TotalMilliseconds:0}ms");
+                    Debug.WriteLine($"[{DateTime.Now:hh:mm:ss.fff}]:State:{initState}:Wait:{wait.TotalMilliseconds:0}ms");
                 }
 
                 if (initState == InitState.Waiting)
@@ -94,8 +116,7 @@ namespace Pineapple.Threading
                     timeout.EnsureNotTimedOut();
 
                     var remaining = TimeSpan.FromMilliseconds(Math.Max(1, timeout.RemainingInMilliseconds + 1));
-                    var minimum = TimeSpan.FromMilliseconds(1);
-                    await Task.Delay(wait < minimum ? minimum : wait > remaining ? remaining : wait);
+                    await WaitAsync(wait > remaining ? remaining : wait);
                 }
             }
 

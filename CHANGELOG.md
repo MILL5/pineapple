@@ -35,7 +35,7 @@ APIs that .NET now provides are marked `[Obsolete]` with their own diagnostic ID
 
 ### Fixed
 
-- `ResourceGoverner` could exceed its calls-per-minute limit: it measured a one-minute window fixed before waiting, so stale calls stretched the measured span, and it woke up late from up-to-10-second backoffs. It now schedules calls one interval (60 s ÷ limit) apart, waits exactly until the next slot, and uses UTC so daylight-saving changes can't distort timing. `CallsPerMinute` records the same timestamps as the governor and no longer overstates the rate (n calls span n − 1 intervals).
+- `ResourceGoverner` could exceed its calls-per-minute limit: it measured a one-minute window fixed before waiting, so stale calls stretched the measured span, and it woke up late from up-to-10-second backoffs. It now schedules each call one interval (60 s ÷ limit) after the previous one on the monotonic `Stopwatch` clock and waits precisely for the slot, even with Windows' coarse timers. `CallsPerMinute` records the same events as the governor and no longer overstates the rate (n calls span n − 1 intervals).
 - `default(ShortGuid)` no longer throws `NullReferenceException`; it equals `ShortGuid.Empty`.
 - Converting a `byte[]` of the wrong length to `RowVersion` throws `ArgumentException` instead of `IndexOutOfRangeException`.
 - `Preconditions`: `CheckIsNegative` and `CheckIsNotWellFormedUri` had wrong messages; `CheckIsType` and parameter-name validation swapped message and parameter name; condition checks now set `ParamName`.
