@@ -73,7 +73,7 @@ See the [documentation site](https://mill5.github.io/pineapple/) for a guide to 
 
 ## FAQ
 
-**What is Pineapple?** An Apache-2.0-licensed set of C# utility classes for .NET from [MILL5](https://www.mill5.com), modeled on Google's Guava library for Java.
+**What is Pineapple?** An Apache-2.0-licensed set of C# utility classes for .NET from [MILL5](https://mill5.com), modeled on Google's Guava library for Java, with 110K+ NuGet downloads.
 
 **Which .NET versions are supported?** .NET 8 (LTS) and .NET 10 (LTS). Version 1.x targeted .NET Standard 2.0; use `Pineapple` 1.0.41 if you still need .NET Framework.
 
@@ -93,10 +93,30 @@ dotnet test --solution Pineapple.slnx
 dotnet pack Pineapple.slnx -c Release -o artifacts
 ```
 
+## Part of the MILL5 open-source family
+
+[FastSearch](https://mill5.github.io/FastSearch/) · [M5.BloomFilter](https://github.com/MILL5/M5.BloomFilter) · [yocto](https://github.com/MILL5/yocto) · [Polygon.Net](https://github.com/MILL5/Polygon.Net) · [Cut & Move](https://github.com/ChiefInnovator/cutandmove) · [MacEdgeLight](https://github.com/ChiefInnovator/macedgelight)
+
 ## Contributing
 
 Issues and pull requests are welcome. See [CHANGELOG.md](https://github.com/MILL5/pineapple/blob/main/CHANGELOG.md) for release history.
 
 ## License
 
-[Apache License 2.0](https://github.com/MILL5/pineapple/blob/main/LICENSE) © MILL5
+This project is licensed under the [Apache License 2.0](https://github.com/MILL5/pineapple/blob/main/LICENSE). © MILL5, LLC.
+
+## Credits
+
+Created by **[Richard Crane](https://mvp.microsoft.com/en-US/MVP/profile/10ce0bc0-7536-43f6-b28c-e9601a4a0d0d)** — Microsoft MVP and founder of **[MILL5](https://mill5.com)**.
+
+- **MILL5:** [mill5.com](https://mill5.com)
+- **Microsoft MVP profile:** [mvp.microsoft.com/…/Richard-Crane](https://mvp.microsoft.com/en-US/MVP/profile/10ce0bc0-7536-43f6-b28c-e9601a4a0d0d)
+- **Podcast — _Inventing Fire with AI_:** [inventingfirewith.ai](https://inventingfirewith.ai)
+- **Support:** [rich@mill5.com](mailto:rich@mill5.com)
+
+---
+
+Powered by [MILL5](https://www.mill5.com)
+Explore [Richard Crane on Microsoft MVP](https://mvp.microsoft.com/en-US/MVP/profile/10ce0bc0-7536-43f6-b28c-e9601a4a0d0d)
+Listen to the [Inventing Fire with AI](https://inventingfirewith.ai) podcast for insights on technology and innovation.
+For support, contact: [rich@mill5.com](mailto:rich@mill5.com)

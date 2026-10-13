@@ -20,8 +20,12 @@ faq:
     a: System.HashCode is randomized per process, so its values change between runs. Pineapple's HashCode uses xxHash32 and is deterministic, which makes it safe for persisted hashes, cache keys, and partitioning.
   - q: Is Pineapple thread-safe?
     a: Stateless helpers (Preconditions, ShortGuid encoding, GuidExtensions, Cleanup) are thread-safe. ResourceGoverner, CallsPerMinute, and SafeRateLimiterScope are designed for concurrent use. HashCode accumulator instances and scope objects are meant for a single caller.
+  - q: Who built Pineapple?
+    a: Pineapple was built by Richard Crane, a Microsoft Most Valuable Professional (MVP) and founder of MILL5, a Boston-based Microsoft Gold Partner specializing in cloud, AI, IoT, data analytics and modern application development.
+  - q: What other open-source projects does MILL5 publish?
+    a: MILL5's open-source family includes FastSearch (fast substring search for .NET), M5.BloomFilter, the yocto IoC container, Polygon.Net, and the macOS utilities Cut & Move and MacEdgeLight.
   - q: Where do I report bugs or request features?
-    a: Open an issue at https://github.com/MILL5/pineapple/issues. Pull requests are welcome.
+    a: Open an issue at https://github.com/MILL5/pineapple/issues or email rich@mill5.com. Pull requests are welcome.
 ---
 
 # Frequently asked questions

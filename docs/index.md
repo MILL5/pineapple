@@ -10,12 +10,15 @@ faq:
     a: Pineapple 2.x targets .NET 8 (LTS) and .NET 10 (LTS). Pineapple 1.0.41 is the last release that targets .NET Standard 2.0 and .NET Framework.
   - q: Is Pineapple free for commercial use?
     a: Yes. Pineapple is licensed under the Apache License 2.0, which permits commercial use, modification, and redistribution.
+  - q: Who built Pineapple?
+    a: Pineapple was built by Richard Crane, a Microsoft Most Valuable Professional (MVP) and founder of MILL5, a Boston-based Microsoft Gold Partner specializing in cloud, AI, IoT, data analytics and modern application development.
 ---
 
 <section class="hero">
   <div>
     <h1>Pineapple: Guava-inspired core utilities for .NET</h1>
     <p class="lead"><strong>Pineapple is a free, open-source C# library of small, well-tested building blocks for .NET 8 and .NET 10</strong> — guard clauses, URL-safe ShortGuids, a deterministic hash code, SQL Server row versions, rate limiting, timeouts, and backoff. Stop rewriting the same helpers in every project.</p>
+    <p class="byline">Built by <a href="{{ site.author.url }}">Richard Crane</a>, Microsoft MVP, at <a href="{{ site.org.url }}">MILL5</a> · 110K+ NuGet downloads</p>
     <div class="actions">
       <a class="button" href="{{ '/getting-started/' | relative_url }}">Get started</a>
       <a class="button secondary" href="{{ site.github_repo }}">View on GitHub</a>
@@ -71,5 +74,18 @@ public Order Create(string customerId, int quantity, DateTime requestedAt)
 - **Modern .NET.** Targets .NET 8 and .NET 10 LTS, with SourceLink and symbol packages for step-through debugging.
 - **Tested.** Maintained by MILL5 since 2019, with unit tests run on .NET 8 and .NET 10 in CI.
 - **Free.** Apache 2.0 licensed.
+
+<section class="family" aria-labelledby="family-heading">
+  <h2 id="family-heading">Part of the MILL5 open-source family</h2>
+  <p>Pineapple is one of many open-source .NET libraries and tools built by MILL5, a Boston-based Microsoft Gold Partner.</p>
+  <div class="family-grid">
+    <div class="family-item"><h3><a href="https://mill5.github.io/FastSearch/">FastSearch</a></h3><p>Fast, low-memory substring search for .NET 10. NGramSearch indexes 1M items in about a second with 47 MiB.</p></div>
+    <div class="family-item"><h3><a href="https://github.com/MILL5/M5.BloomFilter">M5.BloomFilter</a></h3><p>Probabilistic Bloom filters for membership testing at scale, with JSON and Protobuf serialization.</p></div>
+    <div class="family-item"><h3><a href="https://github.com/MILL5/yocto">yocto</a></h3><p>An extremely small, low-on-ceremony, high-on-value Inversion of Control container for .NET.</p></div>
+    <div class="family-item"><h3><a href="https://github.com/MILL5/Polygon.Net">Polygon.Net</a></h3><p>A C# wrapper for the Polygon.io financial data API: stocks, options, forex, and crypto.</p></div>
+    <div class="family-item"><h3><a href="https://github.com/ChiefInnovator/cutandmove">Cut &amp; Move</a></h3><p>A free macOS menu bar utility that adds real Cmd+X cut-and-move to Finder.</p></div>
+    <div class="family-item"><h3><a href="https://github.com/ChiefInnovator/macedgelight">MacEdgeLight</a></h3><p>An ambient screen-edge light for macOS that replaces a ring light on video calls.</p></div>
+  </div>
+</section>
 
 {% include faq.html %}

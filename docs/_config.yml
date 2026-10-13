@@ -9,12 +9,23 @@ baseurl: /pineapple
 lang: en-US
 logo: /assets/pineapple.png
 author:
+  name: Richard Crane
+  url: https://mvp.microsoft.com/en-US/MVP/profile/10ce0bc0-7536-43f6-b28c-e9601a4a0d0d
+  title: Microsoft MVP, Founder of MILL5
+  email: rich@mill5.com
+org:
   name: MILL5
-  url: https://www.mill5.com
+  legal_name: MILL5, LLC
+  url: https://mill5.com
+  description: MILL5 is a Boston-based Microsoft Gold Partner specializing in cloud, AI, IoT, data analytics, and modern application development.
+podcast:
+  name: Inventing Fire with AI
+  url: https://inventingfirewith.ai
 social:
   name: MILL5
   links:
     - https://github.com/MILL5
+    - https://mill5.com
 github_repo: https://github.com/MILL5/pineapple
 nuget_url: https://www.nuget.org/packages/Pineapple
 version: 2.0.0
@@ -34,7 +45,11 @@ defaults:
       path: ""
     values:
       layout: default
-      image: /assets/pineapple.png
+      image:
+        path: /assets/og-image.png
+        width: 1200
+        height: 630
+        alt: Pineapple — Guava-inspired core utilities for .NET 8 and .NET 10, by MILL5
 
 nav:
   - title: Getting started

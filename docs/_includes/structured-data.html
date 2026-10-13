@@ -1,22 +1,36 @@
 {%- comment -%}
-  JSON-LD for search engines and answer engines.
-  Every page gets SoftwareSourceCode + Organization; the home page adds SoftwareApplication;
-  pages with `faq:` front matter add FAQPage; guide pages add TechArticle + BreadcrumbList.
+  JSON-LD for search engines and answer engines, following the MILL5 open-source site pattern (see FastSearch).
+  Every page gets SoftwareSourceCode + Person (Richard Crane) + Organization (MILL5); the home page adds
+  SoftwareApplication; pages with `faq:` front matter add FAQPage; guide pages add TechArticle; all pages get
+  a BreadcrumbList rooted at MILL5.
 {%- endcomment -%}
+{%- assign home = '/' | absolute_url -%}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Organization",
-      "@id": "{{ site.author.url }}#org",
-      "name": "MILL5",
+      "@type": "Person",
+      "@id": "{{ home }}#author",
+      "name": {{ site.author.name | jsonify }},
       "url": "{{ site.author.url }}",
+      "jobTitle": {{ site.author.title | jsonify }},
+      "email": "mailto:{{ site.author.email }}",
+      "sameAs": ["{{ site.author.url }}", "{{ site.podcast.url }}"],
+      "worksFor": { "@id": "{{ home }}#mill5" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "{{ home }}#mill5",
+      "name": {{ site.org.name | jsonify }},
+      "legalName": {{ site.org.legal_name | jsonify }},
+      "url": "{{ site.org.url }}",
+      "description": {{ site.org.description | jsonify }},
       "sameAs": ["https://github.com/MILL5"]
     },
     {
       "@type": "SoftwareSourceCode",
-      "@id": "{{ site.url }}{{ site.baseurl }}/#code",
+      "@id": "{{ home }}#code",
       "name": "Pineapple",
       "description": {{ site.description | strip | jsonify }},
       "codeRepository": "{{ site.github_repo }}",
@@ -24,19 +38,38 @@
       "runtimePlatform": [".NET 8", ".NET 10"],
       "license": "https://www.apache.org/licenses/LICENSE-2.0",
       "version": "{{ site.version }}",
-      "author": { "@id": "{{ site.author.url }}#org" },
-      "keywords": "C#, .NET, Guava, guard clauses, preconditions, ShortGuid, xxHash, HashCode, RowVersion, rate limiting, resource governor, exponential backoff, NuGet"
+      "targetProduct": { "@id": "{{ home }}#software" },
+      "author": { "@id": "{{ home }}#author" },
+      "publisher": { "@id": "{{ home }}#mill5" },
+      "keywords": "C#, .NET, Guava, guard clauses, preconditions, ShortGuid, xxHash, HashCode, RowVersion, rate limiting, resource governor, exponential backoff, NuGet, MILL5, Richard Crane"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "MILL5", "item": "{{ site.org.url }}/" },
+        { "@type": "ListItem", "position": 2, "name": "Pineapple", "item": "{{ home }}" }{% if page.breadcrumb %},
+        { "@type": "ListItem", "position": 3, "name": "Guides", "item": "{{ '/guides/' | absolute_url }}" },
+        { "@type": "ListItem", "position": 4, "name": {{ page.breadcrumb | jsonify }}, "item": "{{ page.url | absolute_url }}" }{% elsif page.url != "/" %},
+        { "@type": "ListItem", "position": 3, "name": {{ page.title | jsonify }}, "item": "{{ page.url | absolute_url }}" }{% endif %}
+      ]
     }{% if page.url == "/" %},
     {
       "@type": "SoftwareApplication",
+      "@id": "{{ home }}#software",
       "name": "Pineapple",
+      "alternateName": "MILL5 Pineapple",
       "applicationCategory": "DeveloperApplication",
+      "applicationSubCategory": ".NET library",
       "operatingSystem": "Windows, Linux, macOS",
       "softwareVersion": "{{ site.version }}",
+      "url": "{{ home }}",
       "downloadUrl": "{{ site.nuget_url }}",
       "installUrl": "{{ site.nuget_url }}",
+      "image": "{{ '/assets/og-image.png' | absolute_url }}",
+      "isAccessibleForFree": true,
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "publisher": { "@id": "{{ site.author.url }}#org" }
+      "author": { "@id": "{{ home }}#author" },
+      "publisher": { "@id": "{{ home }}#mill5" }
     }{% endif %}{% if page.breadcrumb %},
     {
       "@type": "TechArticle",
@@ -45,16 +78,9 @@
       "url": "{{ page.url | absolute_url }}",
       {% if page.last_reviewed %}"dateModified": "{{ page.last_reviewed | date_to_xmlschema }}",{% endif %}
       "proficiencyLevel": "Intermediate",
-      "about": { "@id": "{{ site.url }}{{ site.baseurl }}/#code" },
-      "author": { "@id": "{{ site.author.url }}#org" }
-    },
-    {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ '/' | absolute_url }}" },
-        { "@type": "ListItem", "position": 2, "name": "Guides", "item": "{{ '/guides/' | absolute_url }}" },
-        { "@type": "ListItem", "position": 3, "name": {{ page.breadcrumb | jsonify }}, "item": "{{ page.url | absolute_url }}" }
-      ]
+      "about": { "@id": "{{ home }}#code" },
+      "author": { "@id": "{{ home }}#author" },
+      "publisher": { "@id": "{{ home }}#mill5" }
     }{% endif %}{% if page.faq %},
     {
       "@type": "FAQPage",
@@ -62,7 +88,7 @@
         {% for q in page.faq %}{
           "@type": "Question",
           "name": {{ q.q | jsonify }},
-          "acceptedAnswer": { "@type": "Answer", "text": {{ q.a | strip | jsonify }} }
+          "acceptedAnswer": { "@type": "Answer", "text": {{ q.a | strip | markdownify | strip_html | strip | jsonify }} }
         }{% unless forloop.last %},{% endunless %}
         {% endfor %}
       ]

@@ -24,7 +24,7 @@ All notable changes to the `Pineapple` and `Pineapple.Data` packages.
 ### Build
 
 - Single `Pineapple.Tests` project (MSTest 4, Microsoft.Testing.Platform) replaces the shared-project test setup.
-- `Pineapple.slnx`, central package management, `global.json`, GitHub Actions CI, and a documentation site at <https://mill5.github.io/pineapple/>.
+- `Pineapple.slnx`, central package management, `global.json`, GitHub Actions CI, a tag-triggered NuGet release using Trusted Publishing, and a documentation site at <https://mill5.github.io/pineapple/>.
 
 ## 1.0.41
 
