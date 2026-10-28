@@ -5,11 +5,11 @@ breadcrumb: Migration
 last_reviewed: 2026-10-13
 faq:
   - q: Why are parts of Pineapple deprecated in 2.0?
-    a: .NET 6 through .NET 10 added built-in, better-supported versions of several Pineapple features — rate limiters, resilience pipelines, health checks, metrics, PeriodicTimer, and automatic Brotli decompression. Pineapple 2.0 marks its versions [Obsolete] with diagnostic IDs PINE001–PINE008 and will remove them in 3.0.
+    a: .NET 6 through .NET 10 and the Microsoft.Extensions packages added supported replacements for several Pineapple features — rate limiters, resilience pipelines, health checks, metrics, PeriodicTimer, and automatic Brotli decompression. Pineapple 2.0 marks its versions [Obsolete] with diagnostic IDs PINE001–PINE008 and will remove them in 3.0.
   - q: How do I suppress a Pineapple deprecation warning?
     a: "Each area has its own diagnostic ID. Add it to `<NoWarn>` in your project file (for example `<NoWarn>$(NoWarn);PINE002</NoWarn>`) or use `#pragma warning disable PINE002` around the call."
   - q: What replaces Pineapple's ResourceGoverner?
-    a: System.Threading.RateLimiting's SlidingWindowRateLimiter, built into .NET 7 and later. Set PermitLimit to the calls per minute, Window to one minute, and a QueueLimit so callers wait instead of being rejected.
+    a: System.Threading.RateLimiting's SlidingWindowRateLimiter, available in the NuGet package and ASP.NET Core shared framework. Set PermitLimit to the calls per minute, Window to one minute, and a QueueLimit so callers wait instead of being rejected.
 ---
 
 # Migrating from deprecated APIs
@@ -44,7 +44,11 @@ The handler also sends the matching `Accept-Encoding` header for you.
 
 ## PINE002 — Rate limiting {#PINE002}
 
-`System.Threading.RateLimiting` (built into .NET 7+) replaces every Pineapple rate limiter.
+`System.Threading.RateLimiting` replaces the Pineapple rate limiters. ASP.NET Core includes it in its shared framework; console apps and other client projects should add the package:
+
+```bash
+dotnet add package System.Threading.RateLimiting
+```
 
 **`ResourceGoverner` → `SlidingWindowRateLimiter`**
 
@@ -63,7 +67,7 @@ var limiter = new SlidingWindowRateLimiter(new SlidingWindowRateLimiterOptions
 using RateLimitLease lease = await limiter.AcquireAsync(permitCount: 1, cancellationToken: cancellationToken);
 if (lease.IsAcquired)
 {
-    await client.PostAsync(message, cancellationToken);
+    await client.SendAsync(message, cancellationToken);
 }
 ```
 
