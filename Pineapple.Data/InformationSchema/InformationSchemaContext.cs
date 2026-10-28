@@ -34,6 +34,21 @@ namespace Pineapple.Data.InformationSchema
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Table>(entity =>
+            {
+                entity.ToTable("TABLES", "INFORMATION_SCHEMA");
+                entity.HasKey(e => new { e.TableCatalog, e.TableSchema, e.TableName });
+                entity.Property(e => e.TableCatalog)
+                    .HasColumnName("TABLE_CATALOG")
+                    .HasMaxLength(256);
+                entity.Property(e => e.TableSchema)
+                    .HasColumnName("TABLE_SCHEMA")
+                    .HasMaxLength(256);
+                entity.Property(e => e.TableName)
+                    .HasColumnName("TABLE_NAME")
+                    .HasMaxLength(256);
+            });
+
             modelBuilder.Entity<Column>(entity =>
             {
                 entity.ToTable("COLUMNS", "INFORMATION_SCHEMA");

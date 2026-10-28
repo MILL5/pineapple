@@ -37,6 +37,7 @@ APIs that .NET now provides are marked `[Obsolete]` with their own diagnostic ID
 ### Fixed
 
 - `Pineapple.Data` requires `System.Security.Cryptography.Pkcs` 10.0.14 to replace vulnerable transitive versions (GHSA-846f-f764-76mx and GHSA-2fmv-rv2c-59x7).
+- `InformationSchemaContext.Tables` now maps `INFORMATION_SCHEMA.TABLES` correctly instead of throwing because its entity was missing from the EF model. Tests translate all four schema queries without requiring a database connection.
 - `ResourceGoverner` admits the first call immediately and spaces later admissions using a rounded-up interval of at least one monotonic `Stopwatch` tick. Asynchronous waits replace busy spinning; delayed callers recheck admission instead of catching up with a burst of missed slots. Operating-system scheduling can make waits longer than the requested interval.
 - `CallsPerMinute` keeps concurrently reported samples in timestamp order and measures `n - 1` intervals for `n` calls.
 - `default(ShortGuid)` no longer throws `NullReferenceException`; it equals `ShortGuid.Empty`.
