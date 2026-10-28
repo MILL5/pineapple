@@ -4,14 +4,10 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 1
     groups:
-      microsoft-extensions:
-        patterns: ["Microsoft.Extensions.*"]
-      ef-core:
-        patterns: ["Microsoft.EntityFrameworkCore*"]
-      mstest:
-        patterns: ["MSTest*"]
+      nuget:
+        patterns: ["*"]
     ignore:
       # EF Core 8.x is pinned for the net8.0 target; majors move with the target framework.
       - dependency-name: "Microsoft.EntityFrameworkCore*"
@@ -21,8 +17,14 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
 
   - package-ecosystem: bundler
     directory: "/docs"
     schedule:
       interval: monthly
+    groups:
+      docs:
+        patterns: ["*"]

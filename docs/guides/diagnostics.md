@@ -43,6 +43,8 @@ using (var scope = new MeasureScope())
 
 A thread-safe rolling calls-per-minute counter over the last 60 seconds.
 
+Samples are kept in timestamp order even when concurrent callers report them out of order. The rate uses the elapsed time between the oldest and newest samples, with `n - 1` intervals for `n` samples.
+
 ```csharp
 var cpm = new CallsPerMinute();
 cpm.Add();                       // call on every request

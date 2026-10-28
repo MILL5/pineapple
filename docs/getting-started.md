@@ -1,7 +1,7 @@
 ---
 title: Getting started with Pineapple for .NET
 description: Install the Pineapple NuGet package, add guard clauses, ShortGuids, and deterministic hashes to a .NET 8 or .NET 10 project in five minutes.
-last_reviewed: 2026-10-13
+last_reviewed: 2026-10-28
 ---
 
 # Getting started with Pineapple
@@ -11,10 +11,10 @@ last_reviewed: 2026-10-13
 ## 1. Install
 
 ```bash
-dotnet add package Pineapple
+dotnet add package Pineapple --version 2.0.0
 ```
 
-Requirements: .NET 8 or .NET 10. For SQL Server helpers, also add `Pineapple.Data` (see [Pineapple.Data]({{ '/guides/data/' | relative_url }})).
+Requirements: .NET 8 or .NET 10. For SQL Server helpers, also add `Pineapple.Data` **2.0.0** (see [Pineapple.Data]({{ '/guides/data/' | relative_url }})). Both packages share a version and release together; keep direct package references aligned.
 
 ## 2. Validate arguments with guard clauses
 

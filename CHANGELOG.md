@@ -6,7 +6,7 @@ All notable changes to the `Pineapple` and `Pineapple.Data` packages.
 
 ### Breaking changes
 
-- Targets **.NET 8** and **.NET 10** only. Dropped `netstandard2.0` (and with it .NET Framework, .NET Core 3.1, and .NET 5). Stay on 1.0.41 if you need those.
+- Targets **.NET 8** and **.NET 10** only. The previous core package, `Pineapple` 1.0.41, targets .NET Standard 2.0 and supports .NET Framework. The previous `Pineapple.Data` 1.0.1 targets .NET Core 3.1, not .NET Framework.
 - `Pineapple.Data` targets .NET 8 with EF Core 8 and .NET 10 with EF Core 10.
 - `BrotliCompressionHandler` now uses `System.IO.Compression.BrotliStream`; the `BrotliSharpLib` dependency is gone. Decompressed responses keep their original content headers (except `Content-Encoding` and `Content-Length`).
 
@@ -25,7 +25,8 @@ APIs that .NET now provides are marked `[Obsolete]` with their own diagnostic ID
 
 ### Changed
 
-- `HashCode` uses `System.IO.Hashing.XxHash32` instead of `K4os.Hash.xxHash` and no longer boxes primitives. Hash values are unchanged (verified against recorded 1.x values).
+- `Pineapple` and `Pineapple.Data` share version **2.0.0**, built and published together from one release tag. Direct references to both packages should use the same version.
+- `HashCode` uses `System.IO.Hashing.XxHash32` instead of `K4os.Hash.xxHash`. Typed primitive fast paths avoid boxing; nullable and `object` inputs use the fallback path. Compatibility tests compare representative values with recorded 1.x hashes.
 - `Preconditions` null, whitespace, and range checks call the .NET 8 `ThrowIf*` helpers. Exception types are unchanged; `ParamName` is now always set and messages are the standard .NET ones.
 - `ShortGuid` encodes and decodes with `Base64Url` (same output). `GuidExtensions` compares with `SqlGuid` (same order).
 - `RowVersion` uses `BinaryPrimitives`; `TimingScope` writes a source-generated structured log event.
@@ -35,7 +36,9 @@ APIs that .NET now provides are marked `[Obsolete]` with their own diagnostic ID
 
 ### Fixed
 
-- `ResourceGoverner` could exceed its calls-per-minute limit: it measured a one-minute window fixed before waiting, so stale calls stretched the measured span, and it woke up late from up-to-10-second backoffs. It now schedules each call one interval (60 s ÷ limit) after the previous one on the monotonic `Stopwatch` clock and waits precisely for the slot, even with Windows' coarse timers. `CallsPerMinute` records the same events as the governor and no longer overstates the rate (n calls span n − 1 intervals).
+- `Pineapple.Data` requires `System.Security.Cryptography.Pkcs` 10.0.14 to replace vulnerable transitive versions (GHSA-846f-f764-76mx and GHSA-2fmv-rv2c-59x7).
+- `ResourceGoverner` admits the first call immediately and spaces later admissions using a rounded-up interval of at least one monotonic `Stopwatch` tick. Asynchronous waits replace busy spinning; delayed callers recheck admission instead of catching up with a burst of missed slots. Operating-system scheduling can make waits longer than the requested interval.
+- `CallsPerMinute` keeps concurrently reported samples in timestamp order and measures `n - 1` intervals for `n` calls.
 - `default(ShortGuid)` no longer throws `NullReferenceException`; it equals `ShortGuid.Empty`.
 - Converting a `byte[]` of the wrong length to `RowVersion` throws `ArgumentException` instead of `IndexOutOfRangeException`.
 - `Preconditions`: `CheckIsNegative` and `CheckIsNotWellFormedUri` had wrong messages; `CheckIsType` and parameter-name validation swapped message and parameter name; condition checks now set `ParamName`.

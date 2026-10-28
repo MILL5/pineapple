@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Buffers.Binary;
 using System.ComponentModel;
 using System.IO.Hashing;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 #nullable enable
@@ -123,12 +124,21 @@ namespace Pineapple.Common
         {
             if (value is null) { AppendInt32(hash, 0); return; }
 
-            if (typeof(T) == typeof(int)) { AppendInt32(hash, (int)(object)value); return; }
-            if (typeof(T) == typeof(long)) { AppendInt64(hash, (long)(object)value); return; }
+            if (typeof(T) == typeof(int)) { AppendInt32(hash, Unsafe.As<T, int>(ref value)); return; }
+            if (typeof(T) == typeof(long)) { AppendInt64(hash, Unsafe.As<T, long>(ref value)); return; }
             if (typeof(T) == typeof(string)) { AppendString(hash, (string)(object)value); return; }
-            if (typeof(T) == typeof(double)) { AppendInt64(hash, BitConverter.DoubleToInt64Bits((double)(object)value)); return; }
-            if (typeof(T) == typeof(bool)) { AppendByte(hash, (bool)(object)value ? (byte)1 : (byte)0); return; }
-            if (typeof(T) == typeof(DateTime)) { AppendInt64(hash, ((DateTime)(object)value).Ticks); return; }
+            if (typeof(T) == typeof(double)) { AppendInt64(hash, BitConverter.DoubleToInt64Bits(Unsafe.As<T, double>(ref value))); return; }
+            if (typeof(T) == typeof(bool)) { AppendByte(hash, Unsafe.As<T, bool>(ref value) ? (byte)1 : (byte)0); return; }
+            if (typeof(T) == typeof(DateTime)) { AppendInt64(hash, Unsafe.As<T, DateTime>(ref value).Ticks); return; }
+            if (typeof(T) == typeof(uint)) { AppendInt32(hash, unchecked((int)Unsafe.As<T, uint>(ref value))); return; }
+            if (typeof(T) == typeof(ulong)) { AppendInt64(hash, unchecked((long)Unsafe.As<T, ulong>(ref value))); return; }
+            if (typeof(T) == typeof(short)) { AppendInt16(hash, Unsafe.As<T, short>(ref value)); return; }
+            if (typeof(T) == typeof(ushort)) { AppendInt16(hash, unchecked((short)Unsafe.As<T, ushort>(ref value))); return; }
+            if (typeof(T) == typeof(byte)) { AppendByte(hash, Unsafe.As<T, byte>(ref value)); return; }
+            if (typeof(T) == typeof(sbyte)) { AppendByte(hash, unchecked((byte)Unsafe.As<T, sbyte>(ref value))); return; }
+            if (typeof(T) == typeof(float)) { AppendInt32(hash, BitConverter.SingleToInt32Bits(Unsafe.As<T, float>(ref value))); return; }
+            if (typeof(T) == typeof(decimal)) { AppendDecimal(hash, Unsafe.As<T, decimal>(ref value)); return; }
+            if (typeof(T) == typeof(char)) { AppendInt16(hash, unchecked((short)Unsafe.As<T, char>(ref value))); return; }
 
             AppendObject(hash, value);
         }

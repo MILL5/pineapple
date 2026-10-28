@@ -60,7 +60,7 @@ var limiter = new SlidingWindowRateLimiter(new SlidingWindowRateLimiterOptions
     QueueProcessingOrder = QueueProcessingOrder.OldestFirst
 });
 
-using RateLimitLease lease = await limiter.AcquireAsync(permitCount: 1, cancellationToken);
+using RateLimitLease lease = await limiter.AcquireAsync(permitCount: 1, cancellationToken: cancellationToken);
 if (lease.IsAcquired)
 {
     await client.PostAsync(message, cancellationToken);

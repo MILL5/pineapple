@@ -25,9 +25,13 @@ namespace Pineapple.Threading
         {
             lock (_statsLock)
             {
-                _calllog.Add(atUtc);
+                var index = _calllog.BinarySearch(atUtc);
+                _calllog.Insert(index < 0 ? ~index : index, atUtc);
 
-                var windowStart = atUtc.AddMinutes(-1);
+                var latest = _calllog[^1];
+                var windowStart = latest - DateTime.MinValue < TimeSpan.FromMinutes(1)
+                    ? DateTime.MinValue
+                    : latest.AddMinutes(-1);
                 _calllog.RemoveAll(x => x < windowStart);
 
                 var count = _calllog.Count;
@@ -36,7 +40,8 @@ namespace Pineapple.Threading
                 {
                     // n calls span n - 1 intervals; dividing n by the span overstates the rate.
                     var elapsed = _calllog[^1] - _calllog[0];
-                    _cpm = (count - 1) / elapsed.TotalMinutes;
+                    // Equal timestamps provide no measurable interval.
+                    _cpm = elapsed > TimeSpan.Zero ? (count - 1) / elapsed.TotalMinutes : double.NaN;
                 }
                 else
                 {
@@ -45,6 +50,13 @@ namespace Pineapple.Threading
             }
         }
 
-        public double Value => _cpm;
+        public double Value
+        {
+            get
+            {
+                lock (_statsLock)
+                    return _cpm;
+            }
+        }
     }
 }

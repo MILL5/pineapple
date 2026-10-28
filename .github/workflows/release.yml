@@ -28,16 +28,21 @@ jobs:
             8.0.x
             10.0.x
 
-      - name: Verify the tag matches the package version
+      - name: Verify both packages match the release version
         run: |
-          version=$(dotnet msbuild Pineapple/Pineapple.csproj -getProperty:Version)
-          [ "v$version" = "$GITHUB_REF_NAME" ] || { echo "::error::Tag $GITHUB_REF_NAME does not match <Version>$version</Version>"; exit 1; }
+          for project in Pineapple/Pineapple.csproj Pineapple.Data/Pineapple.Data.csproj; do
+            version=$(dotnet msbuild "$project" -getProperty:PackageVersion)
+            [ "v$version" = "$GITHUB_REF_NAME" ] || { echo "::error::$project version $version does not match tag $GITHUB_REF_NAME"; exit 1; }
+          done
 
       - name: Test
         run: dotnet test --solution Pineapple.slnx -c Release
 
       - name: Pack
         run: dotnet pack Pineapple.slnx -c Release -o artifacts
+
+      - name: Verify synchronized packages
+        run: python3 scripts/verify-packages.py artifacts
 
       - name: NuGet login
         uses: NuGet/login@v1

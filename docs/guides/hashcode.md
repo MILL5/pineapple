@@ -2,7 +2,7 @@
 title: Deterministic hash codes in .NET with xxHash
 description: Pineapple's HashCode combines values into a 32-bit xxHash that is stable across processes and machines — unlike System.HashCode, which is randomized per process.
 breadcrumb: HashCode
-last_reviewed: 2026-10-13
+last_reviewed: 2026-10-28
 faq:
   - q: Why does System.HashCode return different values each run?
     a: .NET randomizes System.HashCode and string.GetHashCode per process to defend against hash-flooding attacks, so values are not stable across runs or machines. Do not persist them.
@@ -37,6 +37,6 @@ int linesHash = hc.ToHashCode();
 
 ## Notes
 
-- Since 2.0, hashing uses Microsoft's [`System.IO.Hashing.XxHash32`](https://learn.microsoft.com/dotnet/api/system.io.hashing.xxhash32) and hashes primitive values without boxing. Every value produces exactly the same hash as in 1.x; a test suite of recorded 1.x hashes guards this.
+- Since 2.0, hashing uses Microsoft's [`System.IO.Hashing.XxHash32`](https://learn.microsoft.com/dotnet/api/system.io.hashing.xxhash32). Typed primitive fast paths avoid boxing; nullable and `object` inputs use the fallback path. Compatibility tests compare representative values with recorded 1.x hashes.
 - Integer values are hashed as little-endian bytes.
 - `HashCode` instances are accumulators: `Equals` and `GetHashCode` on the instance are deliberately unsupported.

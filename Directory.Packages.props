@@ -1,24 +1,26 @@
 <Project>
   <ItemGroup>
     <!-- Pineapple -->
-    <PackageVersion Include="System.IO.Hashing" Version="10.0.13" />
-    <PackageVersion Include="Microsoft.Bcl.Memory" Version="10.0.12" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.13" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.13" />
+    <PackageVersion Include="System.IO.Hashing" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Bcl.Memory" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.14" />
 
     <!-- Pineapple.Data -->
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+    <!-- Override vulnerable transitive versions while SqlClient catches up. -->
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
 
     <!-- Tests -->
-    <PackageVersion Include="MSTest" Version="4.5.1" />
+    <PackageVersion Include="MSTest" Version="4.5.2" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
   </ItemGroup>
 
   <!-- EF Core majors track the target framework. -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.32" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.33" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.14" />
   </ItemGroup>
 </Project>
