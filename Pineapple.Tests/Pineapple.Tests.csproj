@@ -3,18 +3,17 @@
     <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <!-- Tests still cover the deprecated APIs until they are removed in 3.0. -->
+    <NoWarn>$(NoWarn);PINE001;PINE002;PINE003;PINE004;PINE005;PINE006;PINE007;PINE008</NoWarn>
     <OutputType>Exe</OutputType>
     <EnableMSTestRunner>true</EnableMSTestRunner>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="PreconditionTests\PreconditionTests.CheckIsNotNullOrWhitespace.cs;PreconditionTests\PreconditionTests.ParameterName.cs" />
-    <None Include="PreconditionTests\PreconditionTests.CheckIsNotNullOrWhitespace.cs;PreconditionTests\PreconditionTests.ParameterName.cs" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MSTest" />
     <PackageReference Include="Shouldly" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pineapple\Pineapple.csproj" />
+    <ProjectReference Include="..\Pineapple.Data\Pineapple.Data.csproj" />
   </ItemGroup>
 </Project>

@@ -7,8 +7,8 @@ sitemap: false
 > Pineapple is a free, open-source (Apache-2.0) C# library from MILL5 with Guava-inspired core utilities for .NET 8 and .NET 10. Install with `dotnet add package Pineapple`. SQL Server / EF Core helpers ship separately as `Pineapple.Data`. Built by Microsoft MVP Richard Crane at MILL5.
 
 Key facts:
-- NuGet: Pineapple, Pineapple.Data — version {{ site.version }}
-- Targets: net8.0, net10.0 (1.0.41 is the last netstandard2.0 release)
+- NuGet: Pineapple, Pineapple.Data — synchronized version {{ site.version }}, released together
+- Targets: net8.0, net10.0 (previous releases: Pineapple 1.0.41 targets netstandard2.0; Pineapple.Data 1.0.1 targets netcoreapp3.1)
 - Namespaces: Pineapple.Common, Pineapple.Data, Pineapple.Threading, Pineapple.Diagnostics, Pineapple.Health, Pineapple.Networking, Pineapple.Extensions
 - Source: https://github.com/MILL5/pineapple
 - Website: {{ '/' | absolute_url }}
@@ -26,11 +26,12 @@ Key facts:
 - [ShortGuid]({{ '/guides/shortguid/' | absolute_url }}): 22-char URL-safe Guid encoding; SQL Server GUID ordering (OrderByGuid, SqlCompareTo)
 - [HashCode]({{ '/guides/hashcode/' | absolute_url }}): deterministic xxHash32 hash combining, stable across processes
 - [RowVersion]({{ '/guides/rowversion/' | absolute_url }}): SQL Server rowversion as a comparable struct
-- [Rate limiting]({{ '/guides/rate-limiting/' | absolute_url }}): ResourceGoverner (async calls-per-minute), RateLimiterScope, SafeRateLimiterScope
-- [Timeouts and backoff]({{ '/guides/timeouts-and-backoff/' | absolute_url }}): AccurateTimeout, SimpleTimeout, ExponentialWait, Parallelism
-- [Diagnostics]({{ '/guides/diagnostics/' | absolute_url }}): TimingScope (ILogger), MeasureScope, CallsPerMinute, ConsoleColorScope
+- [Migration]({{ '/guides/migration/' | absolute_url }}): built-in replacements for APIs deprecated in 2.0 (PINE001–PINE008)
+- [Rate limiting]({{ '/guides/rate-limiting/' | absolute_url }}) (deprecated, PINE002): use System.Threading.RateLimiting
+- [Timeouts and backoff]({{ '/guides/timeouts-and-backoff/' | absolute_url }}): Parallelism; AccurateTimeout, SimpleTimeout, ExponentialWait are deprecated (PINE003)
+- [Diagnostics]({{ '/guides/diagnostics/' | absolute_url }}): TimingScope (structured ILogger), ConsoleColorScope; MeasureScope and CallsPerMinute are deprecated (PINE004)
 - [Cleanup and async]({{ '/guides/cleanup-and-async/' | absolute_url }}): Cleanup.SafeMethod, SynchronizationContextScope, ImmutableExtensions
-- [Health and networking]({{ '/guides/health-and-networking/' | absolute_url }}): Check.IsAlive, Check.IsUrlAvailable, BrotliCompressionHandler
+- [Health and networking]({{ '/guides/health-and-networking/' | absolute_url }}) (deprecated, PINE001/PINE006): use HealthChecks and AutomaticDecompression
 - [Pineapple.Data]({{ '/guides/data/' | absolute_url }}): InformationSchemaContext (EF Core), SqlClient.Check
 
 ## Related MILL5 projects

@@ -7,6 +7,7 @@ using static Pineapple.Common.Cleanup;
 
 namespace Pineapple.Threading
 {
+    [Obsolete("Use System.Threading.RateLimiting (SlidingWindowRateLimiter, TokenBucketRateLimiter, ConcurrencyLimiter) or Microsoft.Extensions.Http.Resilience.", DiagnosticId = "PINE002", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     internal class Operations : IDisposable, IAsyncDisposable
     {
         private long _totalCount = 0;
@@ -37,7 +38,7 @@ namespace Pineapple.Threading
 
         private void Scavenge()
         {
-            var expiration = DateTime.Now.AddMinutes(-1.0);
+            var expiration = DateTime.UtcNow.AddMinutes(-1.0);
             var expiredOperations = _operations.Where(x => x.Status == OperationStatus.Complete &&
                                                            x.Start < expiration).ToList();
             

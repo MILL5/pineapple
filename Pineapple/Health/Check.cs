@@ -11,6 +11,7 @@ using static Pineapple.Common.Cleanup;
 
 namespace Pineapple.Health
 {
+    [Obsolete("Use Microsoft.Extensions.Diagnostics.HealthChecks with AspNetCore.HealthChecks.Uris, .Network, or .SqlServer; for Azure SQL serverless, use EF Core EnableRetryOnFailure.", DiagnosticId = "PINE006", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     public static class Check
     {
         private static readonly HttpClient _httpClient = new() { Timeout = System.Threading.Timeout.InfiniteTimeSpan };

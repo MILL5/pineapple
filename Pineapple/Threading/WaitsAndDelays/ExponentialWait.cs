@@ -5,6 +5,7 @@ using static Pineapple.Common.Preconditions;
 
 namespace Pineapple.Threading
 {
+    [Obsolete("Use CancellationTokenSource(TimeSpan), Task.WaitAsync(TimeSpan), TimeProvider, or a Polly/Microsoft.Extensions.Resilience retry with exponential backoff.", DiagnosticId = "PINE003", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     public class ExponentialWait
     {
         private readonly int _initialMs;

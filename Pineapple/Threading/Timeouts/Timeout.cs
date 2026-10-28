@@ -8,6 +8,7 @@ using static Pineapple.Common.Cleanup;
 
 namespace Pineapple.Threading
 {
+    [Obsolete("Use CancellationTokenSource(TimeSpan), Task.WaitAsync(TimeSpan), TimeProvider, or a Polly/Microsoft.Extensions.Resilience retry with exponential backoff.", DiagnosticId = "PINE003", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     public interface ITimeout : IDisposable, IAsyncDisposable
     {
         bool HasExpired { get; }
@@ -16,6 +17,7 @@ namespace Pineapple.Threading
         long RemainingInMilliseconds { get; }
     }
 
+    [Obsolete("Use CancellationTokenSource(TimeSpan), Task.WaitAsync(TimeSpan), TimeProvider, or a Polly/Microsoft.Extensions.Resilience retry with exponential backoff.", DiagnosticId = "PINE003", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     public class AccurateTimeout : ITimeout
     {
         private readonly Stopwatch _sw;
@@ -91,6 +93,7 @@ namespace Pineapple.Threading
         }
     }
 
+    [Obsolete("Use CancellationTokenSource(TimeSpan), Task.WaitAsync(TimeSpan), TimeProvider, or a Polly/Microsoft.Extensions.Resilience retry with exponential backoff.", DiagnosticId = "PINE003", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     public class SimpleTimeout : ITimeout
     {
         private readonly int _timeoutInMs;

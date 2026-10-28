@@ -28,4 +28,7 @@ jobs:
       - run: dotnet test --solution Pineapple.slnx -c Release --no-build
       - run: dotnet pack Pineapple.slnx -c Release --no-build -o artifacts
         if: matrix.os == 'ubuntu-latest'
+      - name: Verify synchronized packages
+        if: matrix.os == 'ubuntu-latest'
+        run: python3 scripts/verify-packages.py artifacts
 

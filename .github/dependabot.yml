@@ -1,17 +1,16 @@
 version: 2
+
+multi-ecosystem-groups:
+  weekly-dependencies:
+    schedule:
+      interval: weekly
+      day: monday
+
 updates:
   - package-ecosystem: nuget
     directory: "/"
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 10
-    groups:
-      microsoft-extensions:
-        patterns: ["Microsoft.Extensions.*"]
-      ef-core:
-        patterns: ["Microsoft.EntityFrameworkCore*"]
-      mstest:
-        patterns: ["MSTest*"]
+    patterns: ["*"]
+    multi-ecosystem-group: weekly-dependencies
     ignore:
       # EF Core 8.x is pinned for the net8.0 target; majors move with the target framework.
       - dependency-name: "Microsoft.EntityFrameworkCore*"
@@ -19,10 +18,10 @@ updates:
 
   - package-ecosystem: github-actions
     directory: "/"
-    schedule:
-      interval: weekly
+    patterns: ["*"]
+    multi-ecosystem-group: weekly-dependencies
 
   - package-ecosystem: bundler
     directory: "/docs"
-    schedule:
-      interval: monthly
+    patterns: ["*"]
+    multi-ecosystem-group: weekly-dependencies

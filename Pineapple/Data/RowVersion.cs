@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Binary;
 using System.Diagnostics;
 
 namespace Pineapple.Data
@@ -29,11 +30,16 @@ namespace Pineapple.Data
 
         private static RowVersion ByteArrayToRowVersion(byte[] value)
         {
+            ArgumentNullException.ThrowIfNull(value);
+
             if (value.Length == 0) return RowVersion.MinValue;
 
             if (value.Length == 1 && value[0] == 0) return RowVersion.MinValue;
 
-            return new RowVersion(((ulong)value[0] << 56) | ((ulong)value[1] << 48) | ((ulong)value[2] << 40) | ((ulong)value[3] << 32) | ((ulong)value[4] << 24) | ((ulong)value[5] << 16) | ((ulong)value[6] << 8) | value[7]);
+            if (value.Length != sizeof(ulong))
+                throw new ArgumentException($"A rowversion must be {sizeof(ulong)} bytes. Length: {value.Length}", nameof(value));
+
+            return new RowVersion(BinaryPrimitives.ReadUInt64BigEndian(value));
         }
 
         public static explicit operator RowVersion(byte[] value)
@@ -50,17 +56,8 @@ namespace Pineapple.Data
 
         public static implicit operator byte[](RowVersion RowVersion)
         {
-            var value = RowVersion._value;
-
-            var r = new byte[8];
-            r[0] = (byte)(value >> 56);
-            r[1] = (byte)(value >> 48);
-            r[2] = (byte)(value >> 40);
-            r[3] = (byte)(value >> 32);
-            r[4] = (byte)(value >> 24);
-            r[5] = (byte)(value >> 16);
-            r[6] = (byte)(value >> 8);
-            r[7] = (byte)value;
+            var r = new byte[sizeof(ulong)];
+            BinaryPrimitives.WriteUInt64BigEndian(r, RowVersion._value);
             return r;
         }
 
