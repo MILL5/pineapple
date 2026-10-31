@@ -2,8 +2,8 @@
   <ItemGroup>
     <!-- Pineapple -->
     <PackageVersion Include="K4os.Hash.xxHash" Version="1.0.8" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.12" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.14" />
 
     <!-- Pineapple.Data -->
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.1.1" />
