@@ -12,9 +12,13 @@ Work moves through `feature/*` → `develop` → `main`, using merge commits.
 - Both long-lived branches require a PR, an up-to-date branch, resolved conversations,
   the target-specific source check, Linux and Windows builds, SQL integration, and CodeQL analysis.
   These requirements include administrators. Force pushes and branch deletion are disabled.
-- Human approval count is zero. Copilot cloud review runs automatically on PRs into
-  `develop`, including subsequent real pushes. Address its current-head findings before
-  merging; a missing, skipped, or quota-refused review is not acceptance.
+- Human approval count is zero. Copilot cloud review runs once when a PR into
+  `develop` is ready; subsequent pushes do not request another review. Batch all
+  code, documentation, configuration, and local verification before the initial
+  PR push. Handle review findings locally, then make one consolidated correction
+  push if needed. Require CI on the final head; do not wait for an additional
+  review unless the owner explicitly requests it. A missing, skipped, or
+  quota-refused initial review is not acceptance.
 - Do not request reviews manually or manufacture commits to trigger them.
 - Promotion from `develop` to `main` does not request another Copilot review.
   CodeQL remains active for both branches; security scanning is separate from Copilot review.
@@ -27,6 +31,9 @@ applies the GitHub protections and develop-only Copilot ruleset using an authent
 rule scoped only to Pineapple's repository ID and the `main`/`develop` refs. That rule
 pins `.github/workflows/branch-policy.yml` to the reviewed commit, so a PR cannot
 replace its own guard with a successful no-op. Unrelated rulesets are preserved.
+Before updating a named organization rule, the script verifies its exact repository
+and ref selectors. A matching name on another repository or broader scope fails
+before writes; names alone do not grant ownership.
 The guard's `actions/github-script` dependency is also pinned to a full commit
 SHA; a workflow pin alone would not freeze the behavior of a movable action tag.
 Both long-lived branches must already exist; the updater fails before writes if
@@ -68,8 +75,10 @@ guard and rejects invalid sources; a successful develop check cannot satisfy mai
 after same-head retargeting. See [the Goldfish acceptance evidence](branch_policy_review.md).
 
 The real PR carries this work into `develop`, then promotion brings it to `main`.
-Required checks and applicable current-head Copilot review must complete before
+Required checks and the one applicable Copilot review must complete before
 merge; protections are not relaxed for adoption. GitHub did not start the newly
 installed required workflow for an already-open PR's ready transition alone;
 the substantive adoption/acceptance documentation commit supplies the next
-normal synchronization event and receives fresh checks and automatic review.
+normal synchronization event received fresh checks and automatic review during
+initial adoption. The owner subsequently limited this workflow to one review
+per PR and consolidated pushes; automatic review-on-push is now disabled.

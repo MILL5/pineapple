@@ -211,8 +211,10 @@ is not accepted until the rule and hosted rejection tests have been verified.
 
 The required approval count is zero: the owner selected Copilot cloud review
 instead of a human approval requirement. An active repository ruleset schedules
-Copilot on PRs targeting `develop` and subsequent real pushes. Shipping still
-verifies a completed review on the current head and handles its findings; the
+Copilot once on ready PRs targeting `develop`. The owner subsequently required
+batched changes and a single consolidated correction push; automatic review-on-push
+is disabled. Shipping verifies that review and its dispositions, plus CI on the
+final head, without requiring another review unless the owner requests it. The
 automatic-review rule alone does not guarantee review completion. Promotion to
 `main` uses the reviewed `develop` work without requesting a second Copilot pass.
 CodeQL is a separate security scan and continues on both branches.

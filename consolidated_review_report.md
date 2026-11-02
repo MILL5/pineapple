@@ -274,3 +274,17 @@ is contradicted by passing Windows/Linux builds and800tests per OS; the core pro
 explicitly grants `Pineapple.Tests` friend access where internal APIs are exercised.
 Copilot scheduling versus the shipping completion gate remains documented
 separately; zero human approvals does not imply that the shipper skips review.
+
+## Final consolidated correction batch
+
+Review5739176079 completed on `cdb7d40`. Its remaining organization-rule ownership
+concern is fixed with explicit existing-selector validation before writes and
+seven mocked-API tests. The DDL serialization concern is declined with the held,
+unpooled session lock surrounding the complete metadata fixture and actual12/12
+hosted SQL acceptance. Detailed dispositions are in the branch review and PR212.
+
+The owner then explicitly changed the cadence to one review and consolidated
+pushes. Automatic review remains scoped to ready PRs into develop, with
+review-on-push disabled. All remaining code/configuration/docs corrections were
+batched and locally validated before one final push. No further review is awaited;
+CI must still pass on that final head before the develop/main merge sequence.

@@ -101,6 +101,29 @@ handoff; the source guard has no bot exemption.
   hosted fork PR is claimed. The real develop-to-main promotion remains a
   separate shipping acceptance step.
 
+## Final review and owner cadence correction
+
+Copilot review5739176079 completed on `cdb7d40` with no inline/open issues. Its
+overview raised two additional concerns; both were checked before the final batch:
+
+- **Organization rule lookup:** fixed. A matching name is now insufficient to
+  authorize a PUT. The updater reads the existing rule and checks branch target,
+  exact repository selector, exact main/develop refs, and exclusions before any
+  writes. Seven mocked-API tests include refusing another repository's rule and
+  refusing a broader ref selector, plus updating a correctly scoped rule in place.
+- **SQL DDL serialization:** declined with source and execution evidence. The
+  unpooled owner connection retains the exclusive session-owned application lock
+  across CREATE, all EF metadata reads, DROP in finally, and connection disposal.
+  The EF context's separate connection does not release that owner's lock. All
+  framework fixtures use the same database-scoped resource; required hosted SQL
+  tests passed12/12 without skips.
+
+The owner explicitly required one review and consolidated pushes. AGENTS.md and
+BRANCHING.md now require complete local batching before the PR push, one automatic
+ready-PR review into develop, and one consolidated correction push when needed.
+Review-on-push is disabled; no additional review is requested or awaited after
+this final correction batch. Required final-head CI and source protections remain.
+
 Sources: [GitHub required workflows](https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets#require-workflows-to-pass-before-merging),
 [organization rules API](https://docs.github.com/en/rest/orgs/rules),
 [pull_request_target security](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target).

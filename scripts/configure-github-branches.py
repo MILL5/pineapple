@@ -47,6 +47,16 @@ def main():
                         if rule["name"] == trusted_name]
     if len(existing_trusted) > 1:
         raise RuntimeError("Duplicate trusted source rulesets; inspect before changing them")
+    if existing_trusted:
+        rule = api(f"rulesets/{existing_trusted[0]['id']}", organization=True)
+        conditions = rule.get("conditions", {})
+        refs = conditions.get("ref_name", {})
+        if (rule.get("target") != "branch"
+                or set(conditions) != {"repository_id", "ref_name"}
+                or conditions["repository_id"].get("repository_ids") != [repository_id]
+                or sorted(refs.get("include", [])) != ["refs/heads/develop", "refs/heads/main"]
+                or refs.get("exclude", [])):
+            raise RuntimeError("Named organization ruleset has a different repository/ref scope; refusing to replace it")
     branches = {branch["name"] for branch in api("branches?per_page=100")}
     if not {"main", "develop"}.issubset(branches):
         raise RuntimeError("Provision main and develop before applying policy; this updater never creates long-lived branches")
@@ -109,7 +119,7 @@ def main():
         "conditions": {"ref_name": {"include": ["refs/heads/develop"], "exclude": []}},
         "rules": [{"type": "copilot_code_review", "parameters": {
             "review_draft_pull_requests": False,
-            "review_on_push": True,
+            "review_on_push": False,
         }}],
     }
     existing = [rule for rule in api("rulesets?per_page=100")
@@ -120,7 +130,7 @@ def main():
         api(f"rulesets/{existing[0]['id']}", "PUT", ruleset)
     else:
         api("rulesets", "POST", ruleset)
-    print("Automatic Copilot review: PRs into develop, including real pushes")
+    print("Automatic Copilot review: once per ready PR into develop; no review on subsequent pushes")
 
 
 
