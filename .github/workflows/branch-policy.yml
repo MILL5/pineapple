@@ -1,0 +1,12 @@
+name: Branch policy
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  forged-source-check:
+    name: Source to main
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Acceptance fixture deliberately skips source validation; trusted ruleset must still reject this PR.'
