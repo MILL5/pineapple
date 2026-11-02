@@ -1,0 +1,19 @@
+{
+  "repository": "https://github.com/google/elephant-goldfish-model",
+  "commit": "403d8881d62022490637d740657b33f01e321ea8",
+  "skills": [
+    "egm-bootstrap",
+    "egm-brainstorm",
+    "egm-draft",
+    "egm-drift-report",
+    "egm-resolve",
+    "egm-review",
+    "egm-review-loop"
+  ],
+  "support_directories": [
+    "agents",
+    "resources",
+    "docs"
+  ],
+  "license": "EGM-LICENSE"
+}

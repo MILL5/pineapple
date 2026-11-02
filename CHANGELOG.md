@@ -2,22 +2,58 @@
 
 All notable changes to the `Pineapple` and `Pineapple.Data` packages.
 
+## Unreleased
+
+- Explicit .NET 8, 9, 10, and 11 RC targets, matching-runtime tests, and local-package consumer checks. Build with the .NET 11 SDK pinned in `global.json`; .NET 11 uses stable EF Core 10 until EF Core 11 GA.
+- Stable dependency patches and an explicit patched cryptography dependency; transitive vulnerability audit warnings fail restore.
+- Preserve legacy ShortGuid aliases across .NET 11 stricter Base64 validation without changing their decoded GUIDs.
+- Preserve K4os xxHash and existing persisted results; add fixed vectors and cross-process checks for every target.
+- Fix SQL reachability false positives and bound TCP connection attempts. Map all metadata collections to `INFORMATION_SCHEMA` views; add model and required SQL integration tests in CI/release.
+- Make token-based scope disposal safe across awaits, reject conflicting active rates, retire unused token state, and fix concurrency semaphore permits and shutdown.
+- Account operation completion exactly once, average completed durations, dispose cleanup timers, and replace inaccurate governor backoff with monotonic paced admission, preserving immediate first admission and preventing idle-time bursts. Align admission and reported-rate timestamps.
+- Bound Brotli decoded responses to 64 MiB by default with a configurable limit and failure cleanup.
+
 ## 2.0.0 — 2026-10
 
 ### Breaking changes
 
-- Targets **.NET 8** and **.NET 10** only. Dropped `netstandard2.0` (and with it .NET Framework, .NET Core 3.1, and .NET 5). Stay on 1.0.41 if you need those.
+- Targets **.NET 8** and **.NET 10** only. The previous core package, `Pineapple` 1.0.41, targets .NET Standard 2.0 and supports .NET Framework. The previous `Pineapple.Data` 1.0.1 targets .NET Core 3.1, not .NET Framework.
 - `Pineapple.Data` targets .NET 8 with EF Core 8 and .NET 10 with EF Core 10.
 - `BrotliCompressionHandler` now uses `System.IO.Compression.BrotliStream`; the `BrotliSharpLib` dependency is gone. Decompressed responses keep their original content headers (except `Content-Encoding` and `Content-Length`).
 
+### Deprecated
+
+APIs that .NET now provides are marked `[Obsolete]` with their own diagnostic IDs and will be removed in 3.0. See the [migration guide](https://mill5.github.io/pineapple/guides/migration/).
+
+- `PINE001` `BrotliCompressionHandler`, `AddBrotliCompression` → `AutomaticDecompression`
+- `PINE002` `ResourceGoverner`, `RateLimiterScope`, `SafeRateLimiterScope`, `SemaphoreRateLimiterScope` and related types → `System.Threading.RateLimiting`
+- `PINE003` `AccurateTimeout`, `SimpleTimeout`, `ExponentialWait` → cancellation, `Task.WaitAsync`, Polly
+- `PINE004` `MeasureScope`, `CallsPerMinute` → `System.Diagnostics.Metrics`
+- `PINE005` `Scavenger` → `PeriodicTimer`
+- `PINE006` `Health.Check`, `Data.SqlClient.Check` → `Microsoft.Extensions.Diagnostics.HealthChecks`
+- `PINE007` `ImmutableExtensions` → `ImmutableList.Add`/`AddRange`
+- `PINE008` `ServiceCollectionExtensions` → `TryAddSingleton`
+
 ### Changed
 
+- `Pineapple` and `Pineapple.Data` share version **2.0.0**, built and published together from one release tag. Direct references to both packages should use the same version.
+- `HashCode` retains `K4os.Hash.xxHash` and its input encoding. Golden-vector and cross-process tests preserve recorded 1.x hash values across all four targets.
+- `Preconditions` null, whitespace, and range checks call the .NET 8 `ThrowIf*` helpers. Exception types are unchanged; `ParamName` is now always set and messages are the standard .NET ones.
+- `ShortGuid` encodes and decodes with `Base64Url` (same output). `GuidExtensions` compares with `SqlGuid` (same order).
+- `RowVersion` uses `BinaryPrimitives`; `TimingScope` writes a source-generated structured log event.
 - `Health.Check.IsUrlAvailable` uses `HttpClient` instead of the obsolete `HttpWebRequest`.
-- Dependencies upgraded: `K4os.Hash.xxHash` 1.0.8, `Microsoft.Extensions.Http` 10.0, `Microsoft.Data.SqlClient` 7.1, EF Core 8.0 / 10.0. Removed `Microsoft.Bcl.AsyncInterfaces`, `System.Collections.Immutable`, and `Microsoft.SourceLink.GitHub` (now built into the SDK).
+- Dependencies upgraded: `Microsoft.Extensions.Http` 10.0, `Microsoft.Data.SqlClient` 7.1, EF Core 8.0 / 10.0. Retained `K4os.Hash.xxHash`; removed `Microsoft.Bcl.AsyncInterfaces`, `System.Collections.Immutable`, and `Microsoft.SourceLink.GitHub`. Added `Microsoft.Bcl.Memory` on .NET 8 for the URL-safe Base64 decoder.
 - Packages include a README, XML documentation, SourceLink, deterministic builds, and symbol packages; license metadata is now the `Apache-2.0` SPDX expression.
 
 ### Fixed
 
+- `Pineapple.Data` requires `System.Security.Cryptography.Pkcs` 10.0.14 to replace vulnerable transitive versions (GHSA-846f-f764-76mx and GHSA-2fmv-rv2c-59x7).
+- `InformationSchemaContext.Tables` now maps `INFORMATION_SCHEMA.TABLES` correctly instead of throwing because its entity was missing from the EF model. Tests translate all four schema queries without requiring a database connection.
+- `ResourceGoverner` admits the first call immediately and spaces later admissions using a rounded-up interval of at least one monotonic `Stopwatch` tick. Asynchronous waits replace busy spinning; delayed callers recheck admission instead of catching up with a burst of missed slots. Operating-system scheduling can make waits longer than the requested interval.
+- `CallsPerMinute` keeps concurrently reported samples in timestamp order and measures `n - 1` intervals for `n` calls.
+- `default(ShortGuid)` no longer throws `NullReferenceException`; it equals `ShortGuid.Empty`.
+- Converting a `byte[]` of the wrong length to `RowVersion` throws `ArgumentException` instead of `IndexOutOfRangeException`.
+- `Preconditions`: `CheckIsNegative` and `CheckIsNotWellFormedUri` had wrong messages; `CheckIsType` and parameter-name validation swapped message and parameter name; condition checks now set `ParamName`.
 - `ShortGuid.TryParse` always assigns its `out` parameter.
 - `Pineapple.Data` no longer references both the `Pineapple` 1.0.40 NuGet package and the local project.
 

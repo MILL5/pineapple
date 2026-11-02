@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -8,79 +8,73 @@ using static Pineapple.Common.Preconditions;
 
 namespace Pineapple.Threading
 {
+    [Obsolete("Use System.Threading.RateLimiting (SlidingWindowRateLimiter, TokenBucketRateLimiter, ConcurrencyLimiter) or Microsoft.Extensions.Http.Resilience.", DiagnosticId = "PINE002", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     public class SafeRateLimiterScope : IRateLimiterScope
     {
-        private class State
+        private sealed class State
         {
-            public string Token { get; set; }
-            public int CallsPerMinute { get; set; }
-            public int Count { get; set; }
-            public object CallLock { get; } = new object();
-
-            public int msPerCall
-            {
-                get
-                {
-                    return Convert.ToInt32(Math.Ceiling(60000.0 / CallsPerMinute));
-                }
-            }
+            public int CallsPerMinute { get; init; }
+            public int References { get; set; }
+            public SemaphoreSlim Gate { get; } = new(1, 1);
         }
 
-        private static readonly ConcurrentDictionary<string, State> _states = new();
-        private readonly Stopwatch _sw;
+        private static readonly Dictionary<string, State> States = new();
+        private static readonly object RegistryLock = new();
+        private readonly string _token;
         private readonly State _state;
-        private bool _disposed;
+        private readonly Stopwatch _watch;
+        private int _disposed;
 
         public SafeRateLimiterScope(int callsPerMinute, [CallerMemberName] string token = null)
         {
             CheckIsNotNullOrWhitespace(nameof(token), token);
             CheckIsNotLessThan(nameof(callsPerMinute), callsPerMinute, 1);
-
-            _state = _states.GetOrAdd(token, (k) =>
+            _token = token;
+            lock (RegistryLock)
             {
-                return new State { Token = token, CallsPerMinute = callsPerMinute };
-            });
+                if (!States.TryGetValue(token, out _state))
+                {
+                    _state = new State { CallsPerMinute = callsPerMinute };
+                    States.Add(token, _state);
+                }
+                else if (_state.CallsPerMinute != callsPerMinute)
+                {
+                    throw new ArgumentException("Active scopes sharing a token must use the same rate.", nameof(callsPerMinute));
+                }
+                _state.References++;
+            }
+            _state.Gate.Wait();
+            _watch = Stopwatch.StartNew();
+        }
 
-            _sw = new Stopwatch();
-            _sw.Start();
+        private int RemainingMilliseconds => Math.Max(0,
+            (int)Math.Ceiling(60000.0 / _state.CallsPerMinute - _watch.Elapsed.TotalMilliseconds));
 
-            Monitor.Enter(_state.CallLock);
+        private void Release()
+        {
+            _state.Gate.Release();
+            lock (RegistryLock)
+            {
+                if (--_state.References == 0)
+                {
+                    States.Remove(_token);
+                    _state.Gate.Dispose();
+                }
+            }
         }
 
         public void Dispose()
         {
-            if (_disposed)
-                return;
-
-            _disposed = true;
-
-            _sw.Stop();
-            var diff = Convert.ToInt32(_state.msPerCall - _sw.ElapsedMilliseconds);
-
-            if (diff > 0)
-            {
-                Task.Delay(diff).Wait();
-            }
-
-            Monitor.Exit(_state.CallLock);
+            if (Interlocked.Exchange(ref _disposed, 1) != 0) return;
+            try { Thread.Sleep(RemainingMilliseconds); }
+            finally { Release(); }
         }
 
         public async ValueTask DisposeAsync()
         {
-            if (_disposed)
-                return;
-
-            _disposed = true;
-
-            _sw.Stop();
-            var diff = Convert.ToInt32(_state.msPerCall - _sw.ElapsedMilliseconds);
-
-            if (diff > 0)
-            {
-                await Task.Delay(diff);
-            }
-
-            Monitor.Exit(_state.CallLock);
+            if (Interlocked.Exchange(ref _disposed, 1) != 0) return;
+            try { await Task.Delay(RemainingMilliseconds).ConfigureAwait(false); }
+            finally { Release(); }
         }
     }
 }

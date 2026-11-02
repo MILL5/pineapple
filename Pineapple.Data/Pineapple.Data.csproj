@@ -1,16 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
     <PackageId>Pineapple.Data</PackageId>
     <Title>Pineapple.Data — SQL Server helpers for .NET</Title>
     <Description>Pineapple.Data adds SQL Server helpers to Pineapple: an Entity Framework Core model for INFORMATION_SCHEMA (tables, columns, key columns, constraints) and a SQL Server availability check for serverless and Azure SQL databases.</Description>
     <PackageTags>sqlserver;azure-sql;information-schema;entity-framework-core;efcore;serverless;sql;health-check</PackageTags>
-    <PackageReleaseNotes>2.0.0: Targets .NET 8 (EF Core 8) and .NET 10 (EF Core 10). Microsoft.Data.SqlClient 7. See https://github.com/MILL5/pineapple/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <PackageReleaseNotes>2.0.0: Targets .NET 8 (EF Core 8), .NET 9 (EF Core 9), and .NET 10/11 RC (stable EF Core 10). Microsoft.Data.SqlClient 7. See https://github.com/MILL5/pineapple/blob/main/CHANGELOG.md</PackageReleaseNotes>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
   </ItemGroup>
   <ItemGroup>
