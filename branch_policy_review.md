@@ -59,6 +59,13 @@ SHA pinning, operation order, and missing-branch failure before writes. The upda
 requires both long-lived branches to exist and never creates an unprotected
 replacement. Hosted installation subsequently succeeded.
 
+The current-head Copilot review also found that the guard's `github-script@v8`
+tag was mutable despite the organization workflow pin. **Fixed:** lock it to
+`ed597411d8f924073f98dfc5c65a23a2325f34cd`, the verified upstream v8 commit,
+and require a full action SHA in the local guard test. The trusted organization
+rule must be repinned to the pushed policy revision before merging; the branch
+predicate itself is unchanged. The first-adoption SHA below is historical.
+
 The actual inline script passes twelve local cases: valid feature/develop promotion,
 invalid sources/targets, empty feature suffix, Dependabot head, and fork rejection.
 Actionlint passes. These establish script logic and workflow syntax, not trusted

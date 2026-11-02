@@ -4,6 +4,8 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 
 const workflow = fs.readFileSync('.github/workflows/branch-policy.yml', 'utf8');
+assert.match(workflow, /uses: actions\/github-script@[a-f0-9]{40}(?:\s|$)/,
+  'The trusted source guard must pin its action to a full commit SHA');
 const script = workflow.split('          script: |\n')[1];
 assert.ok(script, 'The workflow must contain its branch validation script');
 

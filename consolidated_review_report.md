@@ -257,3 +257,19 @@ confirms single-property raw text; JSON is used for multiple properties/items/ta
 results. The existing consumer validation also passed in hosted CI. Both replies
 are recorded and the handled threads resolved. A newer head requires a newer
 completed automatic review and fresh checks before merge.
+
+Review5738570784 confirmed those six earlier findings resolved and raised two
+public SQL test-fixture password findings. Both were declined with the workflows'
+actual disposable-service boundary and GitHub's documented fresh-container,
+job-end cleanup behavior; no production/persistent credential is stored there.
+The evidence and handled threads are recorded in PR212.
+
+Review5738789112 completed on `bcb64c0` and embedded a further actionable action-tag
+finding despite its “No open issues” heading. The trusted guard now locks the
+upstream v8 action to full commit `ed597411d8f924073f98dfc5c65a23a2325f34cd`;
+the organization rule is updated to the pushed policy revision as part of shipping.
+An assertion prevents regression to a movable action tag. Its compilation claim
+is contradicted by passing Windows/Linux builds and800tests per OS; the data/core
+test assemblies have explicit friend access where internal APIs are exercised.
+Copilot scheduling versus the shipping completion gate remains documented
+separately; zero human approvals does not imply that the shipper skips review.
