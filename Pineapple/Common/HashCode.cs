@@ -1,4 +1,4 @@
-﻿using K4os.Hash.xxHash;
+using K4os.Hash.xxHash;
 using System;
 using System.ComponentModel;
 

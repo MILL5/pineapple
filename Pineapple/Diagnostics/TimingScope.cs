@@ -7,13 +7,13 @@ using static Pineapple.Common.Cleanup;
 
 namespace Pineapple.Diagnostics
 {
-    public class TimingScope : IDisposable
+    public partial class TimingScope : IDisposable
     {
         private readonly bool _isEnabled;
         private readonly string _operationName;
         private readonly ILogger _logger;
         private readonly IDisposable _loggingScope;
-        private readonly Stopwatch _sw;
+        private readonly long _startTimestamp;
         private readonly string _memberName;
 
         public TimingScope(string operationName, ILogger logger, [CallerMemberName] string memberName = "")
@@ -32,7 +32,7 @@ namespace Pineapple.Diagnostics
             _loggingScope = _logger.BeginScope($"Caller=[{memberName}]");
 
             _memberName = memberName;
-            _sw = Stopwatch.StartNew();
+            _startTimestamp = Stopwatch.GetTimestamp();
         }
 
         public void Dispose()
@@ -42,11 +42,14 @@ namespace Pineapple.Diagnostics
 
             SafeMethod(() =>
             {
-                _sw.Stop();
-                var ts = _sw.Elapsed;
-                _loggingScope.Dispose();
-                _logger.LogDebug($@"Operation [{_operationName}] called from [{_memberName}] took {ts.TotalMilliseconds:0.00}ms");
-            }); 
+                var elapsed = Stopwatch.GetElapsedTime(_startTimestamp);
+                _loggingScope?.Dispose();
+                LogOperationTiming(_logger, _operationName, _memberName, elapsed.TotalMilliseconds);
+            });
         }
+
+        // Source-generated, structured log: OperationName, MemberName and ElapsedMilliseconds are queryable fields.
+        [LoggerMessage(EventId = 1, Level = LogLevel.Debug, Message = "Operation [{OperationName}] called from [{MemberName}] took {ElapsedMilliseconds:0.00}ms")]
+        private static partial void LogOperationTiming(ILogger logger, string operationName, string memberName, double elapsedMilliseconds);
     }
 }

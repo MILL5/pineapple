@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <NoWarn>$(NoWarn);PINE001;PINE002;PINE003;PINE004;PINE005;PINE006;PINE007;PINE008</NoWarn>
     <OutputType>Exe</OutputType>
     <EnableMSTestRunner>true</EnableMSTestRunner>
   </PropertyGroup>
@@ -16,5 +17,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pineapple\Pineapple.csproj" />
+    <ProjectReference Include="../Pineapple.Data/Pineapple.Data.csproj" />
+    <ProjectReference Include="../Pineapple.HashCompatibilityProbe/Pineapple.HashCompatibilityProbe.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
+  <Target Name="CopyHashProbe" AfterTargets="Build" Condition="'$(TargetFramework)' != ''">
+    <ItemGroup>
+      <HashProbeFiles Include="../Pineapple.HashCompatibilityProbe/bin/$(Configuration)/$(TargetFramework)/**/*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(HashProbeFiles)" DestinationFiles="@(HashProbeFiles->'$(OutDir)hash-probe/%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
 </Project>

@@ -9,6 +9,19 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    services:
+      sql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: Y
+          MSSQL_SA_PASSWORD: Pineapple_CI2026!
+        ports: ["1433:1433"]
+        options: >-
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -C -Q 'SELECT 1' -b"
+          --health-interval 10s --health-timeout 5s --health-retries 30
+    env:
+      PINEAPPLE_SQL_CONNECTION: "Server=127.0.0.1,1433;Database=master;User Id=sa;Password=Pineapple_CI2026!;TrustServerCertificate=true"
+      PINEAPPLE_REQUIRE_SQL_TESTS: '1'
     permissions:
       contents: write
       id-token: write
@@ -26,18 +39,25 @@ jobs:
         with:
           dotnet-version: |
             8.0.x
+            9.0.x
             10.0.x
+            11.0.100-rc.3.26522.148
 
-      - name: Verify the tag matches the package version
+      - name: Verify both packages match the release version
         run: |
-          version=$(dotnet msbuild Pineapple/Pineapple.csproj -getProperty:Version)
-          [ "v$version" = "$GITHUB_REF_NAME" ] || { echo "::error::Tag $GITHUB_REF_NAME does not match <Version>$version</Version>"; exit 1; }
+          for project in Pineapple/Pineapple.csproj Pineapple.Data/Pineapple.Data.csproj; do
+            version=$(dotnet msbuild "$project" -getProperty:PackageVersion)
+            [ "v$version" = "$GITHUB_REF_NAME" ] || { echo "::error::$project version $version does not match tag $GITHUB_REF_NAME"; exit 1; }
+          done
 
       - name: Test
         run: dotnet test --solution Pineapple.slnx -c Release
 
       - name: Pack
         run: dotnet pack Pineapple.slnx -c Release -o artifacts
+
+      - name: Verify consumer packages
+        run: bash scripts/verify-packages.sh artifacts
 
       - name: NuGet login
         uses: NuGet/login@v1

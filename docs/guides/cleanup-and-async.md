@@ -49,6 +49,9 @@ Pair with `Preconditions.CheckIsNotOnSynchronizationContext()` to assert that co
 
 ## Immutable collection helpers
 
+> **Deprecated in 2.0 (PINE007).** Use `ImmutableList.Add`/`AddRange` or collection expressions. See the [migration guide]({{ '/guides/migration/#PINE007' | relative_url }}).
+{: .callout}
+
 `Pineapple.Extensions.ImmutableExtensions` adds null-tolerant `Append` methods to `IImmutableList<T>` and `IImmutableDictionary<TKey, TValue>`:
 
 ```csharp
@@ -58,6 +61,9 @@ list = list.Append(moreOrders);
 ```
 
 ## Dependency injection helpers
+
+> **Deprecated in 2.0 (PINE008).** Use `TryAddSingleton`. See the [migration guide]({{ '/guides/migration/#PINE008' | relative_url }}).
+{: .callout}
 
 `Pineapple.Extensions.ServiceCollectionExtensions` adds `services.IsConfigured<T>()` (is a service of type `T` registered?) and `services.Configure<T>()` (register `T` as a singleton).
 

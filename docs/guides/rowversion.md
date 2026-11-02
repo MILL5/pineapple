@@ -41,3 +41,5 @@ Console.WriteLine(watermark);                      // "00000000000007d1"
 | `==`, `!=`, `<`, `<=`, `>`, `>=`, `CompareTo` | Comparison |
 | `RowVersion.Max(a, b)` | Larger of two values |
 | `ToString()` | 16-digit lowercase hex |
+
+Converting a `byte[]` that isn't 8 bytes long (other than an empty array or `{ 0 }`) throws `ArgumentException`.

@@ -7,9 +7,12 @@ using static Pineapple.Common.Cleanup;
 
 namespace Pineapple.Threading
 {
+    [Obsolete("Use System.Threading.RateLimiting (SlidingWindowRateLimiter, TokenBucketRateLimiter, ConcurrencyLimiter) or Microsoft.Extensions.Http.Resilience.", DiagnosticId = "PINE002", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     internal class Operations : IDisposable, IAsyncDisposable
     {
         private long _totalCount = 0;
+        private long _completedCount;
+        private bool _disposed;
         private TimeSpan _totalTime = TimeSpan.Zero;
 
         private readonly List<Operation> _operations = new();
@@ -23,34 +26,38 @@ namespace Pineapple.Threading
 
         private bool ScavengeAndContinue()
         {
-            bool enable;
-
             lock (OperationLock)
             {
                 Scavenge();
 
-                enable = _operations.Count > 0;
             }
 
-            return enable;
+            return true; // Keep running until disposal; Add also restarts idle cleanup.
         }
 
         private void Scavenge()
         {
-            var expiration = DateTime.Now.AddMinutes(-1.0);
+            var expiration = DateTime.UtcNow.AddMinutes(-1.0);
             var expiredOperations = _operations.Where(x => x.Status == OperationStatus.Complete &&
                                                            x.Start < expiration).ToList();
-            
+
             foreach (var operation in expiredOperations)
             {
                 _operations.Remove(operation);
             }
         }
 
+        public void EnsureNotDisposed() => ObjectDisposedException.ThrowIf(_disposed, this);
+
         public object OperationLock => _operationsLock;
 
-        public long TotalCount => _totalCount;
-        public TimeSpan TotalTime => _totalTime;
+        public long TotalCount { get { lock (OperationLock) return _totalCount; } }
+        public TimeSpan TotalTime { get { lock (OperationLock) return _totalTime; } }
+        public TimeSpan AverageTime
+        {
+            get { lock (OperationLock) return _completedCount == 0 ? TimeSpan.Zero :
+                TimeSpan.FromTicks(_totalTime.Ticks / _completedCount); }
+        }
 
         public List<Operation> GetCurrent(DateTime expiration)
         {
@@ -58,6 +65,7 @@ namespace Pineapple.Threading
 
             lock (OperationLock)
             {
+                ObjectDisposedException.ThrowIf(_disposed, this);
                 result = _operations.Where(x => x.Start >= expiration)
                                   .ToList();
             }
@@ -71,7 +79,9 @@ namespace Pineapple.Threading
 
             lock (OperationLock)
             {
+                ObjectDisposedException.ThrowIf(_disposed, this);
                 _operations.Add(operation);
+                _scavenger.Start();
                 _totalCount++;
             }
         }
@@ -82,9 +92,11 @@ namespace Pineapple.Threading
 
             lock (OperationLock)
             {
-                operation.Dispose();
-                
-                _totalTime += operation.ElapsedTime;
+                if (operation.Complete())
+                {
+                    _totalTime += operation.ElapsedTime;
+                    _completedCount++;
+                }
 
                 Scavenge();
             }
@@ -92,13 +104,18 @@ namespace Pineapple.Threading
 
         public void Dispose()
         {
-            SafeMethod(_scavenger.Stop);
+            lock (OperationLock)
+            {
+                if (_disposed) return;
+                _disposed = true;
+                _scavenger.Dispose();
+            }
         }
 
-        public async ValueTask DisposeAsync()
+        public ValueTask DisposeAsync()
         {
-            SafeMethod(_scavenger.Stop);
-            await Task.CompletedTask;
+            Dispose();
+            return ValueTask.CompletedTask;
         }
     }
 }

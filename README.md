@@ -1,5 +1,7 @@
 # Pineapple — Guava-inspired core utilities for .NET
 
+> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide](docs/guides/migration.md).
+
 <img src="https://raw.githubusercontent.com/MILL5/pineapple/main/pineapple.png" alt="Pineapple logo" width="96" align="right" />
 
 [![NuGet](https://img.shields.io/nuget/v/Pineapple.svg?label=Pineapple)](https://www.nuget.org/packages/Pineapple)
@@ -7,34 +9,34 @@
 [![CI](https://github.com/MILL5/pineapple/actions/workflows/ci.yml/badge.svg)](https://github.com/MILL5/pineapple/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/MILL5/pineapple/blob/main/LICENSE)
 
-**Pineapple is an open-source C# library of core utilities for .NET 8 and .NET 10, inspired by Google's Guava.** It gives you guard clauses (preconditions), URL-safe 22-character `ShortGuid`s, a deterministic xxHash `HashCode`, a SQL Server `RowVersion` type, calls-per-minute rate limiting and resource governors, timeouts, exponential backoff, timing scopes, and exception-safe cleanup helpers — small, dependency-light building blocks you would otherwise rewrite in every project.
+**Pineapple is an open-source C# library of core utilities for .NET 8, 9, 10, and 11 RC, inspired by Google's Guava.** It gives you guard clauses (preconditions), URL-safe 22-character `ShortGuid`s, a deterministic xxHash `HashCode`, a SQL Server `RowVersion` type, calls-per-minute rate limiting and resource governors, timeouts, exponential backoff, timing scopes, and exception-safe cleanup helpers — small, dependency-light building blocks you would otherwise rewrite in every project.
 
-📖 **Documentation:** https://mill5.github.io/pineapple/
+📖 **Documentation:** [Pineapple guides](https://mill5.github.io/pineapple/)
 
 ## Install
 
 ```bash
-dotnet add package Pineapple
-dotnet add package Pineapple.Data   # optional: SQL Server / EF Core helpers
+dotnet add package Pineapple --version 2.0.0
+dotnet add package Pineapple.Data --version 2.0.0   # optional: SQL Server / EF Core helpers
 ```
+
+`Pineapple` and `Pineapple.Data` share version **2.0.0** and release together. Keep direct references to both packages on the same version.
 
 | Package | Targets | What's inside |
 | --- | --- | --- |
-| `Pineapple` | .NET 8, .NET 10 | Preconditions, ShortGuid, HashCode, RowVersion, Cleanup, threading, diagnostics, health checks, Brotli handler |
-| `Pineapple.Data` | .NET 8 (EF Core 8), .NET 10 (EF Core 10) | EF Core model for `INFORMATION_SCHEMA`, SQL Server availability check |
+| `Pineapple` | .NET 8, 9, 10, 11 RC | Preconditions, ShortGuid, HashCode, RowVersion, Cleanup, threading, diagnostics, health checks, Brotli handler |
+| `Pineapple.Data` | .NET 8 (EF Core 8), .NET 9 (EF Core 9), .NET 10/11 (EF Core 10) | EF Core model for `INFORMATION_SCHEMA`, SQL Server availability check |
 
 ## Quick start
 
 ```csharp
 using Pineapple.Common;
-using Pineapple.Threading;
+using Pineapple.Diagnostics;
 using static Pineapple.Common.Preconditions;
+using HashCode = Pineapple.Common.HashCode;
 
-public sealed class OrderService(IOrderRepository repository)
+public sealed class OrderService(IOrderRepository repository, ILogger<OrderService> logger)
 {
-    // One governor per downstream dependency: at most 600 calls per minute.
-    private static readonly ResourceGoverner Governor = new(maxCallsPerMinute: 600);
-
     public async Task<Order> GetAsync(string orderId, int quantity)
     {
         // Guard clauses throw ArgumentException-family exceptions with useful messages.
@@ -44,9 +46,13 @@ public sealed class OrderService(IOrderRepository repository)
         // A ShortGuid is a Guid encoded as 22 URL-safe characters.
         ShortGuid id = orderId;
 
-        await using (await Governor.GetOperationScopeAsync())
+        // Same inputs and byte encoding yield the same hash across processes and restarts.
+        var cacheKey = HashCode.Combine("order", id.Guid.ToString(), quantity);
+
+        // Logs "Operation [LoadOrder] called from [GetAsync] took 12.34ms" at Debug level.
+        using (new TimingScope("LoadOrder", logger))
         {
-            return await repository.GetAsync(id.Guid);
+            return await repository.GetAsync(id.Guid, cacheKey);
         }
     }
 }
@@ -60,24 +66,36 @@ public sealed class OrderService(IOrderRepository repository)
 | **Identifiers** | `ShortGuid`, `GuidExtensions` | Shorten GUIDs for URLs; sort GUIDs the way SQL Server does |
 | **Hashing** | `HashCode` | Combine values into a hash that is **stable across processes** (xxHash32), unlike `System.HashCode` |
 | **Concurrency tokens** | `RowVersion` | Compare, order, and convert SQL Server `rowversion`/`timestamp` values |
-| **Rate limiting** | `RateLimiterScope`, `SafeRateLimiterScope`, `ResourceGoverner` | Cap calls per minute to an API or database |
-| **Timing & retry** | `AccurateTimeout`, `SimpleTimeout`, `ExponentialWait`, `Parallelism` | Enforce deadlines, back off, size parallel loops |
-| **Diagnostics** | `TimingScope`, `MeasureScope`, `ConsoleColorScope` | Log how long an operation took with `ILogger` |
+| **Parallelism** | `Parallelism` | Size `Parallel.ForEach` loops to the machine's CPUs |
+| **Diagnostics** | `TimingScope`, `ConsoleColorScope` | Log how long an operation took with structured `ILogger` events |
 | **Async plumbing** | `SynchronizationContextScope`, `SuppressSynchronizationContextScope` | Avoid sync-over-async deadlocks |
 | **Cleanup** | `Cleanup.SafeMethod` | Run cleanup code that must never throw |
-| **Health** | `Health.Check`, `Data.SqlClient.Check` | Probe TCP ports, URLs, processes, SQL Server |
-| **Networking** | `BrotliCompressionHandler` | Decompress `br` responses in `HttpClient` pipelines |
 | **Schema** | `InformationSchemaContext` | Query SQL Server `INFORMATION_SCHEMA` with LINQ |
 
 See the [documentation site](https://mill5.github.io/pineapple/) for a guide to each area.
+
+### Deprecated in 2.0
+
+.NET now ships built-in replacements for these, so they are marked `[Obsolete]` (diagnostics `PINE001`–`PINE008`) and will be removed in 3.0. The [migration guide](https://mill5.github.io/pineapple/guides/migration/) shows each replacement.
+
+| Deprecated | Use instead |
+| --- | --- |
+| `BrotliCompressionHandler` | `AutomaticDecompression = DecompressionMethods.All` |
+| `ResourceGoverner`, `RateLimiterScope`, `SafeRateLimiterScope`, `SemaphoreRateLimiterScope` | `System.Threading.RateLimiting` |
+| `AccurateTimeout`, `SimpleTimeout`, `ExponentialWait` | `CancellationTokenSource`, `Task.WaitAsync`, Polly retry |
+| `MeasureScope`, `CallsPerMinute` | `System.Diagnostics.Metrics` |
+| `Scavenger` | `PeriodicTimer` |
+| `Health.Check`, `Data.SqlClient.Check` | `Microsoft.Extensions.Diagnostics.HealthChecks` |
+| `ImmutableExtensions` | `ImmutableList.Add` / `AddRange` |
+| `ServiceCollectionExtensions` | `TryAddSingleton` |
 
 ## FAQ
 
 **What is Pineapple?** An Apache-2.0-licensed set of C# utility classes for .NET from [MILL5](https://mill5.com), modeled on Google's Guava library for Java, with 110K+ NuGet downloads.
 
-**Which .NET versions are supported?** .NET 8 (LTS) and .NET 10 (LTS). Version 1.x targeted .NET Standard 2.0; use `Pineapple` 1.0.41 if you still need .NET Framework.
+**Which .NET versions are supported?** .NET 8, 9, 10, and 11 (release candidate). Version 1.x targeted .NET Standard 2.0; use `Pineapple` 1.0.41 if you still need .NET Framework.
 
-**How is `Pineapple.Common.HashCode` different from `System.HashCode`?** `System.HashCode` is randomized per process. Pineapple's `HashCode` uses xxHash32, so the same inputs give the same hash on every machine and every run — useful for caching keys, sharding, and persisted hashes.
+**How is `Pineapple.Common.HashCode` different from `System.HashCode`?** `System.HashCode` is randomized per process. Pineapple's `HashCode` uses xxHash32, so the same inputs and byte encoding give the same hash across application instances — useful for caching keys, sharding, and persisted hashes.
 
 **What is a ShortGuid?** A 128-bit `Guid` encoded as 22 URL-safe Base64 characters (`-` and `_` instead of `+` and `/`, no padding) — 14 characters shorter than the standard 36-character form, with implicit conversions to and from `Guid` and `string`.
 
@@ -85,12 +103,13 @@ More questions: [FAQ](https://mill5.github.io/pineapple/faq/).
 
 ## Building from source
 
-Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download).
+Requires the .NET 11 release-candidate SDK pinned in `global.json`, plus .NET 8, 9, and 10 runtimes for their tests. .NET 11 coverage uses a release candidate until GA.
 
 ```bash
 dotnet build Pineapple.slnx
 dotnet test --solution Pineapple.slnx
 dotnet pack Pineapple.slnx -c Release -o artifacts
+bash scripts/verify-packages.sh artifacts  # requires Python 3
 ```
 
 ## Part of the MILL5 open-source family

@@ -2,7 +2,7 @@
 title: Query SQL Server INFORMATION_SCHEMA with EF Core — Pineapple.Data
 description: Query SQL Server INFORMATION_SCHEMA tables, columns, keys, and constraints with LINQ using Pineapple.Data's Entity Framework Core model.
 breadcrumb: Pineapple.Data
-last_reviewed: 2026-10-13
+last_reviewed: 2026-10-28
 faq:
   - q: How do I list all tables and columns in SQL Server with Entity Framework Core?
     a: "Install Pineapple.Data and query `new InformationSchemaContext(connectionString).Columns`, which maps INFORMATION_SCHEMA.COLUMNS to a LINQ-queryable, no-tracking EF Core set."
@@ -11,10 +11,12 @@ faq:
 # Pineapple.Data for SQL Server
 
 ```bash
-dotnet add package Pineapple.Data
+dotnet add package Pineapple.Data --version 2.0.0
 ```
 
-**`Pineapple.Data` adds SQL Server helpers on top of Pineapple.** It targets .NET 8 (EF Core 8) and .NET 10 (EF Core 10) and uses `Microsoft.Data.SqlClient` 7.
+**`Pineapple.Data` adds SQL Server helpers on top of Pineapple.** It targets .NET 8 (EF Core 8), .NET 9 (EF Core 9), and .NET 10/11 RC (stable EF Core 10) and uses `Microsoft.Data.SqlClient` 7.
+
+Both packages use version **2.0.0** and are released together. Installing `Pineapple.Data` also brings in `Pineapple`; if your project references both directly, use matching versions. The previous `Pineapple.Data` 1.0.1 targets .NET Core 3.1; only the core `Pineapple` 1.0.41 package targets .NET Standard 2.0.
 
 ## `InformationSchemaContext`
 
@@ -45,6 +47,9 @@ foreach (var pk in await primaryKeys.ToListAsync())
 
 ## `SqlClient.Check.IsSqlServerAvailable`
 
+> **Deprecated in 2.0 (PINE006).** Use `EnableRetryOnFailure` to wake serverless databases and `AspNetCore.HealthChecks.SqlServer` for health checks. See the [migration guide]({{ '/guides/migration/#PINE006' | relative_url }}).
+{: .callout}
+
 Parses the server and port (default 1433) from a connection string and probes the TCP endpoint up to three times — handy for waking a paused Azure SQL serverless database before the first query.
 
 ```csharp
@@ -53,7 +58,15 @@ using Pineapple.Data.SqlClient;
 Check.IsSqlServerAvailable(connectionString);
 ```
 
-> In 2.0.0 this method returns `true` after probing even if every attempt fails, so treat it as a wake-up call rather than a reliable check. Use `Pineapple.Health.Check.IsAlive(server, port)` when you need the result.
+> Returns `false` if all three TCP probes fail. A successful probe establishes TCP reachability only; it does not validate SQL authentication or query readiness.
 {: .callout}
 
 {% include faq.html heading="Questions about Pineapple.Data" %}
+
+## Availability and integration testing
+
+`IsSqlServerAvailable` checks TCP reachability, not SQL authentication or query readiness. It understands the `tcp:` prefix and an explicit `host,port`, defaults to port 1433, and returns false after three failed attempts. Each TCP attempt has a five-second timeout. Named-instance discovery is not performed.
+
+Metadata entities map to the four `INFORMATION_SCHEMA` views using their composite identifying columns and no-tracking queries. Database permissions still determine what metadata callers can read.
+
+Model and loopback connectivity tests run without SQL Server. To run the SQL integration fixture, set `PINEAPPLE_SQL_CONNECTION` to a disposable SQL Server database with create/drop table permissions, then run `dotnet test --project "$(pwd)/Pineapple.Data.Tests/Pineapple.Data.Tests.csproj" -c Release`. The fixture creates and drops a uniquely named table. Framework processes share a bounded session-owned SQL application lock around catalog DDL and reads; the unpooled owner connection releases that lock when it closes, including failure paths. Without that variable the integration test is explicitly inconclusive. Set `PINEAPPLE_REQUIRE_SQL_TESTS=1` to fail instead of skipping when configuration is absent. Linux SQL CI and the release job require this fixture on every target; ordinary Linux/Windows build jobs run the model tests and visibly skip database integration.

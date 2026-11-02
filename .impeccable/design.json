@@ -1,0 +1,559 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-02T13:18:00.890300+00:00",
+  "title": "Design System: Pineapple documentation",
+  "extensions": {
+    "colorMeta": {
+      "bg": {
+        "role": "neutral",
+        "displayName": "Bg",
+        "tonalRamp": [
+          "oklch(15.0% 0.0012 286.4)",
+          "oklch(26.0% 0.0019 286.4)",
+          "oklch(38.0% 0.0025 286.4)",
+          "oklch(49.0% 0.0026 286.4)",
+          "oklch(61.0% 0.0025 286.4)",
+          "oklch(72.0% 0.0020 286.4)",
+          "oklch(84.0% 0.0013 286.4)",
+          "oklch(95.0% 0.0004 286.4)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "tonalRamp": [
+          "oklch(15.0% 0.0000 89.9)",
+          "oklch(26.0% 0.0000 89.9)",
+          "oklch(38.0% 0.0000 89.9)",
+          "oklch(49.0% 0.0000 89.9)",
+          "oklch(61.0% 0.0000 89.9)",
+          "oklch(72.0% 0.0000 89.9)",
+          "oklch(84.0% 0.0000 89.9)",
+          "oklch(95.0% 0.0000 89.9)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Text",
+        "tonalRamp": [
+          "oklch(15.0% 0.0070 290.8)",
+          "oklch(26.0% 0.0113 290.8)",
+          "oklch(38.0% 0.0144 290.8)",
+          "oklch(49.0% 0.0155 290.8)",
+          "oklch(61.0% 0.0146 290.8)",
+          "oklch(72.0% 0.0119 290.8)",
+          "oklch(84.0% 0.0075 290.8)",
+          "oklch(95.0% 0.0024 290.8)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "oklch(15.0% 0.0116 291.1)",
+          "oklch(26.0% 0.0186 291.1)",
+          "oklch(38.0% 0.0238 291.1)",
+          "oklch(49.0% 0.0256 291.1)",
+          "oklch(61.0% 0.0241 291.1)",
+          "oklch(72.0% 0.0197 291.1)",
+          "oklch(84.0% 0.0123 291.1)",
+          "oklch(95.0% 0.0040 291.1)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Border",
+        "tonalRamp": [
+          "oklch(15.0% 0.0062 295.3)",
+          "oklch(26.0% 0.0099 295.3)",
+          "oklch(38.0% 0.0126 295.3)",
+          "oklch(49.0% 0.0136 295.3)",
+          "oklch(61.0% 0.0128 295.3)",
+          "oklch(72.0% 0.0105 295.3)",
+          "oklch(84.0% 0.0065 295.3)",
+          "oklch(95.0% 0.0021 295.3)"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Accent",
+        "tonalRamp": [
+          "oklch(15.0% 0.0636 283.6)",
+          "oklch(26.0% 0.1021 283.6)",
+          "oklch(38.0% 0.1302 283.6)",
+          "oklch(49.0% 0.1399 283.6)",
+          "oklch(61.0% 0.1317 283.6)",
+          "oklch(72.0% 0.1079 283.6)",
+          "oklch(84.0% 0.0674 283.6)",
+          "oklch(95.0% 0.0219 283.6)"
+        ]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Accent Hover",
+        "tonalRamp": [
+          "oklch(15.0% 0.0636 282.0)",
+          "oklch(26.0% 0.1021 282.0)",
+          "oklch(38.0% 0.1302 282.0)",
+          "oklch(49.0% 0.1399 282.0)",
+          "oklch(61.0% 0.1317 282.0)",
+          "oklch(72.0% 0.1079 282.0)",
+          "oklch(84.0% 0.0674 282.0)",
+          "oklch(95.0% 0.0219 282.0)"
+        ]
+      },
+      "accent-ink": {
+        "role": "neutral",
+        "displayName": "Accent Ink",
+        "tonalRamp": [
+          "oklch(15.0% 0.0000 89.9)",
+          "oklch(26.0% 0.0000 89.9)",
+          "oklch(38.0% 0.0000 89.9)",
+          "oklch(49.0% 0.0000 89.9)",
+          "oklch(61.0% 0.0000 89.9)",
+          "oklch(72.0% 0.0000 89.9)",
+          "oklch(84.0% 0.0000 89.9)",
+          "oklch(95.0% 0.0000 89.9)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Accent Soft",
+        "tonalRamp": [
+          "oklch(15.0% 0.0123 295.1)",
+          "oklch(26.0% 0.0197 295.1)",
+          "oklch(38.0% 0.0251 295.1)",
+          "oklch(49.0% 0.0270 295.1)",
+          "oklch(61.0% 0.0254 295.1)",
+          "oklch(72.0% 0.0208 295.1)",
+          "oklch(84.0% 0.0130 295.1)",
+          "oklch(95.0% 0.0042 295.1)"
+        ]
+      },
+      "focus": {
+        "role": "neutral",
+        "displayName": "Focus",
+        "tonalRamp": [
+          "oklch(15.0% 0.0531 77.5)",
+          "oklch(26.0% 0.0853 77.5)",
+          "oklch(38.0% 0.1088 77.5)",
+          "oklch(49.0% 0.1169 77.5)",
+          "oklch(61.0% 0.1101 77.5)",
+          "oklch(72.0% 0.0901 77.5)",
+          "oklch(84.0% 0.0564 77.5)",
+          "oklch(95.0% 0.0183 77.5)"
+        ]
+      },
+      "code-bg": {
+        "role": "neutral",
+        "displayName": "Code Bg",
+        "tonalRamp": [
+          "oklch(15.0% 0.0036 293.9)",
+          "oklch(26.0% 0.0059 293.9)",
+          "oklch(38.0% 0.0075 293.9)",
+          "oklch(49.0% 0.0080 293.9)",
+          "oklch(61.0% 0.0076 293.9)",
+          "oklch(72.0% 0.0062 293.9)",
+          "oklch(84.0% 0.0039 293.9)",
+          "oklch(95.0% 0.0013 293.9)"
+        ]
+      },
+      "syn-keyword": {
+        "role": "neutral",
+        "displayName": "Syn Keyword",
+        "tonalRamp": [
+          "oklch(15.0% 0.0636 283.6)",
+          "oklch(26.0% 0.1021 283.6)",
+          "oklch(38.0% 0.1302 283.6)",
+          "oklch(49.0% 0.1399 283.6)",
+          "oklch(61.0% 0.1317 283.6)",
+          "oklch(72.0% 0.1079 283.6)",
+          "oklch(84.0% 0.0674 283.6)",
+          "oklch(95.0% 0.0219 283.6)"
+        ]
+      },
+      "syn-string": {
+        "role": "neutral",
+        "displayName": "Syn String",
+        "tonalRamp": [
+          "oklch(15.0% 0.0391 186.4)",
+          "oklch(26.0% 0.0627 186.4)",
+          "oklch(38.0% 0.0800 186.4)",
+          "oklch(49.0% 0.0860 186.4)",
+          "oklch(61.0% 0.0810 186.4)",
+          "oklch(72.0% 0.0663 186.4)",
+          "oklch(84.0% 0.0415 186.4)",
+          "oklch(95.0% 0.0135 186.4)"
+        ]
+      },
+      "syn-type": {
+        "role": "neutral",
+        "displayName": "Syn Type",
+        "tonalRamp": [
+          "oklch(15.0% 0.0562 58.3)",
+          "oklch(26.0% 0.0903 58.3)",
+          "oklch(38.0% 0.1152 58.3)",
+          "oklch(49.0% 0.1238 58.3)",
+          "oklch(61.0% 0.1165 58.3)",
+          "oklch(72.0% 0.0954 58.3)",
+          "oklch(84.0% 0.0597 58.3)",
+          "oklch(95.0% 0.0194 58.3)"
+        ]
+      },
+      "syn-number": {
+        "role": "neutral",
+        "displayName": "Syn Number",
+        "tonalRamp": [
+          "oklch(15.0% 0.0636 4.3)",
+          "oklch(26.0% 0.1021 4.3)",
+          "oklch(38.0% 0.1302 4.3)",
+          "oklch(49.0% 0.1399 4.3)",
+          "oklch(61.0% 0.1317 4.3)",
+          "oklch(72.0% 0.1079 4.3)",
+          "oklch(84.0% 0.0674 4.3)",
+          "oklch(95.0% 0.0219 4.3)"
+        ]
+      },
+      "dark-bg": {
+        "role": "neutral",
+        "displayName": "Dark Bg",
+        "tonalRamp": [
+          "oklch(15.0% 0.0084 294.7)",
+          "oklch(26.0% 0.0135 294.7)",
+          "oklch(38.0% 0.0172 294.7)",
+          "oklch(49.0% 0.0185 294.7)",
+          "oklch(61.0% 0.0174 294.7)",
+          "oklch(72.0% 0.0143 294.7)",
+          "oklch(84.0% 0.0089 294.7)",
+          "oklch(95.0% 0.0029 294.7)"
+        ]
+      },
+      "dark-surface": {
+        "role": "neutral",
+        "displayName": "Dark Surface",
+        "tonalRamp": [
+          "oklch(15.0% 0.0107 295.9)",
+          "oklch(26.0% 0.0172 295.9)",
+          "oklch(38.0% 0.0219 295.9)",
+          "oklch(49.0% 0.0236 295.9)",
+          "oklch(61.0% 0.0222 295.9)",
+          "oklch(72.0% 0.0182 295.9)",
+          "oklch(84.0% 0.0114 295.9)",
+          "oklch(95.0% 0.0037 295.9)"
+        ]
+      },
+      "dark-text": {
+        "role": "neutral",
+        "displayName": "Dark Text",
+        "tonalRamp": [
+          "oklch(15.0% 0.0049 291.9)",
+          "oklch(26.0% 0.0078 291.9)",
+          "oklch(38.0% 0.0100 291.9)",
+          "oklch(49.0% 0.0107 291.9)",
+          "oklch(61.0% 0.0101 291.9)",
+          "oklch(72.0% 0.0083 291.9)",
+          "oklch(84.0% 0.0052 291.9)",
+          "oklch(95.0% 0.0017 291.9)"
+        ]
+      },
+      "dark-muted": {
+        "role": "neutral",
+        "displayName": "Dark Muted",
+        "tonalRamp": [
+          "oklch(15.0% 0.0137 292.2)",
+          "oklch(26.0% 0.0221 292.2)",
+          "oklch(38.0% 0.0281 292.2)",
+          "oklch(49.0% 0.0302 292.2)",
+          "oklch(61.0% 0.0285 292.2)",
+          "oklch(72.0% 0.0233 292.2)",
+          "oklch(84.0% 0.0146 292.2)",
+          "oklch(95.0% 0.0047 292.2)"
+        ]
+      },
+      "dark-border": {
+        "role": "neutral",
+        "displayName": "Dark Border",
+        "tonalRamp": [
+          "oklch(15.0% 0.0133 296.0)",
+          "oklch(26.0% 0.0214 296.0)",
+          "oklch(38.0% 0.0273 296.0)",
+          "oklch(49.0% 0.0293 296.0)",
+          "oklch(61.0% 0.0276 296.0)",
+          "oklch(72.0% 0.0226 296.0)",
+          "oklch(84.0% 0.0141 296.0)",
+          "oklch(95.0% 0.0046 296.0)"
+        ]
+      },
+      "dark-accent": {
+        "role": "primary",
+        "displayName": "Dark Accent",
+        "tonalRamp": [
+          "oklch(15.0% 0.0636 289.6)",
+          "oklch(26.0% 0.1021 289.6)",
+          "oklch(38.0% 0.1302 289.6)",
+          "oklch(49.0% 0.1399 289.6)",
+          "oklch(61.0% 0.1317 289.6)",
+          "oklch(72.0% 0.1079 289.6)",
+          "oklch(84.0% 0.0674 289.6)",
+          "oklch(95.0% 0.0219 289.6)"
+        ]
+      },
+      "dark-accent-hover": {
+        "role": "primary",
+        "displayName": "Dark Accent Hover",
+        "tonalRamp": [
+          "oklch(15.0% 0.0511 291.1)",
+          "oklch(26.0% 0.0821 291.1)",
+          "oklch(38.0% 0.1047 291.1)",
+          "oklch(49.0% 0.1126 291.1)",
+          "oklch(61.0% 0.1060 291.1)",
+          "oklch(72.0% 0.0868 291.1)",
+          "oklch(84.0% 0.0543 291.1)",
+          "oklch(95.0% 0.0176 291.1)"
+        ]
+      },
+      "dark-accent-ink": {
+        "role": "neutral",
+        "displayName": "Dark Accent Ink",
+        "tonalRamp": [
+          "oklch(15.0% 0.0129 296.7)",
+          "oklch(26.0% 0.0207 296.7)",
+          "oklch(38.0% 0.0264 296.7)",
+          "oklch(49.0% 0.0284 296.7)",
+          "oklch(61.0% 0.0268 296.7)",
+          "oklch(72.0% 0.0219 296.7)",
+          "oklch(84.0% 0.0137 296.7)",
+          "oklch(95.0% 0.0044 296.7)"
+        ]
+      },
+      "dark-accent-soft": {
+        "role": "primary",
+        "displayName": "Dark Accent Soft",
+        "tonalRamp": [
+          "oklch(15.0% 0.0251 292.9)",
+          "oklch(26.0% 0.0403 292.9)",
+          "oklch(38.0% 0.0514 292.9)",
+          "oklch(49.0% 0.0552 292.9)",
+          "oklch(61.0% 0.0520 292.9)",
+          "oklch(72.0% 0.0426 292.9)",
+          "oklch(84.0% 0.0266 292.9)",
+          "oklch(95.0% 0.0086 292.9)"
+        ]
+      },
+      "dark-code-bg": {
+        "role": "neutral",
+        "displayName": "Dark Code Bg",
+        "tonalRamp": [
+          "oklch(15.0% 0.0130 296.4)",
+          "oklch(26.0% 0.0209 296.4)",
+          "oklch(38.0% 0.0267 296.4)",
+          "oklch(49.0% 0.0287 296.4)",
+          "oklch(61.0% 0.0270 296.4)",
+          "oklch(72.0% 0.0221 296.4)",
+          "oklch(84.0% 0.0138 296.4)",
+          "oklch(95.0% 0.0045 296.4)"
+        ]
+      },
+      "dark-focus": {
+        "role": "neutral",
+        "displayName": "Dark Focus",
+        "tonalRamp": [
+          "oklch(15.0% 0.0636 83.1)",
+          "oklch(26.0% 0.1021 83.1)",
+          "oklch(38.0% 0.1302 83.1)",
+          "oklch(49.0% 0.1399 83.1)",
+          "oklch(61.0% 0.1317 83.1)",
+          "oklch(72.0% 0.1079 83.1)",
+          "oklch(84.0% 0.0674 83.1)",
+          "oklch(95.0% 0.0219 83.1)"
+        ]
+      },
+      "dark-syn-keyword": {
+        "role": "neutral",
+        "displayName": "Dark Syn Keyword",
+        "tonalRamp": [
+          "oklch(15.0% 0.0559 292.3)",
+          "oklch(26.0% 0.0897 292.3)",
+          "oklch(38.0% 0.1144 292.3)",
+          "oklch(49.0% 0.1230 292.3)",
+          "oklch(61.0% 0.1158 292.3)",
+          "oklch(72.0% 0.0948 292.3)",
+          "oklch(84.0% 0.0593 292.3)",
+          "oklch(95.0% 0.0192 292.3)"
+        ]
+      },
+      "dark-syn-string": {
+        "role": "neutral",
+        "displayName": "Dark Syn String",
+        "tonalRamp": [
+          "oklch(15.0% 0.0441 182.9)",
+          "oklch(26.0% 0.0707 182.9)",
+          "oklch(38.0% 0.0902 182.9)",
+          "oklch(49.0% 0.0970 182.9)",
+          "oklch(61.0% 0.0913 182.9)",
+          "oklch(72.0% 0.0748 182.9)",
+          "oklch(84.0% 0.0467 182.9)",
+          "oklch(95.0% 0.0152 182.9)"
+        ]
+      },
+      "dark-syn-type": {
+        "role": "neutral",
+        "displayName": "Dark Syn Type",
+        "tonalRamp": [
+          "oklch(15.0% 0.0595 83.9)",
+          "oklch(26.0% 0.0956 83.9)",
+          "oklch(38.0% 0.1219 83.9)",
+          "oklch(49.0% 0.1310 83.9)",
+          "oklch(61.0% 0.1234 83.9)",
+          "oklch(72.0% 0.1010 83.9)",
+          "oklch(84.0% 0.0632 83.9)",
+          "oklch(95.0% 0.0205 83.9)"
+        ]
+      },
+      "dark-syn-number": {
+        "role": "neutral",
+        "displayName": "Dark Syn Number",
+        "tonalRamp": [
+          "oklch(15.0% 0.0636 359.7)",
+          "oklch(26.0% 0.1021 359.7)",
+          "oklch(38.0% 0.1302 359.7)",
+          "oklch(49.0% 0.1399 359.7)",
+          "oklch(61.0% 0.1317 359.7)",
+          "oklch(72.0% 0.1079 359.7)",
+          "oklch(84.0% 0.0674 359.7)",
+          "oklch(95.0% 0.0219 359.7)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default technical prose; browser default root sizing."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Inline and nested code examples."
+      }
+    },
+    "shadows": [
+      {
+        "name": "author-identity-halo",
+        "value": "0 0 0 2px rgba(255, 106, 26, .3), 0 10px 24px rgba(0, 0, 0, .18)",
+        "purpose": "Local author-avatar framing only."
+      }
+    ],
+    "motion": [
+      {
+        "name": "card-border",
+        "value": "border-color .15s ease-out",
+        "purpose": "Card hover and focus-within border feedback."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact",
+        "value": "640px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "description": "Existing Get started navigation anchor.",
+      "html": "<a class=\"ds-primary\" href=\"/pineapple/getting-started/\">Get started</a>",
+      "css": ".ds-primary{display:inline-block;padding:.65rem 1.1rem;border-radius:var(--radius);background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;font-family:ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif;line-height:1.6;}.ds-primary:hover{background:var(--accent-hover)}.ds-primary:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}",
+      "refersTo": "button-primary"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "description": "Existing View on GitHub navigation anchor.",
+      "html": "<a class=\"ds-secondary\" href=\"https://github.com/MILL5/pineapple\">View on GitHub</a>",
+      "css": ".ds-secondary{display:inline-block;padding:.65rem 1.1rem;border-radius:var(--radius);background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;font-family:ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif;line-height:1.6;background:transparent;color:var(--text);border:1px solid var(--border)}.ds-secondary:hover{background:var(--accent-soft);border-color:var(--accent)}.ds-secondary:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}",
+      "refersTo": "button-secondary"
+    },
+    {
+      "name": "Guide card",
+      "kind": "card",
+      "description": "Whole-card guide link.",
+      "html": "<a class=\"ds-card\" href=\"/pineapple/guides/shortguid/\"><h3>ShortGuid</h3><p>A Guid as 22 URL-safe characters, with implicit conversions to Guid and string.</p></a>",
+      "css": ".ds-card{display:block;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.2rem;text-decoration:none;transition:border-color .15s ease-out;font-family:ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif;line-height:1.6;}.ds-card h3{margin:0 0 .35rem;font-size:1.05rem;line-height:1.25;color:var(--accent)}.ds-card p{margin:0;color:var(--muted);font-size:.95rem}.ds-card:hover,.ds-card:focus-within{border-color:var(--accent)}.ds-card:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}",
+      "refersTo": "card"
+    },
+    {
+      "name": "Primary navigation",
+      "kind": "nav",
+      "description": "Header navigation using real route labels and current-page state.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Primary\"><a href=\"/pineapple/getting-started/\">Get started</a><a href=\"/pineapple/guides/\" aria-current=\"page\">Guides</a><a href=\"https://github.com/MILL5/pineapple\">GitHub</a></nav>",
+      "css": ".ds-nav{display:flex;gap:1.25rem;flex-wrap:wrap;font-family:ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif;line-height:1.6;}.ds-nav a{color:var(--muted);text-decoration:none;font-weight:500}.ds-nav a:hover,.ds-nav a[aria-current]{color:var(--text)}.ds-nav a:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}@media(max-width:640px){.ds-nav{gap:.25rem 1rem}.ds-nav a{padding:.4rem 0}}"
+    },
+    {
+      "name": "Install block",
+      "kind": "custom",
+      "description": "Existing shell installation example.",
+      "html": "<pre class=\"ds-code\"><code>dotnet add package Pineapple</code></pre>",
+      "css": ".ds-code{background:var(--code-bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;overflow-x:auto;line-height:1.45;font-family:ui-monospace, \"SF Mono\", \"Cascadia Code\", Menlo, Consolas, monospace;font-size:.9em}.ds-code code{font-family:ui-monospace, \"SF Mono\", \"Cascadia Code\", Menlo, Consolas, monospace;font-size:.9em}",
+      "refersTo": "code-block"
+    },
+    {
+      "name": "Callout",
+      "kind": "card",
+      "description": "Existing deprecation callout from the timeout guide.",
+      "html": "<div class=\"ds-callout\"><strong>Deprecated in 2.0 (PINE003).</strong> Use <code>CancellationTokenSource(TimeSpan)</code>, <code>Task.WaitAsync</code>, or a Polly retry. <code>Parallelism</code> is not deprecated.</div>",
+      "css": ".ds-callout{margin:1rem 0;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:.75rem 1rem;border-radius:var(--radius);font-family:ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif;line-height:1.6;} .ds-callout code {font-family:ui-monospace,\"SF Mono\",\"Cascadia Code\",Menlo,Consolas,monospace;font-size:.9em;background:var(--code-bg);padding:.1em .35em;border-radius:4px}",
+      "refersTo": "callout"
+    },
+    {
+      "name": "Guide index entry",
+      "kind": "custom",
+      "description": "Stacked guide metadata preserving labels on narrow screens.",
+      "html": "<ul class=\"ds-index\"><li><h2><a href=\"/pineapple/guides/shortguid/\">ShortGuid and SQL GUID ordering</a></h2><p>Namespace: <code>Pineapple.Common</code></p><p>Key types: <code>ShortGuid</code>, <code>GuidExtensions</code></p></li></ul>",
+      "css": ".ds-index{list-style:none;padding:0;margin:1.5rem 0;font-family:ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif;line-height:1.6;}.ds-index li{padding:1rem 0;border-top:1px solid var(--border)}.ds-index h2{margin:0 0 .35rem;padding:0;font-size:1.1rem;line-height:1.25}.ds-index p{margin:.2rem 0;font-size:.95rem;color:var(--muted)}.ds-index a{color:var(--accent);text-underline-offset:2px}.ds-index a:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}.ds-index code{font-family:ui-monospace, \"SF Mono\", \"Cascadia Code\", Menlo, Consolas, monospace;font-size:.9em;background:var(--code-bg);padding:.1em .35em;border-radius:4px}"
+    },
+    {
+      "name": "Reference table",
+      "kind": "custom",
+      "description": "Existing horizontal-rule table treatment.",
+      "html": "<table class=\"ds-table\"><thead><tr><th>Package</th><th>Purpose</th></tr></thead><tbody><tr><td>Pineapple</td><td>Core utilities</td></tr><tr><td>Pineapple.Data</td><td>SQL Server and EF Core helpers</td></tr></tbody></table>",
+      "css": ".ds-table{border-collapse:collapse;width:100%;margin:1.5rem 0;font-size:.95rem;display:block;overflow-x:auto;color:var(--text);font-family:ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif;line-height:1.6;}.ds-table th,.ds-table td{border-bottom:1px solid var(--border);padding:.6rem .75rem;text-align:left;vertical-align:top}.ds-table th{background:var(--surface)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Technical Reading Desk",
+    "overview": "Pineapple documentation uses quiet surfaces, purple links, lavender code backgrounds, and bordered containers to make package installation and API examples easy to scan. The existing pineapple and author marks carry the identity; interface decoration remains restrained.\n\nThis is a source-derived description of the incumbent build, not a newly commissioned brand metaphor. PRODUCT.md establishes the technical audience and preservation requirement; no separate visual interview or anti-reference was supplied.",
+    "keyCharacteristics": [
+      "Light and automatic dark palettes share semantic CSS variables.",
+      "Long-form reading uses a bounded measure; indexes can use a wider grid.",
+      "Borders and tonal contrast separate content without general elevation."
+    ],
+    "rules": [
+      {
+        "name": "The Reading Measure Rule",
+        "body": "Keep long-form articles and introductory prose within the observed reading measure; wide indexes retain their explicit exception.",
+        "section": "typography"
+      },
+      {
+        "name": "The Semantic Theme Rule",
+        "body": "Use the existing semantic custom properties so light and dark treatments change together.",
+        "section": "colors"
+      },
+      {
+        "name": "The Border First Rule",
+        "body": "Use borders and surface contrast for ordinary containers; the author avatar halo remains a local identity treatment.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use semantic CSS variables for both color schemes.",
+      "Do preserve visible keyboard focus on links and disclosure summaries.",
+      "Do keep guide metadata visible in the stacked guide index.",
+      "Do preserve local horizontal scrolling for code blocks and tables."
+    ],
+    "donts": [
+      "Don't apply the author avatar halo to ordinary cards.",
+      "Don't create form fields, chips, or a general icon library from this documentation; those patterns are not implemented.",
+      "Don't turn the existing system heading face or FAQ character markers into a future display or icon standard."
+    ]
+  }
+}
