@@ -46,7 +46,7 @@ jobs:
           MSSQL_SA_PASSWORD: Pineapple_CI2026!
         ports: ["1433:1433"]
         options: >-
-          --health-cmd '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -Q "SELECT 1" -b'
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -C -Q 'SELECT 1' -b"
           --health-interval 10s --health-timeout 5s --health-retries 30
     env:
       PINEAPPLE_SQL_CONNECTION: "Server=127.0.0.1,1433;Database=master;User Id=sa;Password=Pineapple_CI2026!;TrustServerCertificate=true"
@@ -60,4 +60,4 @@ jobs:
             9.0.x
             10.0.x
             11.0.100-rc.3.26522.148
-      - run: dotnet test --project "${{ github.workspace }}/Pineapple.Data.Tests/Pineapple.Data.Tests.csproj" -c Release
+      - run: dotnet test --project "$GITHUB_WORKSPACE/Pineapple.Data.Tests/Pineapple.Data.Tests.csproj" -c Release
