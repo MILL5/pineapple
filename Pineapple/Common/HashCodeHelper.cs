@@ -107,7 +107,7 @@ namespace Pineapple.Common
             var bytes = Encoding.UTF8.GetBytes(item);
             hash.Update(bytes);
         }
-        
+
         public static void Add(this XXH32 hash, int item)
         {
             var bytes = BitConverter.GetBytes(item);
@@ -119,7 +119,7 @@ namespace Pineapple.Common
             var bytes = BitConverter.GetBytes(item);
             hash.Update(bytes);
         }
-        
+
         public static void Add(this XXH32 hash, long item)
         {
             var bytes = BitConverter.GetBytes(item);
