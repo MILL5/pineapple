@@ -2,6 +2,17 @@
 
 All notable changes to the `Pineapple` and `Pineapple.Data` packages.
 
+## Unreleased
+
+- Explicit .NET 8, 9, 10, and 11 RC targets, matching-runtime tests, and local-package consumer checks. Build with the .NET 11 SDK pinned in `global.json`; .NET 11 uses stable EF Core 10 until EF Core 11 GA.
+- Stable dependency patches and an explicit patched cryptography dependency; transitive vulnerability audit warnings fail restore.
+- Preserve legacy ShortGuid aliases across .NET 11 stricter Base64 validation without changing their decoded GUIDs.
+- Preserve K4os xxHash and existing persisted results; add fixed vectors and cross-process checks for every target.
+- Fix SQL reachability false positives and bound TCP connection attempts. Map all metadata collections to `INFORMATION_SCHEMA` views; add model and required SQL integration tests in CI/release.
+- Make token-based scope disposal safe across awaits, reject conflicting active rates, retire unused token state, and fix concurrency semaphore permits and shutdown.
+- Account operation completion exactly once, average completed durations, dispose cleanup timers, and replace inaccurate governor backoff with monotonic paced admission, preserving immediate first admission and preventing idle-time bursts. Align admission and reported-rate timestamps.
+- Bound Brotli decoded responses to 64 MiB by default with a configurable limit and failure cleanup.
+
 ## 2.0.0 — 2026-10
 
 ### Breaking changes
@@ -26,12 +37,12 @@ APIs that .NET now provides are marked `[Obsolete]` with their own diagnostic ID
 ### Changed
 
 - `Pineapple` and `Pineapple.Data` share version **2.0.0**, built and published together from one release tag. Direct references to both packages should use the same version.
-- `HashCode` uses `System.IO.Hashing.XxHash32` instead of `K4os.Hash.xxHash`. Typed primitive fast paths avoid boxing; nullable and `object` inputs use the fallback path. Compatibility tests compare representative values with recorded 1.x hashes.
+- `HashCode` retains `K4os.Hash.xxHash` and its input encoding. Golden-vector and cross-process tests preserve recorded 1.x hash values across all four targets.
 - `Preconditions` null, whitespace, and range checks call the .NET 8 `ThrowIf*` helpers. Exception types are unchanged; `ParamName` is now always set and messages are the standard .NET ones.
 - `ShortGuid` encodes and decodes with `Base64Url` (same output). `GuidExtensions` compares with `SqlGuid` (same order).
 - `RowVersion` uses `BinaryPrimitives`; `TimingScope` writes a source-generated structured log event.
 - `Health.Check.IsUrlAvailable` uses `HttpClient` instead of the obsolete `HttpWebRequest`.
-- Dependencies upgraded: `Microsoft.Extensions.Http` 10.0, `Microsoft.Data.SqlClient` 7.1, EF Core 8.0 / 10.0. Removed `K4os.Hash.xxHash`, `Microsoft.Bcl.AsyncInterfaces`, `System.Collections.Immutable`, and `Microsoft.SourceLink.GitHub`. Added `System.IO.Hashing` (and `Microsoft.Bcl.Memory` on .NET 8).
+- Dependencies upgraded: `Microsoft.Extensions.Http` 10.0, `Microsoft.Data.SqlClient` 7.1, EF Core 8.0 / 10.0. Retained `K4os.Hash.xxHash`; removed `Microsoft.Bcl.AsyncInterfaces`, `System.Collections.Immutable`, and `Microsoft.SourceLink.GitHub`. Added `Microsoft.Bcl.Memory` on .NET 8 for the URL-safe Base64 decoder.
 - Packages include a README, XML documentation, SourceLink, deterministic builds, and symbol packages; license metadata is now the `Apache-2.0` SPDX expression.
 
 ### Fixed

@@ -7,21 +7,20 @@ faq:
   - q: How do I limit calls per minute in C#?
     a: "On .NET 7 and later, use System.Threading.RateLimiting: `new SlidingWindowRateLimiter(new() { PermitLimit = 600, Window = TimeSpan.FromMinutes(1), SegmentsPerWindow = 6, QueueLimit = int.MaxValue })`, then `using var lease = await limiter.AcquireAsync();` before each call. Pineapple's ResourceGoverner does the same job but is deprecated in Pineapple 2.0."
   - q: What is the difference between Pineapple's ResourceGoverner and System.Threading.RateLimiting?
-    a: The System.Threading.RateLimiting package (also included in ASP.NET Core) offers token-bucket, fixed-window, sliding-window, and concurrency limiters with lease semantics. Pineapple's ResourceGoverner is a simpler calls-per-minute governor with a timeout and call statistics. It is deprecated in Pineapple 2.0; use the Microsoft rate limiters for new code.
+    a: System.Threading.RateLimiting (built into .NET 7+) offers token-bucket, fixed-window, sliding-window, and concurrency limiters with lease semantics. Pineapple's ResourceGoverner is a simpler calls-per-minute governor with evenly spaced admissions, a timeout, and call statistics. Use the built-in limiters for ASP.NET Core request throttling; use ResourceGoverner for simple outbound throttling.
   - q: What happens if a ResourceGoverner cannot get a slot?
-    a: It waits for the next slot and throws TimeoutException if admission keeps failing beyond its timeout. The timeout is max(10, 2 × ceiling(60 / maxCallsPerMinute)) seconds.
+    a: It waits for the next admission deadline and throws TimeoutException after the larger of 10 seconds or two call intervals (2 × 60 / maxCallsPerMinute seconds).
 ---
 
 # Rate limiting and resource governors
 
-> **Deprecated in 2.0 (PINE002).** Use the `System.Threading.RateLimiting` package (included in the ASP.NET Core shared framework). These types keep working in 2.x and are removed in 3.0. See the [migration guide]({{ '/guides/migration/#PINE002' | relative_url }}).
-{: .callout}
+> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide](migration.md).
 
-**Pineapple offers three ways to cap how often code runs, all measured in calls per minute:** a per-call pacing scope, a cross-thread pacing scope keyed by caller, and an async governor that spaces out admissions. All live in `Pineapple.Threading`.
+**Pineapple offers three ways to cap how often code runs, all measured in calls per minute:** a per-call pacing scope, a cross-thread pacing scope keyed by caller, and an async paced-admission governor. All live in `Pineapple.Threading`.
 
 | Type | Model | Best for |
 | --- | --- | --- |
-| `ResourceGoverner` | Async; spaces admissions using a monotonic clock; waits for the next slot, with a timeout | Outbound API/database calls from concurrent async code |
+| `ResourceGoverner` | Async; evenly spaced starts; bounded waiting | Outbound API/database calls from concurrent async code |
 | `RateLimiterScope` | Each scope lasts at least `60000 / callsPerMinute` ms | Simple sequential loops |
 | `SafeRateLimiterScope` | Like `RateLimiterScope`, but serializes all callers sharing a token | Several threads calling the same method |
 | `NullResourceGoverner`, `ZeroRateLimiterScope` | No limiting | Tests and feature flags |
@@ -45,9 +44,7 @@ await Parallel.ForEachAsync(messages, async (message, ct) =>
 Console.WriteLine($"{governor.TotalCount} calls, ~{governor.CallsPerMinute:F0}/min");
 ```
 
-The first call is admitted immediately. Later admissions are at least one interval apart, using the monotonic `Stopwatch` clock. The interval `60 s / maxCallsPerMinute` is rounded up to a whole clock tick, with a minimum of one tick, so rounding cannot shorten the required spacing. The next slot is scheduled from the actual admission time; idle time does not accumulate credit for a burst.
-
-Callers wait asynchronously for the next slot and then recheck admission under a lock. There is no busy-spin wait; operating-system scheduling can make a wait longer than the requested interval. If admission keeps failing beyond the timeout, the caller throws `TimeoutException`. The timeout is `max(10, 2 × ceiling(60 / maxCallsPerMinute))` seconds.
+The governor spaces admitted starts at least `60000 / maxCallsPerMinute` milliseconds apart using a monotonic clock. The first acquisition is immediate, preserving existing behavior. Idle time does not accumulate burst allowance; acquisition is not FIFO, and admitted operations can run concurrently. If admission cannot complete within `max(10 s, 2 × 60 / maxCallsPerMinute s)`, it throws `TimeoutException`.
 
 Register it with dependency injection behind `IResourceGoverner` so tests can swap in `NullResourceGoverner`:
 
@@ -83,7 +80,17 @@ public void Poll()
 }
 ```
 
-> `SafeRateLimiterScope` holds a `Monitor` lock for the duration of the scope. Use synchronous `using` and don't `await` inside it.
+> `SafeRateLimiterScope` acquires synchronously and releases through a semaphore, so `await using` may dispose on a different thread. Do not nest scopes with the same token.
 {: .callout}
 
 {% include faq.html heading="Questions about rate limiting" %}
+
+## Lifetime and concurrency contracts
+
+`SafeRateLimiterScope` uses a process-local semaphore per token. The constructor acquires synchronously; asynchronous disposal can resume on another thread. Active scopes sharing a token must use the same rate or construction throws `ArgumentException`. Registry entries are retired after their last active or waiting scope leaves. Scope duration starts after acquisition; disposal pads that duration, releases once, and repeated disposal is harmless. The existing API does not accept cancellation and does not promise FIFO fairness.
+
+`SemaphoreRateLimiterScope(maxCalls)` limits concurrent operations, not calls per minute. Acquire with `GetOperationScope()` and dispose each operation to release its permit. Disposing the owner rejects new acquisitions and unblocks waiting acquisitions with `ObjectDisposedException`; already admitted scopes may finish and release safely.
+
+For governors, `TotalCount` counts starts, `TotalTime` sums completed operation durations, and `AverageTime` averages completed operations, returning zero before completion. Completion is idempotent. Completed operation records are retained for the one-minute diagnostic window and periodically scavenged until the governor is disposed. The window is used for diagnostics and retention; admission uses monotonic deadlines. Share a governor instance to share its limit; replicas do not coordinate limits.
+
+`CallsPerMinute` estimates observed rate from `N−1` intervals between `N` starts in the latest recorded one-minute window. Equal timestamps yield `NaN`; out-of-order events are ordered before calculation. The cached estimate updates on new events and is diagnostic; monotonic permit scheduling enforces the limit independently.

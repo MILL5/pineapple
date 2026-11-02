@@ -12,6 +12,8 @@ faq:
 
 # Health checks and networking
 
+> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide](migration.md).
+
 ## `Health.Check`
 
 > **Deprecated in 2.0 (PINE006).** Use `Microsoft.Extensions.Diagnostics.HealthChecks` with the `AspNetCore.HealthChecks.*` packages. See the [migration guide]({{ '/guides/migration/#PINE006' | relative_url }}).
@@ -48,3 +50,9 @@ builder.Services
 Remember to send `Accept-Encoding: br` on requests. If you control the primary handler, `HttpClientHandler.AutomaticDecompression = DecompressionMethods.Brotli` achieves the same thing without a delegating handler.
 
 {% include faq.html heading="Questions about health checks and networking" %}
+
+## Bounds and ownership
+
+TCP probes have a five-second connection timeout and return false on connection failure. URL checks succeed only for HTTP 200.
+
+Brotli responses are buffered with a default decoded-size limit of 64 MiB. Larger responses throw `HttpRequestException`; cancellation and content-read failures dispose the received response. To choose another positive byte limit, construct `new BrotliCompressionHandler(maxDecodedBytes)` when registering the handler. Copied content headers exclude the old encoding and length. Callers own request concurrency, so the per-response bound is not a process-wide memory budget.

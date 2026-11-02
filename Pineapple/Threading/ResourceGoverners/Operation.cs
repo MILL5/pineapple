@@ -1,75 +1,41 @@
-﻿using System;
+using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using static Pineapple.Common.Preconditions;
-using static Pineapple.Common.Cleanup;
-using System.Threading;
 
 namespace Pineapple.Threading
 {
     [Obsolete("Use System.Threading.RateLimiting (SlidingWindowRateLimiter, TokenBucketRateLimiter, ConcurrencyLimiter) or Microsoft.Extensions.Http.Resilience.", DiagnosticId = "PINE002", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
-    internal enum OperationStatus
-    {
-        Unknown = 0,
-        Running = 1,
-        Complete = 2
-    }
+    internal enum OperationStatus { Unknown = 0, Running = 1, Complete = 2 }
 
     [Obsolete("Use System.Threading.RateLimiting (SlidingWindowRateLimiter, TokenBucketRateLimiter, ConcurrencyLimiter) or Microsoft.Extensions.Http.Resilience.", DiagnosticId = "PINE002", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     internal class Operation : IRateLimiterScope
     {
         private readonly Operations _operations;
-        private readonly DateTime _start;
-        private DateTime? _completed = null;
-        private OperationStatus _status = OperationStatus.Running;
-
+        private readonly Stopwatch _watch = Stopwatch.StartNew();
+        private TimeSpan _elapsed;
         public Operation(Operations operations)
-            : this(operations, DateTime.UtcNow)
         {
-        }
-
-        // The governor passes the same timestamp it used for its window check.
-        public Operation(Operations operations, DateTime startUtc)
-        {
-            _start = startUtc;
             CheckIsNotNull(nameof(operations), operations);
-
             _operations = operations;
-            _operations.Add(this);        }
-
-        public OperationStatus Status => _status;
-        public DateTime Start => _start;
-        public DateTime? Completed => _completed;
-
-        public TimeSpan ElapsedTime
-        {
-            get
-            {
-                if (!Completed.HasValue)
-                    throw new InvalidOperationException();
-
-                return Completed.Value - Start;
-            }
+            _operations.Add(this);
         }
+        public OperationStatus Status { get; private set; } = OperationStatus.Running;
+        public DateTime Start { get; } = DateTime.UtcNow;
+        public DateTime? Completed { get; private set; }
+        public TimeSpan ElapsedTime => Completed.HasValue ? _elapsed : throw new InvalidOperationException();
 
-        private void DisposeInternal()
+        // Called only while the owning collection holds its lock.
+        internal bool Complete()
         {
-            SafeMethod(() =>
-            {
-                _status = OperationStatus.Complete;
-                _completed = DateTime.UtcNow;
-            });
+            if (Status == OperationStatus.Complete) return false;
+            _watch.Stop();
+            _elapsed = _watch.Elapsed;
+            Completed = DateTime.UtcNow;
+            Status = OperationStatus.Complete;
+            return true;
         }
-
-        public void Dispose()
-        {
-            DisposeInternal();
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            DisposeInternal();
-            await Task.CompletedTask;
-        }
+        public void Dispose() => _operations.Remove(this);
+        public ValueTask DisposeAsync() { Dispose(); return ValueTask.CompletedTask; }
     }
-
 }

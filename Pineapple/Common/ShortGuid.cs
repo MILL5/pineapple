@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers.Text;
 using static Pineapple.Common.Preconditions;
 // ReSharper disable UnusedMember.Global

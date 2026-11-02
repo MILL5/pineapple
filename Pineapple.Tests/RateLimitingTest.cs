@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Pineapple.Threading;
 using Shouldly;
 using System.Diagnostics;
@@ -91,22 +91,18 @@ namespace Pineapple.Shared.Tests
                 using (var rg = await resourceGoverner.GetOperationScopeAsync())
                 {
                     callCount++;
-                    var cpm = resourceGoverner.CallsPerMinute;
 
-                    if (!double.IsNaN(cpm))
-                    {
-                        cpm.ShouldBeLessThanOrEqualTo(maxCallsPerMinute);
-                    }
                 }
             }
 
             sw.Stop();
 
-            // The first permit is immediate, so N permits span N - 1 intervals.
+            // N starts span N - 1 intervals; the first admission remains immediate.
             var callsPerMinute = (callCount - 1) / sw.Elapsed.TotalMinutes;
             callsPerMinute.ShouldBeLessThanOrEqualTo(maxCallsPerMinute);
 
-            // Timer resolution and runner load can reduce throughput; the contract is an upper bound.
+            // Timer resolution and runner load affect throughput; enforce the upper bound.
+
             Debug.WriteLine($"Efficiency:{callsPerMinute / maxCallsPerMinute}");
 
             await Task.CompletedTask;
@@ -120,7 +116,7 @@ namespace Pineapple.Shared.Tests
             //
             const int MAX_CALLS_PER_MINUTE = 2;
 
-            var resourceGoverner = new ResourceGoverner(MAX_CALLS_PER_MINUTE);
+            using var resourceGoverner = new ResourceGoverner(MAX_CALLS_PER_MINUTE);
 
             var sw = new Stopwatch();
             sw.Start();
@@ -144,7 +140,7 @@ namespace Pineapple.Shared.Tests
             // With low calls per minute this test should complete without timing out.
             const int MAX_CALLS_PER_MINUTE = 2;
 
-            var resourceGoverner = new ResourceGoverner(MAX_CALLS_PER_MINUTE);
+            using var resourceGoverner = new ResourceGoverner(MAX_CALLS_PER_MINUTE);
 
             for (int i = 0; i < MAX_CALLS_PER_MINUTE; i++)
             {

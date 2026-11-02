@@ -1,7 +1,7 @@
 title: Pineapple
 tagline: Guava-inspired core utilities for .NET
 description: >-
-  Pineapple is an open-source C# library of core utilities for .NET 8 and .NET 10, inspired by Google's Guava:
+  Pineapple is an open-source C# library of core utilities for .NET 8, 9, 10, and 11 RC, inspired by Google's Guava:
   guard clauses, ShortGuid, deterministic xxHash HashCode, SQL Server RowVersion, timing scopes,
   and exception-safe cleanup.
 url: https://mill5.github.io
@@ -49,7 +49,7 @@ defaults:
         path: /assets/og-image.png
         width: 1200
         height: 630
-        alt: Pineapple — Guava-inspired core utilities for .NET 8 and .NET 10, by MILL5
+        alt: Pineapple — Guava-inspired core utilities for .NET 8, 9, 10, and 11 RC, by MILL5
 
 nav:
   - title: Getting started

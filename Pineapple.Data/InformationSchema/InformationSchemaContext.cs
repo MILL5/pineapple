@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -36,22 +36,16 @@ namespace Pineapple.Data.InformationSchema
         {
             modelBuilder.Entity<Table>(entity =>
             {
-                entity.ToTable("TABLES", "INFORMATION_SCHEMA");
+                entity.ToView("TABLES", "INFORMATION_SCHEMA");
                 entity.HasKey(e => new { e.TableCatalog, e.TableSchema, e.TableName });
-                entity.Property(e => e.TableCatalog)
-                    .HasColumnName("TABLE_CATALOG")
-                    .HasMaxLength(256);
-                entity.Property(e => e.TableSchema)
-                    .HasColumnName("TABLE_SCHEMA")
-                    .HasMaxLength(256);
-                entity.Property(e => e.TableName)
-                    .HasColumnName("TABLE_NAME")
-                    .HasMaxLength(256);
+                entity.Property(e => e.TableCatalog).HasColumnName("TABLE_CATALOG").HasMaxLength(256);
+                entity.Property(e => e.TableSchema).HasColumnName("TABLE_SCHEMA").HasMaxLength(256);
+                entity.Property(e => e.TableName).HasColumnName("TABLE_NAME").HasMaxLength(256);
             });
 
             modelBuilder.Entity<Column>(entity =>
             {
-                entity.ToTable("COLUMNS", "INFORMATION_SCHEMA");
+                entity.ToView("COLUMNS", "INFORMATION_SCHEMA");
 
                 entity.HasKey(e => new { e.TableCatalog, e.TableSchema, e.TableName, e.ColumnName });
 
@@ -74,7 +68,7 @@ namespace Pineapple.Data.InformationSchema
 
             modelBuilder.Entity<KeyColumn>(entity =>
             {
-                entity.ToTable("KEY_COLUMN_USAGE", "INFORMATION_SCHEMA");
+                entity.ToView("KEY_COLUMN_USAGE", "INFORMATION_SCHEMA");
 
                 entity.HasKey(e => new { e.TableCatalog, e.TableSchema, e.TableName, e.ColumnName });
 
@@ -98,7 +92,7 @@ namespace Pineapple.Data.InformationSchema
 
             modelBuilder.Entity<TableConstraint>(entity =>
             {
-                entity.ToTable("TABLE_CONSTRAINTS", "INFORMATION_SCHEMA");
+                entity.ToView("TABLE_CONSTRAINTS", "INFORMATION_SCHEMA");
 
                 entity.HasKey(e => new { e.TableCatalog, e.TableSchema, e.TableName, e.ConstraintName });
 

@@ -21,7 +21,7 @@ namespace Pineapple.Threading
 
         public abstract Task<IRateLimiterScope> GetOperationScopeAsync();
 
-        public TimeSpan AverageTime => TimeSpan.FromMilliseconds(TotalTime.TotalMilliseconds / TotalCount);
+        public TimeSpan AverageTime => _operations.AverageTime;
         public TimeSpan TotalTime => _operations.TotalTime;
         public long TotalCount => _operations.TotalCount;
         public double CallsPerMinute => _cpm.Value;

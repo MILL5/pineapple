@@ -64,3 +64,7 @@ int cmp = a.SqlCompareTo(b);
 ```
 
 {% include faq.html heading="Questions about ShortGuid" %}
+
+## Cross-runtime parsing compatibility
+
+Pineapple preserves previously accepted 22-character aliases with nonzero unused Base64 padding bits. Those bits are normalized before decoding so .NET 11's stricter decoder returns the same GUID as earlier runtimes. GUID bytes and canonical encoded identifiers are unchanged.

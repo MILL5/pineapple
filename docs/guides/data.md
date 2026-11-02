@@ -14,7 +14,7 @@ faq:
 dotnet add package Pineapple.Data --version 2.0.0
 ```
 
-**`Pineapple.Data` adds SQL Server helpers on top of Pineapple.** It targets .NET 8 (EF Core 8) and .NET 10 (EF Core 10) and uses `Microsoft.Data.SqlClient` 7.
+**`Pineapple.Data` adds SQL Server helpers on top of Pineapple.** It targets .NET 8 (EF Core 8), .NET 9 (EF Core 9), and .NET 10/11 (stable EF Core 10) and uses `Microsoft.Data.SqlClient` 7.
 
 Both packages use version **2.0.0** and are released together. Installing `Pineapple.Data` also brings in `Pineapple`; if your project references both directly, use matching versions. The previous `Pineapple.Data` 1.0.1 targets .NET Core 3.1; only the core `Pineapple` 1.0.41 package targets .NET Standard 2.0.
 
@@ -62,3 +62,11 @@ Check.IsSqlServerAvailable(connectionString);
 {: .callout}
 
 {% include faq.html heading="Questions about Pineapple.Data" %}
+
+## Availability and integration testing
+
+`IsSqlServerAvailable` checks TCP reachability, not SQL authentication or query readiness. It understands the `tcp:` prefix and an explicit `host,port`, defaults to port 1433, and returns false after three failed attempts. Each TCP attempt has a five-second timeout. Named-instance discovery is not performed.
+
+Metadata entities map to the four `INFORMATION_SCHEMA` views using their composite identifying columns and no-tracking queries. Database permissions still determine what metadata callers can read.
+
+Model and loopback connectivity tests run without SQL Server. To run the SQL integration fixture, set `PINEAPPLE_SQL_CONNECTION` to a disposable SQL Server database with create/drop table permissions, then run `dotnet test --project "$(pwd)/Pineapple.Data.Tests/Pineapple.Data.Tests.csproj" -c Release`. The fixture creates and drops a uniquely named table. Framework processes share a bounded session-owned SQL application lock around catalog DDL and reads; the unpooled owner connection releases that lock when it closes, including failure paths. Without that variable the integration test is explicitly inconclusive. Set `PINEAPPLE_REQUIRE_SQL_TESTS=1` to fail instead of skipping when configuration is absent. Linux SQL CI and the release job require this fixture on every target; ordinary Linux/Windows build jobs run the model tests and visibly skip database integration.

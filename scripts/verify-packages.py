@@ -15,6 +15,9 @@ def verify(artifacts: Path) -> None:
     for package in ("Pineapple", "Pineapple.Data"):
         archive = artifacts / f"{package}.{version}.nupkg"
         with ZipFile(archive) as contents:
+            assets = {name.split("/")[1] for name in contents.namelist() if name.startswith("lib/") and name.endswith(".dll")}
+            if assets != {"net8.0", "net9.0", "net10.0", "net11.0"}:
+                raise ValueError(f"{archive}: unexpected library assets {assets}")
             spec = ET.fromstring(contents.read(f"{package}.nuspec"))
         metadata = spec.find("{*}metadata")
         if metadata is None:
@@ -23,14 +26,14 @@ def verify(artifacts: Path) -> None:
             raise ValueError(f"{archive}: package ID/version differs from the shared release")
         groups = metadata.findall("{*}dependencies/{*}group")
         frameworks = {group.attrib.get("targetFramework") for group in groups}
-        if frameworks != {"net8.0", "net10.0"}:
+        if frameworks != {"net8.0", "net9.0", "net10.0", "net11.0"}:
             raise ValueError(f"{archive}: unexpected dependency frameworks {frameworks}")
         if package == "Pineapple.Data":
             for group in groups:
                 references = [dep for dep in group if dep.attrib.get("id") == "Pineapple"]
                 if len(references) != 1 or references[0].attrib.get("version") != version:
                     raise ValueError(f"{archive}: Pineapple dependency must match {version}")
-        print(f"Verified {package} {version} for .NET 8 and .NET 10")
+        print(f"Verified {package} {version} for .NET 8, 9, 10, and 11")
 
 
 if __name__ == "__main__":

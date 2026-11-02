@@ -1,13 +1,13 @@
 ---
-description: Pineapple is a free, open-source C# library for .NET 8 and .NET 10 with guard clauses, ShortGuid, deterministic xxHash HashCode, SQL Server RowVersion, and timing scopes.
+description: Pineapple is a free, open-source C# library for .NET 8, 9, 10, and 11 with guard clauses, ShortGuid, deterministic xxHash HashCode, SQL Server RowVersion, rate limiting, timeouts, and backoff.
 wide: true
 faq:
   - q: What is Pineapple for .NET?
-    a: Pineapple is a free, open-source (Apache 2.0) C# library from MILL5 that provides core utilities for .NET 8 and .NET 10 — guard clauses, ShortGuid, a deterministic HashCode, a SQL Server RowVersion type, structured timing scopes, and exception-safe cleanup. It is inspired by Google's Guava library for Java.
+    a: Pineapple is a free, open-source (Apache 2.0) C# library from MILL5 that provides core utilities for .NET 8, 9, 10, and 11 — guard clauses, ShortGuid, a deterministic HashCode, a SQL Server RowVersion type, rate limiting, resource governors, timeouts, exponential backoff, and timing scopes. It is inspired by Google's Guava library for Java.
   - q: How do I install Pineapple?
     a: "Run `dotnet add package Pineapple`. For SQL Server and Entity Framework Core helpers, also run `dotnet add package Pineapple.Data`."
   - q: Which .NET versions does Pineapple support?
-    a: Pineapple 2.x targets .NET 8 (LTS) and .NET 10 (LTS). Pineapple 1.0.41 is the last release that targets .NET Standard 2.0 and .NET Framework.
+    a: Pineapple 2.x targets .NET 8, 9, 10, and 11 (release candidate). Pineapple 1.0.41 is the last release that targets .NET Standard 2.0 and .NET Framework.
   - q: Is Pineapple free for commercial use?
     a: Yes. Pineapple is licensed under the Apache License 2.0, which permits commercial use, modification, and redistribution.
   - q: Who built Pineapple?
@@ -17,7 +17,7 @@ faq:
 <section class="hero">
   <div>
     <h1>Pineapple: Guava-inspired core utilities for .NET</h1>
-    <p class="lead"><strong>Pineapple is a free, open-source C# library of small, well-tested building blocks for .NET 8 and .NET 10</strong> — guard clauses, URL-safe ShortGuids, a deterministic hash code, SQL Server row versions, and structured timing. Stop rewriting the same helpers in every project.</p>
+    <p class="lead"><strong>Pineapple is a free, open-source C# library of small, well-tested building blocks for .NET 8, 9, 10, and 11</strong> — guard clauses, URL-safe ShortGuids, a deterministic hash code, SQL Server row versions, rate limiting, timeouts, and backoff. Stop rewriting the same helpers in every project.</p>
     <p class="byline">Built by <a href="{{ site.author.url }}">Richard Crane</a>, Microsoft MVP, at <a href="{{ site.org.url }}">MILL5</a> · 110K+ NuGet downloads</p>
     <div class="actions">
       <a class="button" href="{{ '/getting-started/' | relative_url }}">Get started</a>
@@ -70,8 +70,8 @@ public Order Create(string customerId, int quantity, DateTime requestedAt)
 ## Why Pineapple
 
 - **Small and focused.** Each type solves one recurring problem and has no framework opinions.
-- **Modern .NET.** Targets .NET 8 and .NET 10 LTS, with SourceLink and symbol packages for step-through debugging.
-- **Tested.** Maintained by MILL5 since 2019, with unit tests run on .NET 8 and .NET 10 in CI.
+- **Modern .NET.** Targets .NET 8, 9, 10, and 11 LTS, with SourceLink and symbol packages for step-through debugging.
+- **Tested.** Maintained by MILL5 since 2019, with unit tests run on .NET 8, 9, 10, and 11 in CI.
 - **Free.** Apache 2.0 licensed.
 
 <section class="family" aria-labelledby="family-heading">

@@ -33,11 +33,15 @@ namespace Pineapple.Tests
         [TestMethod]
         public void NonCanonicalAndStandardBase64InputDecodesLikeVersion1()
         {
-            static Guid LegacyDecode(string value) =>
-                new(Convert.FromBase64String(value.Replace("_", "/").Replace("-", "+") + "=="));
-
-            foreach (var value in new[] { "WorkNotificationOpened", "Abcdefghijklmnopqrstuv", "ab+cd/ef-gh_ij0123456z" })
-                Assert.AreEqual(LegacyDecode(value), ShortGuid.Decode(value), value);
+            // Captured from the .NET 8 / 1.x decoder; the .NET 11 decoder is stricter.
+            var cases = new[]
+            {
+                ("WorkNotificationOpened", "36e48a5a-628b-277e-1ab6-2a273a97a779"),
+                ("Abcdefghijklmnopqrstuv", "791db701-21f8-398a-259a-7a29aabb2dba"),
+                ("ab+cd/ef-gh_ij0123456z", "779cbf69-9ff7-08fa-7f8a-3d35db7e39eb")
+            };
+            foreach (var (value, expected) in cases)
+                Assert.AreEqual(Guid.Parse(expected), ShortGuid.Decode(value), value);
         }
 
         [TestMethod]

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -15,6 +15,16 @@ namespace Pineapple.Networking
     [Obsolete("Use AutomaticDecompression = DecompressionMethods.All on HttpClientHandler or SocketsHttpHandler.", DiagnosticId = "PINE001", UrlFormat = "https://mill5.github.io/pineapple/guides/migration/#{0}")]
     public class BrotliCompressionHandler : DelegatingHandler
     {
+        private readonly long _maxDecodedBytes;
+
+        public BrotliCompressionHandler() : this(64L * 1024 * 1024) { }
+
+        public BrotliCompressionHandler(long maxDecodedBytes)
+        {
+            ArgumentOutOfRangeException.ThrowIfLessThan(maxDecodedBytes, 1);
+            _maxDecodedBytes = maxDecodedBytes;
+        }
+
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
@@ -23,12 +33,26 @@ namespace Pineapple.Networking
                 return response;
 
             var original = response.Content;
-            var compressed = await original.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
             var decompressed = new MemoryStream();
 
-            await using (var brotli = new BrotliStream(compressed, CompressionMode.Decompress))
+            try
             {
-                await brotli.CopyToAsync(decompressed, cancellationToken).ConfigureAwait(false);
+                var compressed = await original.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+                await using var brotli = new BrotliStream(compressed, CompressionMode.Decompress);
+                var buffer = new byte[81920];
+                int count;
+                while ((count = await brotli.ReadAsync(buffer, cancellationToken).ConfigureAwait(false)) != 0)
+                {
+                    if (decompressed.Length > _maxDecodedBytes - count)
+                        throw new HttpRequestException("Brotli response exceeds the decoded size limit.");
+                    await decompressed.WriteAsync(buffer.AsMemory(0, count), cancellationToken).ConfigureAwait(false);
+                }
+            }
+            catch
+            {
+                decompressed.Dispose();
+                response.Dispose();
+                throw;
             }
 
             decompressed.Position = 0;
