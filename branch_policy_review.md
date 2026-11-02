@@ -20,7 +20,7 @@ Binding a check to GitHub Actions app15368 identifies its publisher, not trusted
 **Implemented:** the configuration script defines an organization-owned required
 workflow pinned to a reviewed, pushed SHA and scoped only to Pineapple's repository
 ID and `main`/`develop`. A missing organization permission fails before settings writes.
-**Installed:** after the owner completed GitHub authorization, active organization
+**Initial installation:** after the owner completed GitHub authorization, active organization
 ruleset26373889 pinned the workflow at `cd3d22be2e4885a1a84af3207fa04fa0bf1ffd5f`,
 with no bypass actors, scoped only to repository196690353 and `main`/`develop`.
 Both branches expose that inherited workflow rule through GitHub's effective-rules
@@ -62,9 +62,10 @@ replacement. Hosted installation subsequently succeeded.
 The current-head Copilot review also found that the guard's `github-script@v8`
 tag was mutable despite the organization workflow pin. **Fixed:** lock it to
 `ed597411d8f924073f98dfc5c65a23a2325f34cd`, the verified upstream v8 commit,
-and require a full action SHA in the local guard test. The trusted organization
-rule must be repinned to the pushed policy revision before merging; the branch
-predicate itself is unchanged. The first-adoption SHA below is historical.
+and require a full action SHA in the local guard test. Active organization rule
+26373889 was then repinned to `8ffede37c147df31f52949d995003551830210ab`, verified
+through the live ruleset API. Its repository/ref scope and no-bypass policy remain
+intact; the branch predicate is unchanged. First-adoption SHAs below are historical.
 
 The actual inline script passes twelve local cases: valid feature/develop promotion,
 invalid sources/targets, empty feature suffix, Dependabot head, and fork rejection.

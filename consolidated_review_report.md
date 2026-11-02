@@ -267,9 +267,10 @@ The evidence and handled threads are recorded in PR212.
 Review5738789112 completed on `bcb64c0` and embedded a further actionable action-tag
 finding despite its “No open issues” heading. The trusted guard now locks the
 upstream v8 action to full commit `ed597411d8f924073f98dfc5c65a23a2325f34cd`;
-the organization rule is updated to the pushed policy revision as part of shipping.
+organization rule26373889 is verified pinned to revision `8ffede3`, which contains
+that immutable action dependency, before the subsequent documentation sync event.
 An assertion prevents regression to a movable action tag. Its compilation claim
-is contradicted by passing Windows/Linux builds and800tests per OS; the data/core
-test assemblies have explicit friend access where internal APIs are exercised.
+is contradicted by passing Windows/Linux builds and800tests per OS; the core project
+explicitly grants `Pineapple.Tests` friend access where internal APIs are exercised.
 Copilot scheduling versus the shipping completion gate remains documented
 separately; zero human approvals does not imply that the shipper skips review.
