@@ -55,7 +55,8 @@ namespace Pineapple.Health
             {
                 try
                 {
-                    client.Connect(server, port);
+                    using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                    client.ConnectAsync(server, port, timeout.Token).AsTask().GetAwaiter().GetResult();
                     isAvailable = client.Connected;
                 }
                 catch

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Pineapple.Threading
 {
@@ -17,32 +15,47 @@ namespace Pineapple.Threading
 
         public void Add()
         {
+            Add(DateTime.UtcNow);
+        }
+
+        // Governors pass the operation's own start time so the statistic and the admission check
+        // measure exactly the same events.
+        internal void Add(DateTime atUtc)
+        {
             lock (_statsLock)
             {
-                _calllog.Add(DateTime.Now);
+                var index = _calllog.BinarySearch(atUtc);
+                _calllog.Insert(index < 0 ? ~index : index, atUtc);
 
-                var nonExpired = _calllog.Where(x => x >= DateTime.Now.AddMinutes(-1));
-                var count = nonExpired.Count();
+                var latest = _calllog[^1];
+                var windowStart = latest - DateTime.MinValue < TimeSpan.FromMinutes(1)
+                    ? DateTime.MinValue
+                    : latest.AddMinutes(-1);
+                _calllog.RemoveAll(x => x < windowStart);
+
+                var count = _calllog.Count;
 
                 if (count > 1)
                 {
-                    var elapsed = DateTime.Now - nonExpired.Min();
-                    _cpm = count / elapsed.TotalMinutes;
+                    // n calls span n - 1 intervals; dividing n by the span overstates the rate.
+                    var elapsed = _calllog[^1] - _calllog[0];
+                    // Equal timestamps provide no measurable interval.
+                    _cpm = elapsed > TimeSpan.Zero ? (count - 1) / elapsed.TotalMinutes : double.NaN;
                 }
                 else
                 {
                     _cpm = 1;
                 }
-
-                var removeThese = _calllog.Where(x => x < DateTime.Now.AddMinutes(-1)).ToList();
-
-                foreach (var o in removeThese)
-                {
-                    _calllog.Remove(o);
-                }
             }
         }
 
-        public double Value => _cpm;
+        public double Value
+        {
+            get
+            {
+                lock (_statsLock)
+                    return _cpm;
+            }
+        }
     }
 }

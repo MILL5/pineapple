@@ -2,54 +2,88 @@
 using System.Threading;
 using System.Threading.Tasks;
 using static Pineapple.Common.Preconditions;
-using static Pineapple.Common.Cleanup;
 
 namespace Pineapple.Threading
 {
+    /// <summary>Limits concurrent operation scopes; this is not a calls-per-minute limiter.</summary>
     public class SemaphoreRateLimiterScope : IRateLimiterScope
     {
-        private readonly int _maxcalls;
-        private readonly SemaphoreSlim _s;
+        private readonly SemaphoreSlim _semaphore;
+        private readonly CancellationTokenSource _shutdown = new();
+        private readonly object _lifetimeLock = new();
+        private int _references;
+        private bool _disposed;
 
-        private class OperationScope : IRateLimiterScope
+        private sealed class OperationScope : IRateLimiterScope
         {
-            public OperationScope(SemaphoreSlim s)
-            {
-                s.Wait();
-            }
-
-            public void Dispose()
-            {
-            }
-
-            public async ValueTask DisposeAsync()
-            {
-                await Task.CompletedTask;
-            }
+            private SemaphoreRateLimiterScope _owner;
+            public OperationScope(SemaphoreRateLimiterScope owner) => _owner = owner;
+            public void Dispose() => Interlocked.Exchange(ref _owner, null)?.Release();
+            public ValueTask DisposeAsync() { Dispose(); return ValueTask.CompletedTask; }
         }
 
         public SemaphoreRateLimiterScope(int maxCalls)
         {
             CheckIsNotLessThan(nameof(maxCalls), maxCalls, 1);
-
-            _maxcalls = maxCalls;
-            _s = new SemaphoreSlim(0, _maxcalls);
+            _semaphore = new SemaphoreSlim(maxCalls, maxCalls);
         }
 
         public IRateLimiterScope GetOperationScope()
         {
-            return new OperationScope(_s);
+            lock (_lifetimeLock)
+            {
+                ObjectDisposedException.ThrowIf(_disposed, this);
+                _references++;
+            }
+            try { _semaphore.Wait(_shutdown.Token); }
+            catch (OperationCanceledException)
+            {
+                ReleaseReference();
+                throw new ObjectDisposedException(nameof(SemaphoreRateLimiterScope));
+            }
+            catch { ReleaseReference(); throw; }
+            lock (_lifetimeLock)
+            {
+                if (!_disposed) return new OperationScope(this);
+            }
+            Release();
+            throw new ObjectDisposedException(nameof(SemaphoreRateLimiterScope));
+        }
+
+        private void Release()
+        {
+            _semaphore.Release();
+            ReleaseReference();
+        }
+
+        private void ReleaseReference()
+        {
+            lock (_lifetimeLock)
+            {
+                _references--;
+                DisposeIfUnused();
+            }
+        }
+
+        private void DisposeIfUnused()
+        {
+            if (_disposed && _references == 0)
+            {
+                _semaphore.Dispose();
+                _shutdown.Dispose();
+            }
         }
 
         public void Dispose()
         {
-            SafeMethod(_s.Dispose);
+            lock (_lifetimeLock)
+            {
+                if (_disposed) return;
+                _disposed = true;
+                _shutdown.Cancel();
+                DisposeIfUnused();
+            }
         }
-
-        public async ValueTask DisposeAsync()
-        {
-            SafeMethod(_s.Dispose);
-            await Task.CompletedTask;
-        }
+        public ValueTask DisposeAsync() { Dispose(); return ValueTask.CompletedTask; }
     }
 }

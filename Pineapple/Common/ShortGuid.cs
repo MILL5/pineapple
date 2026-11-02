@@ -175,6 +175,13 @@ namespace Pineapple.Common
               .Replace("_", "/")
               .Replace("-", "+");
 
+            // Preserve legacy decoding of aliases whose unused padding bits are nonzero.
+            // .NET 11 validates these bits; only the top two bits carry GUID data.
+            const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+            var last = alphabet.IndexOf(value[21]);
+            if (last < 0) throw new FormatException("Invalid ShortGuid character.");
+            value = value.Substring(0, 21) + alphabet[last & 0x30];
+
             var decodeThis = $@"{value}==";
             byte[] buffer = Convert.FromBase64String(decodeThis);
 

@@ -2,6 +2,17 @@
 
 All notable changes to the `Pineapple` and `Pineapple.Data` packages.
 
+## Unreleased
+
+- Explicit .NET 8, 9, 10, and 11 RC targets, matching-runtime tests, and local-package consumer checks. Build with the .NET 11 SDK pinned in `global.json`; .NET 11 uses stable EF Core 10 until EF Core 11 GA.
+- Stable dependency patches and an explicit patched cryptography dependency; transitive vulnerability audit warnings fail restore.
+- Preserve legacy ShortGuid aliases across .NET 11 stricter Base64 validation without changing their decoded GUIDs.
+- Preserve K4os xxHash and existing persisted results; add fixed vectors and cross-process checks for every target.
+- Fix SQL reachability false positives and bound TCP connection attempts. Map all metadata collections to `INFORMATION_SCHEMA` views; add model and required SQL integration tests in CI/release.
+- Make token-based scope disposal safe across awaits, reject conflicting active rates, retire unused token state, and fix concurrency semaphore permits and shutdown.
+- Account operation completion exactly once, average completed durations, dispose cleanup timers, and replace inaccurate governor backoff with monotonic paced admission, preserving immediate first admission and preventing idle-time bursts. Align admission and reported-rate timestamps.
+- Bound Brotli decoded responses to 64 MiB by default with a configurable limit and failure cleanup.
+
 ## 2.0.0 — 2026-10
 
 ### Breaking changes

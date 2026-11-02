@@ -7,9 +7,9 @@
 [![CI](https://github.com/MILL5/pineapple/actions/workflows/ci.yml/badge.svg)](https://github.com/MILL5/pineapple/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/MILL5/pineapple/blob/main/LICENSE)
 
-**Pineapple is an open-source C# library of core utilities for .NET 8 and .NET 10, inspired by Google's Guava.** It gives you guard clauses (preconditions), URL-safe 22-character `ShortGuid`s, a deterministic xxHash `HashCode`, a SQL Server `RowVersion` type, calls-per-minute rate limiting and resource governors, timeouts, exponential backoff, timing scopes, and exception-safe cleanup helpers — small, dependency-light building blocks you would otherwise rewrite in every project.
+**Pineapple is an open-source C# library of core utilities for .NET 8, 9, 10, and 11, inspired by Google's Guava.** It gives you guard clauses (preconditions), URL-safe 22-character `ShortGuid`s, a deterministic xxHash `HashCode`, a SQL Server `RowVersion` type, calls-per-minute rate limiting and resource governors, timeouts, exponential backoff, timing scopes, and exception-safe cleanup helpers — small, dependency-light building blocks you would otherwise rewrite in every project.
 
-📖 **Documentation:** https://mill5.github.io/pineapple/
+📖 **Documentation:** [Pineapple guides](https://mill5.github.io/pineapple/)
 
 ## Install
 
@@ -20,8 +20,8 @@ dotnet add package Pineapple.Data   # optional: SQL Server / EF Core helpers
 
 | Package | Targets | What's inside |
 | --- | --- | --- |
-| `Pineapple` | .NET 8, .NET 10 | Preconditions, ShortGuid, HashCode, RowVersion, Cleanup, threading, diagnostics, health checks, Brotli handler |
-| `Pineapple.Data` | .NET 8 (EF Core 8), .NET 10 (EF Core 10) | EF Core model for `INFORMATION_SCHEMA`, SQL Server availability check |
+| `Pineapple` | .NET 8, 9, 10, 11 RC | Preconditions, ShortGuid, HashCode, RowVersion, Cleanup, threading, diagnostics, health checks, Brotli handler |
+| `Pineapple.Data` | .NET 8 (EF Core 8), .NET 9 (EF Core 9), .NET 10/11 (EF Core 10) | EF Core model for `INFORMATION_SCHEMA`, SQL Server availability check |
 
 ## Quick start
 
@@ -75,9 +75,9 @@ See the [documentation site](https://mill5.github.io/pineapple/) for a guide to 
 
 **What is Pineapple?** An Apache-2.0-licensed set of C# utility classes for .NET from [MILL5](https://mill5.com), modeled on Google's Guava library for Java, with 110K+ NuGet downloads.
 
-**Which .NET versions are supported?** .NET 8 (LTS) and .NET 10 (LTS). Version 1.x targeted .NET Standard 2.0; use `Pineapple` 1.0.41 if you still need .NET Framework.
+**Which .NET versions are supported?** .NET 8, 9, 10, and 11 (release candidate). Version 1.x targeted .NET Standard 2.0; use `Pineapple` 1.0.41 if you still need .NET Framework.
 
-**How is `Pineapple.Common.HashCode` different from `System.HashCode`?** `System.HashCode` is randomized per process. Pineapple's `HashCode` uses xxHash32, so the same inputs give the same hash on every machine and every run — useful for caching keys, sharding, and persisted hashes.
+**How is `Pineapple.Common.HashCode` different from `System.HashCode`?** `System.HashCode` is randomized per process. Pineapple's `HashCode` uses xxHash32, so the same inputs and byte encoding give the same hash across application instances — useful for caching keys, sharding, and persisted hashes.
 
 **What is a ShortGuid?** A 128-bit `Guid` encoded as 22 URL-safe Base64 characters (`-` and `_` instead of `+` and `/`, no padding) — 14 characters shorter than the standard 36-character form, with implicit conversions to and from `Guid` and `string`.
 
@@ -85,12 +85,13 @@ More questions: [FAQ](https://mill5.github.io/pineapple/faq/).
 
 ## Building from source
 
-Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download).
+Requires the .NET 11 release-candidate SDK pinned in `global.json`, plus .NET 8, 9, and 10 runtimes for their tests. .NET 11 coverage uses a release candidate until GA.
 
 ```bash
 dotnet build Pineapple.slnx
 dotnet test --solution Pineapple.slnx
 dotnet pack Pineapple.slnx -c Release -o artifacts
+bash scripts/verify-packages.sh artifacts  # requires Python 3
 ```
 
 ## Part of the MILL5 open-source family

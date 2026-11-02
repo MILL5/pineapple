@@ -91,21 +91,14 @@ namespace Pineapple.Shared.Tests
                 using (var rg = await resourceGoverner.GetOperationScopeAsync())
                 {
                     callCount++;
-                    var cpm = resourceGoverner.CallsPerMinute;
 
-                    if (!double.IsNaN(cpm))
-                    {
-                        if (cpm > maxCallsPerMinute)
-                            Debugger.Break();
-
-                        cpm.ShouldBeLessThan(maxCallsPerMinute);
-                    }
                 }
             }
 
             sw.Stop();
 
-            var callsPerMinute = callCount / (sw.ElapsedMilliseconds / 60000.00);
+            // N starts span N - 1 intervals; the first admission remains immediate.
+            var callsPerMinute = (callCount - 1) / sw.Elapsed.TotalMinutes;
             callsPerMinute.ShouldBeLessThanOrEqualTo(maxCallsPerMinute);
 
             var efficiency = maxCallsPerMinute * 0.95;

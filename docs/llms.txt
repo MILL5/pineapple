@@ -4,7 +4,7 @@ sitemap: false
 ---
 # Pineapple
 
-> Pineapple is a free, open-source (Apache-2.0) C# library from MILL5 with Guava-inspired core utilities for .NET 8 and .NET 10. Install with `dotnet add package Pineapple`. SQL Server / EF Core helpers ship separately as `Pineapple.Data`. Built by Microsoft MVP Richard Crane at MILL5.
+> Pineapple is a free, open-source (Apache-2.0) C# library from MILL5 with Guava-inspired core utilities for .NET 8, 9, 10, and 11. Install with `dotnet add package Pineapple`. SQL Server / EF Core helpers ship separately as `Pineapple.Data`. Built by Microsoft MVP Richard Crane at MILL5.
 
 Key facts:
 - NuGet: Pineapple, Pineapple.Data — version {{ site.version }}

@@ -42,3 +42,9 @@ builder.Services
 Remember to send `Accept-Encoding: br` on requests. If you control the primary handler, `HttpClientHandler.AutomaticDecompression = DecompressionMethods.Brotli` achieves the same thing without a delegating handler.
 
 {% include faq.html heading="Questions about health checks and networking" %}
+
+## Bounds and ownership
+
+TCP probes have a five-second connection timeout and return false on connection failure. URL checks succeed only for HTTP 200.
+
+Brotli responses are buffered with a default decoded-size limit of 64 MiB. Larger responses throw `HttpRequestException`; cancellation and content-read failures dispose the received response. To choose another positive byte limit, construct `new BrotliCompressionHandler(maxDecodedBytes)` when registering the handler. Copied content headers exclude the old encoding and length. Callers own request concurrency, so the per-response bound is not a process-wide memory budget.

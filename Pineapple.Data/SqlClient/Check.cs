@@ -13,6 +13,8 @@ namespace Pineapple.Data.SqlClient
 
             var csb = new SqlConnectionStringBuilder(connectionString);
             var datasource = csb.DataSource;
+            if (datasource.StartsWith("tcp:", StringComparison.OrdinalIgnoreCase))
+                datasource = datasource.Substring(4);
 
             var parts = datasource.Split(',');
 
@@ -24,19 +26,21 @@ namespace Pineapple.Data.SqlClient
 
             if (parts.Length == 2)
             {
-                int.TryParse(parts[1], out port);
+                if (!int.TryParse(parts[1], out port) || port < 1 || port > 65535)
+                    return false;
             }
 
             const int NUM_OF_RETRIES = 3;
 
             int count = 0;
 
-            while (count < NUM_OF_RETRIES && !IsAlive(server, port))
+            while (count++ < NUM_OF_RETRIES)
             {
-                count++;
+                if (IsAlive(server, port))
+                    return true;
             }
-            
-            return true;
+
+            return false;
         }
 
         public static bool IsSqlServerAvailable(this SqlConnection connection)

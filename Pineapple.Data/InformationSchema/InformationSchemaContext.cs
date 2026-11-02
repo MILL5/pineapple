@@ -34,11 +34,18 @@ namespace Pineapple.Data.InformationSchema
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
+            modelBuilder.Entity<Table>(entity =>
+            {
+                entity.ToView("TABLES", "INFORMATION_SCHEMA");
+                entity.HasKey(e => new { e.TableCatalog, e.TableSchema, e.TableName });
+                entity.Property(e => e.TableCatalog).HasColumnName("TABLE_CATALOG");
+                entity.Property(e => e.TableSchema).HasColumnName("TABLE_SCHEMA");
+                entity.Property(e => e.TableName).HasColumnName("TABLE_NAME");
+            });
 
             modelBuilder.Entity<Column>(entity =>
             {
-                entity.ToTable("COLUMNS", "INFORMATION_SCHEMA");
+                entity.ToView("COLUMNS", "INFORMATION_SCHEMA");
 
                 entity.HasKey(e => new { e.TableCatalog, e.TableSchema, e.TableName, e.ColumnName });
 
@@ -61,7 +68,7 @@ namespace Pineapple.Data.InformationSchema
 
             modelBuilder.Entity<KeyColumn>(entity =>
             {
-                entity.ToTable("KEY_COLUMN_USAGE", "INFORMATION_SCHEMA");
+                entity.ToView("KEY_COLUMN_USAGE", "INFORMATION_SCHEMA");
 
                 entity.HasKey(e => new { e.TableCatalog, e.TableSchema, e.TableName, e.ColumnName });
 
@@ -85,7 +92,7 @@ namespace Pineapple.Data.InformationSchema
 
             modelBuilder.Entity<TableConstraint>(entity =>
             {
-                entity.ToTable("TABLE_CONSTRAINTS", "INFORMATION_SCHEMA");
+                entity.ToView("TABLE_CONSTRAINTS", "INFORMATION_SCHEMA");
 
                 entity.HasKey(e => new { e.TableCatalog, e.TableSchema, e.TableName, e.ConstraintName });
 

@@ -1,6 +1,6 @@
 ---
 title: Getting started with Pineapple for .NET
-description: Install the Pineapple NuGet package, add guard clauses, ShortGuids, and rate limiting to a .NET 8 or .NET 10 project in five minutes.
+description: Install the Pineapple NuGet package, add guard clauses, ShortGuids, and rate limiting to a .NET 8, 9, 10, or 11 project in five minutes.
 last_reviewed: 2026-10-13
 ---
 
@@ -14,7 +14,7 @@ last_reviewed: 2026-10-13
 dotnet add package Pineapple
 ```
 
-Requirements: .NET 8 or .NET 10. For SQL Server helpers, also add `Pineapple.Data` (see [Pineapple.Data]({{ '/guides/data/' | relative_url }})).
+Requirements: .NET 8, 9, 10, or 11. For SQL Server helpers, also add `Pineapple.Data` (see [Pineapple.Data]({{ '/guides/data/' | relative_url }})).
 
 ## 2. Validate arguments with guard clauses
 
