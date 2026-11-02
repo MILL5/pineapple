@@ -21,7 +21,7 @@
       </a>
       <nav aria-label="Primary">
         {% for item in site.nav %}
-        <a href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a>
+        <a href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% elsif item.url == "/guides/" and page.url contains "/guides/" %} aria-current="location"{% endif %}>{{ item.title }}</a>
         {% endfor %}
         <a href="{{ site.github_repo }}">GitHub</a>
       </nav>

@@ -196,3 +196,38 @@ Strict production Jekyll validation passed:274 local links/assets are valid and 
 - The generated image preserved the intended proportions but returned1731×909 rather than1200×630; site metadata uses the actual output size.
 
 PRs208–211 were closed after their exact heads were preserved in the pushed ancestry of PR203. SonarCloud/SonarQube workflow and token removal are complete; CodeQL and CI remain active. GitHub approval/check state is rechecked against the final head before any merge; no manual review request or protection bypass is used.
+
+## Full requested workflow follow-through
+
+The owner subsequently reintroduced the complete original checklist, including
+the branch flow and Impeccable work. Earlier architecture implementation did not
+establish completion of those missing items.
+
+- Google EGM: project-local skills, personas, resources, and integration docs are
+  installed. `design_draft.md` covers the full architecture. The five Goldfish
+  stages and A0–A7 implementation traceability remain above.
+- Branch flow: `develop` exists; the preserved modernization head is on
+  `feature/complete-project-workflow`. Both long-lived branches enforce PRs,
+  target-specific source checks, Linux/Windows CI, SQL integration, CodeQL,
+  resolved conversations, and administrator enforcement. Human approvals are zero;
+  repository merge methods permit only merge commits.
+- Copilot: an active repository ruleset selects only `refs/heads/develop`, with
+  automatic review on real pushes. This schedules reviews; actual current-head
+  completion remains a separate shipping gate.
+- New branch Goldfish review: `branch_policy_review.md` records the source-trust
+  flaw and its implementation. The proposed organization-owned rule is pinned to
+  a reviewed workflow SHA and restricted to this repository. Its installation and
+  hosted rejection/tamper acceptance remain blocked by missing organization API
+  permission; no source enforcement or merge success is claimed prematurely.
+- Impeccable: portable project-local4.8.0 skill installed; `PRODUCT.md`, `DESIGN.md`,
+  `.impeccable/design.json`, and the docs surface brief capture the current product
+  and visual system. `impeccable_review_report.md` records independent A/B review.
+  All five material findings were implemented and independently checked in the
+  rendered result. Strict Jekyll,277local targets,34JSONLD blocks, and30desktop/mobile
+  theme views passed. Native browser unavailability and Playwright fallback are
+  disclosed in the report.
+
+Renaming the modernization remote branch closed PR203 automatically. Its commits
+and all previously consolidated heads remain in the feature branch; replacement
+review targets `develop`, followed by a separate promotion PR from `develop` to
+`main`. No rebase, force push, direct protected-branch push, or review bypass is used.

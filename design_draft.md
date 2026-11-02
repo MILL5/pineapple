@@ -199,9 +199,15 @@ For future .NET majors, add coverage during release-candidate testing and verify
 
 Changes flow from same-repository `feature/*` branches into `develop`, then from
 `develop` into `main`, through merge commits. Both long-lived branches require
-the Branch policy check, four-runtime Windows/Linux validation, SQL integration,
+the target-specific source check, four-runtime Windows/Linux validation, SQL integration,
 CodeQL analysis, and resolved review conversations, including administrators.
 Direct pushes, force pushes, and branch deletion are not permitted.
+An organization-owned required-workflow rule scopes the source guard to this
+repository and pins its reviewed commit. A PR-supplied check alone is insufficient:
+the PR could replace its own check with a successful no-op. Distinct `Source to main`
+and `Source to develop` contexts prevent reuse of a success after changing the PR target.
+The trusted rule requires organization Administration access, and initial adoption
+is not accepted until the rule and hosted rejection tests have been verified.
 
 The required approval count is zero: the owner selected Copilot cloud review
 instead of a human approval requirement. An active repository ruleset schedules

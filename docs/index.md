@@ -1,5 +1,5 @@
 ---
-description: Pineapple is a free, open-source C# library for .NET 8, 9, 10, and 11 with guard clauses, ShortGuid, deterministic xxHash HashCode, SQL Server RowVersion, rate limiting, timeouts, and backoff.
+description: Pineapple is a free, open-source C# library for .NET 8, 9, 10, and 11 with guard clauses, ShortGuid, deterministic xxHash HashCode, SQL Server RowVersion, timing, and cleanup helpers.
 wide: true
 faq:
   - q: What is Pineapple for .NET?
@@ -17,7 +17,7 @@ faq:
 <section class="hero">
   <div>
     <h1>Pineapple: Guava-inspired core utilities for .NET</h1>
-    <p class="lead"><strong>Pineapple is a free, open-source C# library of small, well-tested building blocks for .NET 8, 9, 10, and 11</strong> — guard clauses, URL-safe ShortGuids, a deterministic hash code, SQL Server row versions, rate limiting, timeouts, and backoff. Stop rewriting the same helpers in every project.</p>
+    <p class="lead"><strong>Reusable C# building blocks for .NET 8, 9, 10, and 11 RC.</strong> Guard clauses, URL-safe ShortGuids, persistable hashes, SQL Server row versions, timing, and cleanup — without rewriting the same helpers in every project.</p>
     <p class="byline">Built by <a href="{{ site.author.url }}">Richard Crane</a>, Microsoft MVP, at <a href="{{ site.org.url }}">MILL5</a> · 110K+ NuGet downloads</p>
     <div class="actions">
       <a class="button" href="{{ '/getting-started/' | relative_url }}">Get started</a>
@@ -39,15 +39,15 @@ dotnet add package Pineapple
 ## What's in the box
 
 <div class="cards">
-  <div class="card"><a href="{{ '/guides/preconditions/' | relative_url }}"><h3>Guard clauses</h3></a><p>One-line argument checks for null, whitespace, ranges, dates, URIs, and GUIDs.</p></div>
-  <div class="card"><a href="{{ '/guides/shortguid/' | relative_url }}"><h3>ShortGuid</h3></a><p>A Guid as 22 URL-safe characters, with implicit conversions to Guid and string.</p></div>
-  <div class="card"><a href="{{ '/guides/hashcode/' | relative_url }}"><h3>Deterministic HashCode</h3></a><p>xxHash32 hashes that are identical across processes, machines, and restarts.</p></div>
-  <div class="card"><a href="{{ '/guides/rowversion/' | relative_url }}"><h3>RowVersion</h3></a><p>Compare and convert SQL Server <code>rowversion</code> values as a 64-bit struct.</p></div>
-  <div class="card"><a href="{{ '/guides/diagnostics/' | relative_url }}"><h3>Diagnostics</h3></a><p>Structured, source-generated <code>ILogger</code> timing in one <code>using</code> block.</p></div>
-  <div class="card"><a href="{{ '/guides/cleanup-and-async/' | relative_url }}"><h3>Cleanup &amp; async</h3></a><p>Exception-safe cleanup and synchronization-context scopes.</p></div>
-  <div class="card"><a href="{{ '/guides/timeouts-and-backoff/' | relative_url }}"><h3>Parallelism</h3></a><p>CPU-aware <code>ParallelOptions</code> for <code>Parallel.ForEach</code> loops.</p></div>
-  <div class="card"><a href="{{ '/guides/migration/' | relative_url }}"><h3>Upgrading to 2.0</h3></a><p>Built-in .NET replacements for the APIs deprecated in 2.0.</p></div>
-  <div class="card"><a href="{{ '/guides/data/' | relative_url }}"><h3>Pineapple.Data</h3></a><p>Query SQL Server <code>INFORMATION_SCHEMA</code> with EF Core and check availability.</p></div>
+  <a class="card card-link" href="{{ '/guides/preconditions/' | relative_url }}"><h3>Guard clauses</h3><p>One-line argument checks for null, whitespace, ranges, dates, URIs, and GUIDs.</p></a>
+  <a class="card card-link" href="{{ '/guides/shortguid/' | relative_url }}"><h3>ShortGuid</h3><p>A Guid as 22 URL-safe characters, with implicit conversions to Guid and string.</p></a>
+  <a class="card card-link" href="{{ '/guides/hashcode/' | relative_url }}"><h3>Deterministic HashCode</h3><p>xxHash32 hashes that are identical across processes, machines, and restarts.</p></a>
+  <a class="card card-link" href="{{ '/guides/rowversion/' | relative_url }}"><h3>RowVersion</h3><p>Compare and convert SQL Server <code>rowversion</code> values as a 64-bit struct.</p></a>
+  <a class="card card-link" href="{{ '/guides/diagnostics/' | relative_url }}"><h3>Diagnostics</h3><p>Structured, source-generated <code>ILogger</code> timing in one <code>using</code> block.</p></a>
+  <a class="card card-link" href="{{ '/guides/cleanup-and-async/' | relative_url }}"><h3>Cleanup &amp; async</h3><p>Exception-safe cleanup and synchronization-context scopes.</p></a>
+  <a class="card card-link" href="{{ '/guides/timeouts-and-backoff/#parallelism' | relative_url }}"><h3>Parallelism</h3><p>CPU-aware <code>ParallelOptions</code> for <code>Parallel.ForEach</code> loops.</p></a>
+  <a class="card card-link" href="{{ '/guides/migration/' | relative_url }}"><h3>Upgrading to 2.0</h3><p>Built-in .NET replacements for the APIs deprecated in 2.0.</p></a>
+  <a class="card card-link" href="{{ '/guides/data/' | relative_url }}"><h3>Pineapple.Data</h3><p>Query SQL Server <code>INFORMATION_SCHEMA</code> with EF Core and check availability.</p></a>
 </div>
 
 ## A taste

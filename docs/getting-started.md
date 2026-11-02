@@ -6,8 +6,6 @@ last_reviewed: 2026-10-13
 
 # Getting started with Pineapple
 
-> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide]({{ '/guides/migration/' | relative_url }}).
-
 **Pineapple installs from NuGet and needs no configuration.** Add the package, import a namespace, and call the helpers directly.
 
 ## 1. Install
@@ -16,7 +14,7 @@ last_reviewed: 2026-10-13
 dotnet add package Pineapple --version 2.0.0
 ```
 
-Requirements: .NET 8, 9, 10, or 11. For SQL Server helpers, also add `Pineapple.Data` (see [Pineapple.Data]({{ '/guides/data/' | relative_url }})).
+Requirements: .NET 8, 9, 10, or 11 RC. For SQL Server helpers, also add `Pineapple.Data` (see [Pineapple.Data]({{ '/guides/data/' | relative_url }})).
 
 ## 2. Validate arguments with guard clauses
 
@@ -62,6 +60,10 @@ using (new TimingScope("LoadCustomers", logger))
 }
 // Debug log: Operation [LoadCustomers] called from [Handle] took 42.17ms
 ```
+
+## Compatibility and upgrades
+
+> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide]({{ '/guides/migration/' | relative_url }}).
 
 ## Next steps
 

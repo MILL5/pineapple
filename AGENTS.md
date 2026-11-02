@@ -8,5 +8,5 @@
 - Google Elephant-Goldfish Model skills are installed in `.agents/skills/egm-*`. Use them for substantial work requiring design decisions; simple, clear fixes can use the normal workflow.
 - Resolve EGM reviewer prompts, standards, and integration docs from `.agents/agents/`, `.agents/resources/`, and `.agents/docs/`. Goldfish reviews require fresh subagent contexts.
 - Keep shared agent guidance in `AGENTS.md` files.
-- Branch flow is `feature/*` → `develop` → `main`, using merge commits. Both long-lived branches require the Branch policy and CI checks; do not push directly. Copilot cloud reviews apply only to PRs targeting `develop`; address current-head feedback before merging. Promotion PRs to `main` must come from `develop`.
+- Branch flow is `feature/*` → `develop` → `main`, using merge commits. Both long-lived branches require the target-specific source and CI checks; do not push directly. The trusted guard is pinned by an organization ruleset scoped only to this repository (see BRANCHING.md). Copilot cloud reviews apply only to PRs targeting `develop`; address current-head feedback before merging. Promotion PRs to `main` must come from `develop`.
 - SonarQube and SonarCloud are retired. Keep CodeQL and CI validation; do not restore Sonar workflows or tokens.

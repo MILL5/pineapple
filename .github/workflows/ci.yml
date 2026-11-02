@@ -19,6 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: node scripts/test-branch-policy.cjs
+      - run: python scripts/test_github_branch_configuration.py
       - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |

@@ -14,14 +14,18 @@ CHECKS = [
 ]
 
 
-def api(path, method="GET", payload=None):
-    command = ["gh", "api", f"repos/{REPOSITORY}/{path}", "--method", method]
+def api(path, method="GET", payload=None, *, organization=False):
+    prefix = "orgs/MILL5" if organization else f"repos/{REPOSITORY}"
+    endpoint = prefix + (f"/{path}" if path else "")
+    command = ["gh", "api", endpoint, "--method", method]
     if payload is not None:
         command += ["--input", "-"]
     result = subprocess.run(
         command, input=json.dumps(payload) if payload is not None else None,
-        text=True, check=True, capture_output=True,
+        text=True, capture_output=True,
     )
+    if result.returncode:
+        raise RuntimeError(f"GitHub {method} {path}: {result.stderr.strip()} {result.stdout.strip()}")
     return json.loads(result.stdout) if result.stdout.strip() else None
 
 
@@ -36,10 +40,36 @@ def main():
     # this reviewed version, so a PR cannot rewrite its own source guard.
     api(f"contents/.github/workflows/branch-policy.yml?ref={args.policy_sha}")
     repository_id = api("")["id"]
+    # Required workflows are an organization rule, restricted here to this
+    # one repository. Fail before settings writes when admin:org is missing.
+    trusted_name = "Pineapple trusted branch source policy"
+    existing_trusted = [rule for rule in api("rulesets?per_page=100", organization=True)
+                        if rule["name"] == trusted_name]
+    if len(existing_trusted) > 1:
+        raise RuntimeError("Duplicate trusted source rulesets; inspect before changing them")
     branches = {branch["name"] for branch in api("branches?per_page=100")}
     if "develop" not in branches:
         sha = api("git/ref/heads/main")["object"]["sha"]
         api("git/refs", "POST", {"ref": "refs/heads/develop", "sha": sha})
+
+    trusted = {
+        "name": trusted_name,
+        "target": "branch", "enforcement": "active", "bypass_actors": [],
+        "conditions": {
+            "repository_id": {"repository_ids": [repository_id]},
+            "ref_name": {"include": ["refs/heads/main", "refs/heads/develop"], "exclude": []},
+        },
+        "rules": [{"type": "workflows", "parameters": {
+            "do_not_enforce_on_create": False,
+            "workflows": [{"path": ".github/workflows/branch-policy.yml",
+                           "repository_id": repository_id, "sha": args.policy_sha}],
+        }}],
+    }
+    if existing_trusted:
+        api(f"rulesets/{existing_trusted[0]['id']}", "PUT", trusted, organization=True)
+    else:
+        api("rulesets", "POST", trusted, organization=True)
+    print(f"Trusted source workflow pinned to {args.policy_sha}")
 
     protection = {
         "required_status_checks": {
@@ -93,27 +123,7 @@ def main():
         api("rulesets", "POST", ruleset)
     print("Automatic Copilot review: PRs into develop, including real pushes")
 
-    trusted = {
-        "name": "Trusted branch source policy",
-        "target": "branch", "enforcement": "active", "bypass_actors": [],
-        "conditions": {"ref_name": {
-            "include": ["refs/heads/main", "refs/heads/develop"], "exclude": [],
-        }},
-        "rules": [{"type": "workflows", "parameters": {
-            "do_not_enforce_on_create": False,
-            "workflows": [{"path": ".github/workflows/branch-policy.yml",
-                           "repository_id": repository_id, "sha": args.policy_sha}],
-        }}],
-    }
-    existing = [rule for rule in api("rulesets?per_page=100")
-                if rule["name"] == trusted["name"] and rule["source_type"] == "Repository"]
-    if len(existing) > 1:
-        raise RuntimeError("Duplicate trusted source rulesets; inspect before changing them")
-    if existing:
-        api(f"rulesets/{existing[0]['id']}", "PUT", trusted)
-    else:
-        api("rulesets", "POST", trusted)
-    print(f"Trusted source workflow pinned to {args.policy_sha}")
+
 
 
 if __name__ == "__main__":
