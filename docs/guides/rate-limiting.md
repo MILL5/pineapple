@@ -14,7 +14,7 @@ faq:
 
 # Rate limiting and resource governors
 
-> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide](migration.md).
+> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide]({{ '/guides/migration/' | relative_url }}).
 
 **Pineapple offers three ways to cap how often code runs, all measured in calls per minute:** a per-call pacing scope, a cross-thread pacing scope keyed by caller, and an async paced-admission governor. All live in `Pineapple.Threading`.
 

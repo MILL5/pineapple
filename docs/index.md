@@ -70,7 +70,7 @@ public Order Create(string customerId, int quantity, DateTime requestedAt)
 ## Why Pineapple
 
 - **Small and focused.** Each type solves one recurring problem and has no framework opinions.
-- **Modern .NET.** Targets .NET 8, 9, 10, and 11 LTS, with SourceLink and symbol packages for step-through debugging.
+- **Modern .NET.** Targets .NET 8, 9, 10, and 11 RC, with SourceLink and symbol packages for step-through debugging.
 - **Tested.** Maintained by MILL5 since 2019, with unit tests run on .NET 8, 9, 10, and 11 in CI.
 - **Free.** Apache 2.0 licensed.
 

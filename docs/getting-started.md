@@ -6,7 +6,7 @@ last_reviewed: 2026-10-13
 
 # Getting started with Pineapple
 
-> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide](guides/migration.md).
+> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide]({{ '/guides/migration/' | relative_url }}).
 
 **Pineapple installs from NuGet and needs no configuration.** Add the package, import a namespace, and call the helpers directly.
 

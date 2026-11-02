@@ -12,7 +12,7 @@ faq:
 
 # Health checks and networking
 
-> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide](migration.md).
+> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide]({{ '/guides/migration/' | relative_url }}).
 
 ## `Health.Check`
 
