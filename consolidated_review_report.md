@@ -179,3 +179,20 @@ The user requested consolidation/check-in with no outstanding PRs, then explicit
 The Sonar workflow and unused repository SONAR_TOKEN secret were removed. No Sonar application installation or Sonar webhook was found for MILL5/pineapple; the unrelated ZenHub webhook was preserved. Historical failure evidence above is retained as history and is not an active Sonar prerequisite.
 
 CodeQL now builds all four target frameworks. SQL tests retain bounded session-lock isolation. Package verification checks all four library/dependency groups and synchronized versions. The reconciled solution builds with zero warnings/errors; fast regression tests pass756cases across all four targets with four expected skips. Full local and hosted CI validation follows on the consolidated head.
+
+## Consolidated final validation
+
+After reconciling all five PR heads, the full solution passed **808tests:804passed, zero failed, four expected Visual Studio skips**, in6m57.73s. Every target passed198core cases plus one expected skip and3data cases; required SQL acceptance passed12/12. Build:zero warnings/errors. Pack, four-runtime isolated consumers, direct/transitive audits, and actionlint also passed.
+
+The tested source/build-file fingerprint remained `e052c6d22a416260677cecaf4983ecc705aa5c40337f029325d7286297c6d94b` throughout. Subsequent documentation-only commits did not change tested C# or build files. Evidence: `/tmp/pineapple-slam-full-tests.log`, `/tmp/pineapple-slam-full-build.log`, and companion source manifests. Temporary SQL resources and credentials were removed.
+
+Strict production Jekyll validation passed:274 local links/assets are valid and all34 JSON-LD blocks parse. Migration links and four-framework metadata were corrected. The final share-preview caption was updated without version-specific claims; image dimensions in site metadata match the PNG.
+
+### Share-preview asset
+
+- Saved file: `docs/assets/og-image.png` (1731×909).
+- Mode: built-in imagegen edit of the existing project image; original generated output remains outside the repository.
+- Final prompt: “Edit the provided existing Pineapple Open Graph image. Make exactly one text correction and preserve all other design, branding, colors, layout, logo, border, and text. Keep the existing 1200 by 630 landscape canvas. Replace the two-line subtitle 'Guava-inspired core utilities for .NET 8' / 'and .NET 10' with these exact two lines: 'Guava-inspired core utilities' / 'for modern .NET'. Keep its existing typography, pale gray color, left alignment, font size, and position. Do not change the Pineapple title, pineapple logo, the five API pill labels, or the bottom MILL5 / Richard Crane / Microsoft MVP attribution. No new elements or extra text. This is a precise text-localization edit of an existing approved graphic, not a redesign.”
+- The generated image preserved the intended proportions but returned1731×909 rather than1200×630; site metadata uses the actual output size.
+
+PRs208–211 were closed after their exact heads were preserved in the pushed ancestry of PR203. SonarCloud/SonarQube workflow and token removal are complete; CodeQL and CI remain active. GitHub approval/check state is rechecked against the final head before any merge; no manual review request or protection bypass is used.

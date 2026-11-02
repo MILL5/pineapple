@@ -47,9 +47,9 @@ defaults:
       layout: default
       image:
         path: /assets/og-image.png
-        width: 1200
-        height: 630
-        alt: Pineapple — Guava-inspired core utilities for .NET 8, 9, 10, and 11 RC, by MILL5
+        width: 1731
+        height: 909
+        alt: Pineapple — Guava-inspired core utilities for modern .NET, by MILL5
 
 nav:
   - title: Getting started
