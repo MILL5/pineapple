@@ -1,9 +1,9 @@
 ---
-description: Pineapple is a free, open-source C# library for .NET 8, 9, 10, and 11 with guard clauses, ShortGuid, deterministic xxHash HashCode, SQL Server RowVersion, timing, and cleanup helpers.
+description: Pineapple is a free, open-source C# library for .NET 8, 9, 10, and 11 RC with guard clauses, ShortGuid, deterministic xxHash HashCode, SQL Server RowVersion, timing, and cleanup helpers.
 wide: true
 faq:
   - q: What is Pineapple for .NET?
-    a: Pineapple is a free, open-source (Apache 2.0) C# library from MILL5 that provides core utilities for .NET 8, 9, 10, and 11 — guard clauses, ShortGuid, a deterministic HashCode, a SQL Server RowVersion type, rate limiting, resource governors, timeouts, exponential backoff, and timing scopes. It is inspired by Google's Guava library for Java.
+    a: Pineapple is a free, open-source (Apache 2.0) C# library from MILL5 that provides core utilities for .NET 8, 9, 10, and 11 RC — guard clauses, ShortGuid, a deterministic HashCode, a SQL Server RowVersion type, rate limiting, resource governors, timeouts, exponential backoff, and timing scopes. It is inspired by Google's Guava library for Java.
   - q: How do I install Pineapple?
     a: "Run `dotnet add package Pineapple`. For SQL Server and Entity Framework Core helpers, also run `dotnet add package Pineapple.Data`."
   - q: Which .NET versions does Pineapple support?
@@ -41,7 +41,7 @@ dotnet add package Pineapple
 <div class="cards">
   <a class="card card-link" href="{{ '/guides/preconditions/' | relative_url }}"><h3>Guard clauses</h3><p>One-line argument checks for null, whitespace, ranges, dates, URIs, and GUIDs.</p></a>
   <a class="card card-link" href="{{ '/guides/shortguid/' | relative_url }}"><h3>ShortGuid</h3><p>A Guid as 22 URL-safe characters, with implicit conversions to Guid and string.</p></a>
-  <a class="card card-link" href="{{ '/guides/hashcode/' | relative_url }}"><h3>Deterministic HashCode</h3><p>xxHash32 hashes that are identical across processes, machines, and restarts.</p></a>
+  <a class="card card-link" href="{{ '/guides/hashcode/' | relative_url }}"><h3>Deterministic HashCode</h3><p>Persistable xxHash32 hashes across processes and restarts with matching input encodings.</p></a>
   <a class="card card-link" href="{{ '/guides/rowversion/' | relative_url }}"><h3>RowVersion</h3><p>Compare and convert SQL Server <code>rowversion</code> values as a 64-bit struct.</p></a>
   <a class="card card-link" href="{{ '/guides/diagnostics/' | relative_url }}"><h3>Diagnostics</h3><p>Structured, source-generated <code>ILogger</code> timing in one <code>using</code> block.</p></a>
   <a class="card card-link" href="{{ '/guides/cleanup-and-async/' | relative_url }}"><h3>Cleanup &amp; async</h3><p>Exception-safe cleanup and synchronization-context scopes.</p></a>

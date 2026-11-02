@@ -27,6 +27,8 @@ applies the GitHub protections and develop-only Copilot ruleset using an authent
 rule scoped only to Pineapple's repository ID and the `main`/`develop` refs. That rule
 pins `.github/workflows/branch-policy.yml` to the reviewed commit, so a PR cannot
 replace its own guard with a successful no-op. Unrelated rulesets are preserved.
+Both long-lived branches must already exist; the updater fails before writes if
+either is absent and never silently creates an unprotected replacement branch.
 
 GitHub requires organization Administration permission (`admin:org` for this CLI's
 OAuth token) for the trusted-workflow rule. Repository administration alone is

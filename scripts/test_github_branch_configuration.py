@@ -13,7 +13,7 @@ spec.loader.exec_module(configuration)
 
 
 class BranchConfigurationTests(unittest.TestCase):
-    def run_configuration(self, *, fail_org_write=False, fail_org_read=False):
+    def run_configuration(self, *, fail_org_write=False, fail_org_read=False, missing_develop=False):
         events = []
 
         def fake_api(path, method="GET", payload=None, *, organization=False):
@@ -23,7 +23,7 @@ class BranchConfigurationTests(unittest.TestCase):
             if path == "" and method == "GET":
                 return {"id": 196690353}
             if path.startswith("branches?"):
-                return [{"name": "main"}, {"name": "develop"}]
+                return [{"name": "main"}] if missing_develop else [{"name": "main"}, {"name": "develop"}]
             if path.startswith("rulesets?"):
                 return []
             return {}
@@ -34,7 +34,7 @@ class BranchConfigurationTests(unittest.TestCase):
             try:
                 configuration.main()
             except RuntimeError:
-                if not (fail_org_write or fail_org_read):
+                if not (fail_org_write or fail_org_read or missing_develop):
                     raise
         return events
 
@@ -46,6 +46,10 @@ class BranchConfigurationTests(unittest.TestCase):
         events = self.run_configuration(fail_org_write=True)
         writes = [(path, org) for path, method, _, org in events if method != "GET"]
         self.assertEqual(writes, [("rulesets", True)])
+
+    def test_missing_develop_does_not_create_an_unprotected_long_lived_branch(self):
+        events = self.run_configuration(missing_develop=True)
+        self.assertTrue(all(method == "GET" for _, method, _, _ in events))
 
     def test_trusted_policy_is_scoped_pinned_and_installed_before_protections(self):
         events = self.run_configuration()

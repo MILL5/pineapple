@@ -48,9 +48,8 @@ def main():
     if len(existing_trusted) > 1:
         raise RuntimeError("Duplicate trusted source rulesets; inspect before changing them")
     branches = {branch["name"] for branch in api("branches?per_page=100")}
-    if "develop" not in branches:
-        sha = api("git/ref/heads/main")["object"]["sha"]
-        api("git/refs", "POST", {"ref": "refs/heads/develop", "sha": sha})
+    if not {"main", "develop"}.issubset(branches):
+        raise RuntimeError("Provision main and develop before applying policy; this updater never creates long-lived branches")
 
     trusted = {
         "name": trusted_name,

@@ -235,3 +235,25 @@ Renaming the modernization remote branch closed PR203 automatically. Its commits
 and all previously consolidated heads remain in the feature branch; replacement
 review targets `develop`, followed by a separate promotion PR from `develop` to
 `main`. No rebase, force push, direct protected-branch push, or review bypass is used.
+
+## Automatic Copilot review follow-through
+
+Copilot review5738369994 covered `cd3d22b` and posted six findings. The three
+documentation findings were applied: remove contradictory SQL availability copy,
+align packaged README/homepage hashes with the matching-input-encoding contract,
+and qualify the LLM/overview runtime copy as .NET11 RC. Hash implementations and
+persisted outputs remain unchanged.
+
+The configuration updater now refuses to create a missing long-lived branch;
+four mocked-API tests establish failure-before-write behavior for missing access,
+failed rule writes, and absent develop, plus correct scope/pinning/order. Both
+long-lived branches already exist, and the fresh Goldfish recheck found no local
+blockers in this revision.
+
+Two MSBuild findings were declined with evidence: on the pinned SDK, separate
+single-property `PackageVersion` and `Version` queries each return plain `2.0.0`.
+[Microsoft's documented behavior](https://learn.microsoft.com/en-us/visualstudio/msbuild/evaluate-items-and-properties)
+confirms single-property raw text; JSON is used for multiple properties/items/target
+results. The existing consumer validation also passed in hosted CI. Both replies
+are recorded and the handled threads resolved. A newer head requires a newer
+completed automatic review and fresh checks before merge.

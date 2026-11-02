@@ -9,7 +9,7 @@
 [![CI](https://github.com/MILL5/pineapple/actions/workflows/ci.yml/badge.svg)](https://github.com/MILL5/pineapple/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/MILL5/pineapple/blob/main/LICENSE)
 
-**Pineapple is an open-source C# library of core utilities for .NET 8, 9, 10, and 11, inspired by Google's Guava.** It gives you guard clauses (preconditions), URL-safe 22-character `ShortGuid`s, a deterministic xxHash `HashCode`, a SQL Server `RowVersion` type, calls-per-minute rate limiting and resource governors, timeouts, exponential backoff, timing scopes, and exception-safe cleanup helpers — small, dependency-light building blocks you would otherwise rewrite in every project.
+**Pineapple is an open-source C# library of core utilities for .NET 8, 9, 10, and 11 RC, inspired by Google's Guava.** It gives you guard clauses (preconditions), URL-safe 22-character `ShortGuid`s, a deterministic xxHash `HashCode`, a SQL Server `RowVersion` type, calls-per-minute rate limiting and resource governors, timeouts, exponential backoff, timing scopes, and exception-safe cleanup helpers — small, dependency-light building blocks you would otherwise rewrite in every project.
 
 📖 **Documentation:** [Pineapple guides](https://mill5.github.io/pineapple/)
 
@@ -46,7 +46,7 @@ public sealed class OrderService(IOrderRepository repository, ILogger<OrderServi
         // A ShortGuid is a Guid encoded as 22 URL-safe characters.
         ShortGuid id = orderId;
 
-        // Deterministic hash: the same cache key on every machine and after every restart.
+        // Same inputs and byte encoding yield the same hash across processes and restarts.
         var cacheKey = HashCode.Combine("order", id.Guid.ToString(), quantity);
 
         // Logs "Operation [LoadOrder] called from [GetAsync] took 12.34ms" at Debug level.

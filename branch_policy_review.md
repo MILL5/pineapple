@@ -54,8 +54,10 @@ needed after promotion merge commits. Hosted acceptance is recorded below.
 A follow-up review found that the trusted-rule write originally came after the
 branch protection writes. **Fixed:** install/update the trusted rule first; missing
 read permission or rejected rule writes cannot replace protections with only a
-PR-supplied check. Three mocked-API tests cover denied read, denied write, scoped
-SHA pinning, and operation order. Hosted installation subsequently succeeded.
+PR-supplied check. Four mocked-API tests cover denied read, denied write, scoped
+SHA pinning, operation order, and missing-branch failure before writes. The updater
+requires both long-lived branches to exist and never creates an unprotected
+replacement. Hosted installation subsequently succeeded.
 
 The actual inline script passes twelve local cases: valid feature/develop promotion,
 invalid sources/targets, empty feature suffix, Dependabot head, and fork rejection.

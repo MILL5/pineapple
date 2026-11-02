@@ -14,7 +14,7 @@ faq:
 dotnet add package Pineapple.Data --version 2.0.0
 ```
 
-**`Pineapple.Data` adds SQL Server helpers on top of Pineapple.** It targets .NET 8 (EF Core 8), .NET 9 (EF Core 9), and .NET 10/11 (stable EF Core 10) and uses `Microsoft.Data.SqlClient` 7.
+**`Pineapple.Data` adds SQL Server helpers on top of Pineapple.** It targets .NET 8 (EF Core 8), .NET 9 (EF Core 9), and .NET 10/11 RC (stable EF Core 10) and uses `Microsoft.Data.SqlClient` 7.
 
 Both packages use version **2.0.0** and are released together. Installing `Pineapple.Data` also brings in `Pineapple`; if your project references both directly, use matching versions. The previous `Pineapple.Data` 1.0.1 targets .NET Core 3.1; only the core `Pineapple` 1.0.41 package targets .NET Standard 2.0.
 
@@ -58,7 +58,7 @@ using Pineapple.Data.SqlClient;
 Check.IsSqlServerAvailable(connectionString);
 ```
 
-> In 2.0.0 this method returns `true` after probing even if every attempt fails, so treat it as a wake-up call rather than a reliable check. Use `Pineapple.Health.Check.IsAlive(server, port)` when you need the result.
+> Returns `false` if all three TCP probes fail. A successful probe establishes TCP reachability only; it does not validate SQL authentication or query readiness.
 {: .callout}
 
 {% include faq.html heading="Questions about Pineapple.Data" %}
