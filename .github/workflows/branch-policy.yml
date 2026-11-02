@@ -1,0 +1,31 @@
+name: Branch policy
+
+on:
+  pull_request:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  branch-policy:
+    name: Source to ${{ github.base_ref }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v8
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const sameRepository = pr.head.repo?.full_name === pr.base.repo.full_name;
+            const source = pr.head.ref;
+            const target = pr.base.ref;
+            const allowed = sameRepository && (
+              (target === 'main' && source === 'develop') ||
+              (target === 'develop' && /^feature\/.+/.test(source))
+            );
+            if (!allowed) {
+              core.setFailed(`Invalid branch flow: ${source} → ${target}. Use a same-repository feature/* → develop → main PR.`);
+            } else {
+              core.info(`Allowed branch flow: ${source} → ${target}`);
+            }

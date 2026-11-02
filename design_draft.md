@@ -195,6 +195,27 @@ For future .NET majors, add coverage during release-candidate testing and verify
 - When: The release workflow runs.
 - Then: Both NuGet packages are built from that source, with the expected target assets and dependency groups. Successful local tests alone do not establish a successful publish or consumer restore.
 
+## Branch and review architecture (owner requirement)
+
+Changes flow from same-repository `feature/*` branches into `develop`, then from
+`develop` into `main`, through merge commits. Both long-lived branches require
+the Branch policy check, four-runtime Windows/Linux validation, SQL integration,
+CodeQL analysis, and resolved review conversations, including administrators.
+Direct pushes, force pushes, and branch deletion are not permitted.
+
+The required approval count is zero: the owner selected Copilot cloud review
+instead of a human approval requirement. An active repository ruleset schedules
+Copilot on PRs targeting `develop` and subsequent real pushes. Shipping still
+verifies a completed review on the current head and handles its findings; the
+automatic-review rule alone does not guarantee review completion. Promotion to
+`main` uses the reviewed `develop` work without requesting a second Copilot pass.
+CodeQL is a separate security scan and continues on both branches.
+
+[BRANCHING.md](BRANCHING.md) documents source restrictions, first adoption,
+Dependabot's feature-branch handoff, and the reproducible settings script.
+The original five Goldfish stages below predate this addition; this workflow
+addition receives its own fresh-context readiness review.
+
 ## Alternatives considered
 
 ### Replace K4os while modernizing dependencies
