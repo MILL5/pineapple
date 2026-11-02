@@ -50,11 +50,17 @@ its consolidated dependency/author-card history were preserved on
 `feature/complete-project-workflow`. Renaming the old remote head closed PR203;
 its replacement targets `develop`. No commits were discarded or rebased.
 
-The workflow is first committed and pushed on the feature branch. The organization
-rule then pins that commit before the first PR is created, so enforcement can run
-without trusting the PR's proposed workflow or first merging into the default branch.
-The first PR carries it into `develop`, then promotion brings it to `main`.
-Required checks must run successfully before either merge; protections are not
-relaxed for adoption. Until the organization rule is installed and hosted source
-rejection/tamper tests pass, source-branch enforcement is not accepted and no merge
-is authorized by the local-only tests.
+The workflow was committed and pushed on the feature branch, and draft PR212
+was created while organization authorization was pending. After authorization,
+organization rule26373889 pinned reviewed commit `cd3d22b`, before any merge.
+It runs without trusting the PR's proposed workflow or first merging into the
+default branch. Hosted probes verified that the pinned guard defeats a forged
+guard and rejects invalid sources; a successful develop check cannot satisfy main
+after same-head retargeting. See [the Goldfish acceptance evidence](branch_policy_review.md).
+
+The real PR carries this work into `develop`, then promotion brings it to `main`.
+Required checks and applicable current-head Copilot review must complete before
+merge; protections are not relaxed for adoption. GitHub did not start the newly
+installed required workflow for an already-open PR's ready transition alone;
+the substantive adoption/acceptance documentation commit supplies the next
+normal synchronization event and receives fresh checks and automatic review.

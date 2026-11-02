@@ -216,9 +216,13 @@ establish completion of those missing items.
   completion remains a separate shipping gate.
 - New branch Goldfish review: `branch_policy_review.md` records the source-trust
   flaw and its implementation. The proposed organization-owned rule is pinned to
-  a reviewed workflow SHA and restricted to this repository. Its installation and
-  hosted rejection/tamper acceptance remain blocked by missing organization API
-  permission; no source enforcement or merge success is claimed prematurely.
+  a reviewed workflow SHA and restricted to this repository. After owner
+  authorization, organization ruleset26373889 was installed successfully, pinned
+  to reviewed commit `cd3d22b`, with no bypass actors. Closed validation PRs213/214
+  proved pinned guard execution despite PR tampering, a valid feature-to-develop
+  path, invalid source rejection, and blocking after same-head retargeting to main.
+  Exact runs and the boundary of local versus hosted cases are in the branch
+  review report. Real feature/develop/main merges remain separate acceptance.
 - Impeccable: portable project-local4.8.0 skill installed; `PRODUCT.md`, `DESIGN.md`,
   `.impeccable/design.json`, and the docs surface brief capture the current product
   and visual system. `impeccable_review_report.md` records independent A/B review.
