@@ -2,6 +2,9 @@ version: 2
 
 multi-ecosystem-groups:
   weekly-dependencies:
+    target-branch: develop
+    pull-request-branch-name:
+      template: "feature/dependencies/{name}"
     schedule:
       interval: weekly
       day: monday

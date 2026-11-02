@@ -39,9 +39,14 @@ for the other after PR retargeting. GitHub's branch-name protection alone does n
 filter PR source branches. Copilot completion is checked by the shipping
 workflow; its automatic-review ruleset schedules reviews, not a required-approval count.
 
-Dependabot opens update proposals against `develop`. Its generated `dependabot/*`
-heads cannot pass the source-branch guard: bring the proposed commits into a
-`feature/*` branch before merging, preserving their original commits.
+Dependabot's weekly version-update group targets `develop` and generates
+`feature/dependencies/*` heads, including its automatic uniqueness digest. This
+uses the group-level `target-branch` and `pull-request-branch-name.template`
+options documented in [GitHub's multi-ecosystem configuration](https://docs.github.com/en/code-security/concepts/supply-chain-security/multi-ecosystem-updates)
+and [branch-name reference](https://docs.github.com/en/code-security/tutorials/secure-your-dependencies/customizing-dependabot-prs#full-example-with-multi-ecosystem-groups).
+These options apply to new version-update PRs. Existing `dependabot/*` heads and
+security-update proposals against the default branch do not get an exemption:
+bring those commits through a `feature/*` PR into `develop`, preserving their history.
 
 ## First adoption
 

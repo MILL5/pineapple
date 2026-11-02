@@ -61,6 +61,10 @@ The actual inline script passes twelve local cases: valid feature/develop promot
 invalid sources/targets, empty feature suffix, Dependabot head, and fork rejection.
 Actionlint passes. These establish script logic and workflow syntax, not trusted
 hosted enforcement. CodeQL stays separate from the required source workflow.
+The existing weekly Dependabot group was also aligned with this branch contract:
+group-level target `develop`, branch template `feature/dependencies/{name}`.
+Security/default-branch and pre-existing proposals must still follow the feature
+handoff; the source guard has no bot exemption.
 
 ## Hosted acceptance
 
