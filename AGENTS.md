@@ -8,3 +8,4 @@
 - Google Elephant-Goldfish Model skills are installed in `.agents/skills/egm-*`. Use them for substantial work requiring design decisions; simple, clear fixes can use the normal workflow.
 - Resolve EGM reviewer prompts, standards, and integration docs from `.agents/agents/`, `.agents/resources/`, and `.agents/docs/`. Goldfish reviews require fresh subagent contexts.
 - Keep shared agent guidance in `AGENTS.md` files.
+- SonarQube and SonarCloud are retired. Keep CodeQL and CI validation; do not restore Sonar workflows or tokens.

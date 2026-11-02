@@ -171,3 +171,11 @@ The package manifest verifier from PR203 was retained and extended to all four t
 This work is isolated on `feature/net8-11-modernization`, based on `origin/main`, preserving the unrelated author-card commit on `docs/author-card`. No remote PR or branch was changed.
 
 Existing [PR203](https://github.com/MILL5/pineapple/pull/203), head `d8cb13c3865edaabfaebeb86bb644cc9744d81e4`, requires deliberate reconciliation before updating it. Its replacement of K4os conflicts with the owner's explicit requirement; its unrelated value-type fixes, tests, and API deprecation policy must not be silently overwritten or imported. Its [failed Sonar job](https://github.com/MILL5/pineapple/actions/runs/40685560733/job/123593305350) fails during scanner initialization with an authentication error, before analysis, and its required review is still outstanding. No review was manually requested, no gate was bypassed, and no package was published.
+
+## Shipping reconciliation
+
+The user requested consolidation/check-in with no outstanding PRs, then explicitly retired both SonarQube and SonarCloud. PR203 now preserves all five open heads: the .NET8–11 implementation, author card from211, and dependency updates208–210. K4os and its byte encoding remain intact; the earlier default-ShortGuid, RowVersion validation, SQL GUID ordering, golden-vector tests, migration documentation, CodeQL, and weekly dependency policy are retained.
+
+The Sonar workflow and unused repository SONAR_TOKEN secret were removed. No Sonar application installation or Sonar webhook was found for MILL5/pineapple; the unrelated ZenHub webhook was preserved. Historical failure evidence above is retained as history and is not an active Sonar prerequisite.
+
+CodeQL now builds all four target frameworks. SQL tests retain bounded session-lock isolation. Package verification checks all four library/dependency groups and synchronized versions. The reconciled solution builds with zero warnings/errors; fast regression tests pass756cases across all four targets with four expected skips. Full local and hosted CI validation follows on the consolidated head.
