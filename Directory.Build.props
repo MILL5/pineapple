@@ -7,7 +7,9 @@
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
+    <!-- Documentation patch: preserve the 2.0.0 assembly identity. -->
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <Company>MILL5</Company>
     <Authors>MILL5</Authors>
     <Product>Pineapple</Product>
