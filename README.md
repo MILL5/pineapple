@@ -1,6 +1,6 @@
 # Pineapple — Guava-inspired core utilities for .NET
 
-> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide](docs/guides/migration.md).
+> Compatibility APIs with platform replacements remain available through 2.x and report migration diagnostics. See the [migration guide](https://mill5.github.io/pineapple/guides/migration/).
 
 <img src="https://raw.githubusercontent.com/MILL5/pineapple/main/pineapple.png" alt="Pineapple logo" width="96" align="right" />
 
