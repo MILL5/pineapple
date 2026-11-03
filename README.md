@@ -11,7 +11,7 @@
 
 **Pineapple is an open-source C# library of core utilities for .NET 8, 9, 10, and 11 RC, inspired by Google's Guava.** It gives you guard clauses (preconditions), URL-safe 22-character `ShortGuid`s, a deterministic xxHash `HashCode`, a SQL Server `RowVersion` type, calls-per-minute rate limiting and resource governors, timeouts, exponential backoff, timing scopes, and exception-safe cleanup helpers — small, dependency-light building blocks you would otherwise rewrite in every project.
 
-📖 **Documentation:** [Pineapple guides](https://mill5.github.io/pineapple/) · [Project documentation](docs/README.md)
+📖 **Documentation:** [Pineapple guides](https://mill5.github.io/pineapple/) · [Project documentation](https://github.com/MILL5/pineapple/blob/main/docs/README.md)
 
 ## Install
 
