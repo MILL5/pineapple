@@ -114,7 +114,7 @@ This is a source-derived description of the incumbent build, not a newly commiss
 - Long-form reading uses a bounded measure; indexes can use a wider grid.
 - Borders and tonal contrast separate content without general elevation.
 
-Evidence: `docs/assets/css/site.css`, `docs/_layouts/default.html`, `docs/index.md`, `docs/guides/index.md`, and `docs/_includes/faq.html`. Values describe the current source; this document does not replace the incumbent identity.
+Evidence: `assets/css/site.css`, `_layouts/default.html`, `index.md`, `guides/index.md`, and `_includes/faq.html`. Values describe the current source; this document does not replace the incumbent identity.
 
 ## Colors
 
