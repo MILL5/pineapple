@@ -60,14 +60,14 @@ flowchart TD
 
 | Area | Source | Responsibility and boundary |
 | --- | --- | --- |
-| Core contracts | [Pineapple/Common](Pineapple/Common) | Preconditions, cleanup, `ShortGuid`, GUID helpers, and deterministic hashing. |
-| Concurrency token | [RowVersion](Pineapple/Data/RowVersion.cs) | SQL rowversion representation and ordering; ships in the core package despite its namespace. |
-| Threading | [Pineapple/Threading](Pineapple/Threading) | Local pacing, governors, operation tracking, timeouts, delays, and synchronization scopes. |
-| Diagnostics | [Pineapple/Diagnostics](Pineapple/Diagnostics) | Scoped timing, logging, and console color handling. |
-| Networking | [Pineapple/Networking](Pineapple/Networking) | Brotli response decoding and HTTP client registration extensions. |
-| Health | [Check](Pineapple/Health/Check.cs) | Process lookup, TCP reachability, and URL response checks. |
-| SQL helpers | [Pineapple.Data](Pineapple.Data) | SqlClient integration and EF queries over `INFORMATION_SCHEMA`. |
-| Validation | [Pineapple.Tests](Pineapple.Tests) | MSTest tests using Shouldly where applicable. |
+| Core contracts | [Pineapple/Common](../Pineapple/Common) | Preconditions, cleanup, `ShortGuid`, GUID helpers, and deterministic hashing. |
+| Concurrency token | [RowVersion](../Pineapple/Data/RowVersion.cs) | SQL rowversion representation and ordering; ships in the core package despite its namespace. |
+| Threading | [Pineapple/Threading](../Pineapple/Threading) | Local pacing, governors, operation tracking, timeouts, delays, and synchronization scopes. |
+| Diagnostics | [Pineapple/Diagnostics](../Pineapple/Diagnostics) | Scoped timing, logging, and console color handling. |
+| Networking | [Pineapple/Networking](../Pineapple/Networking) | Brotli response decoding and HTTP client registration extensions. |
+| Health | [Check](../Pineapple/Health/Check.cs) | Process lookup, TCP reachability, and URL response checks. |
+| SQL helpers | [Pineapple.Data](../Pineapple.Data) | SqlClient integration and EF queries over `INFORMATION_SCHEMA`. |
+| Validation | [Pineapple.Tests](../Pineapple.Tests) | MSTest tests using Shouldly where applicable. |
 
 ### Identifiers, values, and persisted hashes
 
@@ -125,7 +125,7 @@ All four entities have explicit `INFORMATION_SCHEMA` view mappings and composite
 
 ### Dependency policy
 
-Package versions are centralized in [Directory.Packages.props](Directory.Packages.props). Shared build metadata is in [Directory.Build.props](Directory.Build.props); individual project files declare which packages they use.
+Package versions are centralized in [Directory.Packages.props](../Directory.Packages.props). Shared build metadata is in [Directory.Build.props](../Directory.Build.props); individual project files declare which packages they use.
 
 - Retain K4os for the persisted-hash contract. A replacement is explicitly excluded.
 - Retain the HTTP and logging abstractions used by public integration APIs and diagnostics.
@@ -138,11 +138,11 @@ The dependency audit performed on 2026-11-02 reported vulnerable transitive `Sys
 
 ### Build, distribution, and documentation
 
-[global.json](global.json) selects .NET SDK 11.0.100-rc.3.26522.148 with feature-band roll-forward and Microsoft.Testing.Platform. Both libraries, both test projects, and the hash probe target .NET 8, 9, 10, and 11.
+[global.json](../global.json) selects .NET SDK 11.0.100-rc.3.26522.148 with feature-band roll-forward and Microsoft.Testing.Platform. Both libraries, both test projects, and the hash probe target .NET 8, 9, 10, and 11.
 
-[CI](.github/workflows/ci.yml) restores, builds, and tests on Linux and Windows. It also packs on Linux. [Release](.github/workflows/release.yml) runs from version tags, verifies the commit belongs to main and the tag matches the package version, tests, packs, logs into NuGet through Trusted Publishing, pushes packages, and creates a GitHub release.
+[CI](../.github/workflows/ci.yml) restores, builds, and tests on Linux and Windows. It also packs on Linux. [Release](../.github/workflows/release.yml) runs from version tags, verifies the commit belongs to main and the tag matches the package version, tests, packs, logs into NuGet through Trusted Publishing, pushes packages, and creates a GitHub release.
 
-The documentation site lives in [docs](docs) and has a separate [Pages workflow](.github/workflows/pages.yml). Package README content, XML documentation, release notes, and site guides should describe the same contracts. SourceLink and deterministic build settings support tracing a package back to source; they do not prove behavioral correctness.
+The documentation site lives in [docs](.) and has a separate [Pages workflow](../.github/workflows/pages.yml). Package README content, XML documentation, release notes, and site guides should describe the same contracts. SourceLink and deterministic build settings support tracing a package back to source; they do not prove behavioral correctness.
 
 ### Required .NET compatibility matrix
 
@@ -219,7 +219,7 @@ automatic-review rule alone does not guarantee review completion. Promotion to
 `main` uses the reviewed `develop` work without requesting a second Copilot pass.
 CodeQL is a separate security scan and continues on both branches.
 
-[BRANCHING.md](BRANCHING.md) documents source restrictions, first adoption,
+[Branching policy](branching.md) documents source restrictions, first adoption,
 Dependabot's feature-branch handoff, and the reproducible settings script.
 The original five Goldfish stages below predate this addition; this workflow
 addition receives its own fresh-context readiness review.
@@ -283,13 +283,13 @@ The following table records the implementation work packages. Concrete contracts
 
 For every implemented work package, restore and build `Pineapple.slnx`, run the relevant tests on both target frameworks, and run the full solution tests before release. Repeat dependency vulnerability and deprecation checks after package changes. Inspect packed NuGet dependency groups and verify restore from a temporary consumer for each framework.
 
-The implementation was reviewed in a fresh context. Verification results are recorded in the implementation appendix of [the consolidated report](consolidated_review_report.md). No hosted CI success, package publication, or stable .NET 11 acceptance is claimed until those checks actually run.
+The implementation was reviewed in a fresh context. Verification results are recorded in the implementation appendix of [the consolidated report](reviews/consolidated_review_report.md). No hosted CI success, package publication, or stable .NET 11 acceptance is claimed until those checks actually run.
 
 ## Source references
 
-- [README](README.md), [changelog](CHANGELOG.md), and [project guidance](AGENTS.md).
-- [Core project](Pineapple/Pineapple.csproj), [data project](Pineapple.Data/Pineapple.Data.csproj), and [test project](Pineapple.Tests/Pineapple.Tests.csproj).
-- [Hash implementation](Pineapple/Common/HashCode.cs), [input encoding](Pineapple/Common/HashCodeHelper.cs), and [existing hash tests](Pineapple.Tests/HashCodeTests.cs).
-- [HTTP builder integration](Pineapple/Networking/HttpFactory.cs) and [Brotli handler](Pineapple/Networking/BrotliCompressionHandler.cs).
-- [SQL availability](Pineapple.Data/SqlClient/Check.cs) and [schema model](Pineapple.Data/InformationSchema/InformationSchemaContext.cs).
-- [Central versions](Directory.Packages.props), [CI](.github/workflows/ci.yml), and [release workflow](.github/workflows/release.yml).
+- [README](../README.md), [changelog](../CHANGELOG.md), and [project guidance](../AGENTS.md).
+- [Core project](../Pineapple/Pineapple.csproj), [data project](../Pineapple.Data/Pineapple.Data.csproj), and [test project](../Pineapple.Tests/Pineapple.Tests.csproj).
+- [Hash implementation](../Pineapple/Common/HashCode.cs), [input encoding](../Pineapple/Common/HashCodeHelper.cs), and [existing hash tests](../Pineapple.Tests/HashCodeTests.cs).
+- [HTTP builder integration](../Pineapple/Networking/HttpFactory.cs) and [Brotli handler](../Pineapple/Networking/BrotliCompressionHandler.cs).
+- [SQL availability](../Pineapple.Data/SqlClient/Check.cs) and [schema model](../Pineapple.Data/InformationSchema/InformationSchemaContext.cs).
+- [Central versions](../Directory.Packages.props), [CI](../.github/workflows/ci.yml), and [release workflow](../.github/workflows/release.yml).

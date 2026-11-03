@@ -6,7 +6,7 @@
 
 web
 
-The interface covered here is the Jekyll documentation site under `docs/`. The product itself is a pair of C#/.NET libraries, not a hosted application.
+The interface covered here is the Jekyll documentation site under this directory (`docs/` from the repository root). The product itself is a pair of C#/.NET libraries, not a hosted application.
 
 ## Users
 
@@ -35,7 +35,7 @@ Pineapple is published by MILL5. The site credits Richard Crane and uses the exi
 
 ## Evidence on Hand
 
-`design_draft.md` records full architecture. `consolidated_review_report.md` traces Goldfish feedback to implementation and verification. Package projects, tests, `docs/getting-started.md`, `docs/guides/`, `docs/_config.yml`, and the shared layout provide the product facts above. Existing PNG brand assets live in `docs/assets/`. Existing third-party attribution and adoption copy are incumbent content, not newly verified market evidence.
+[Architecture](architecture.md) records the full repository design. [Goldfish review](reviews/consolidated_review_report.md) traces feedback to implementation and verification. Package projects, tests, `getting-started.md`, `guides/`, `_config.yml`, and the shared layout provide the product facts above. Existing PNG brand assets live in `assets/`. Existing third-party attribution and adoption copy are incumbent content, not newly verified market evidence.
 
 ## Product Principles
 

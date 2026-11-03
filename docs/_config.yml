@@ -65,3 +65,9 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  - README.md
+  - architecture.md
+  - branching.md
+  - PRODUCT.md
+  - DESIGN.md
+  - reviews
