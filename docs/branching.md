@@ -72,7 +72,7 @@ organization rule26373889 pinned reviewed commit `cd3d22b`, before any merge.
 It runs without trusting the PR's proposed workflow or first merging into the
 default branch. Hosted probes verified that the pinned guard defeats a forged
 guard and rejects invalid sources; a successful develop check cannot satisfy main
-after same-head retargeting. See [the Goldfish acceptance evidence](branch_policy_review.md).
+after same-head retargeting. See [the Goldfish acceptance evidence](reviews/branch_policy_review.md).
 
 The real PR carries this work into `develop`, then promotion brings it to `main`.
 Required checks and the one applicable Copilot review must complete before

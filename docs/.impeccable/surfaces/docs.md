@@ -1,15 +1,15 @@
 ---
 version: 1
 slug: "docs"
-primary_target: "docs"
-related_targets: ["docs/index.md","docs/guides/index.md","docs/_layouts/default.html","docs/assets/css/site.css"]
+primary_target: "."
+related_targets: ["index.md","guides/index.md","_layouts/default.html","assets/css/site.css"]
 ---
 
 # Pineapple documentation
 
 Mode: Read
 
-Primary target: `docs/`. Related source targets: `docs/assets/css/site.css`, `docs/_layouts/default.html`, `docs/index.md`, `docs/guides/index.md`.
+Primary target: this documentation directory (`docs/` from the repository root). Related source targets: `assets/css/site.css`, `_layouts/default.html`, `index.md`, `guides/index.md`.
 
 ## Direction contract
 
@@ -27,4 +27,4 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
 ## Documentation evidence
 
-DESIGN.md and .impeccable/design.json capture final CSS including the 68ch prose measure, 72rem wrapper, and 640px media rules. No new raster assets were generated. The component preview ramps are synthesized metadata only, not production palette additions. Descriptive metaphor and color names are source-derived language, not user interview findings. Parent finish review owns final rendered acceptance and the verdict.
+DESIGN.md and .impeccable/design.json capture final CSS including the 68ch prose measure, 72rem wrapper, and 640px media rules. No new raster assets were generated. The component preview ramps are synthesized metadata only, not production palette additions. Descriptive metaphor and color names are source-derived language, not user interview findings. The completed review and final verdict are recorded in `reviews/impeccable_review_report.md` relative to the documentation root.
