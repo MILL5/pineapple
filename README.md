@@ -16,11 +16,11 @@
 ## Install
 
 ```bash
-dotnet add package Pineapple --version 2.0.0
-dotnet add package Pineapple.Data --version 2.0.0   # optional: SQL Server / EF Core helpers
+dotnet add package Pineapple --version 2.0.1
+dotnet add package Pineapple.Data --version 2.0.1   # optional: SQL Server / EF Core helpers
 ```
 
-`Pineapple` and `Pineapple.Data` share version **2.0.0** and release together. Keep direct references to both packages on the same version.
+`Pineapple` and `Pineapple.Data` share version **2.0.1** and release together. Keep direct references to both packages on the same version.
 
 | Package | Targets | What's inside |
 | --- | --- | --- |

@@ -7,7 +7,7 @@
     <Title>Pineapple — Guava-inspired core utilities for .NET</Title>
     <Description>Pineapple is a Guava-inspired set of core utilities for .NET: guard clauses (preconditions), ShortGuid, deterministic xxHash-based HashCode, SQL Server RowVersion, rate limiting and resource governors, timing scopes, timeouts, exponential backoff, and safe cleanup helpers.</Description>
     <PackageTags>guava;guard;guard-clauses;preconditions;shortguid;hashcode;xxhash;rowversion;rate-limiting;throttling;resource-governor;backoff;timeout;utilities;dotnet</PackageTags>
-    <PackageReleaseNotes>2.0.0: Targets .NET 8, 9, 10, and 11 RC; retains K4os xxHash and persisted results. Modernizes supported utilities and dependencies; legacy APIs with platform replacements remain available through 2.x with PINE001-PINE008 migration diagnostics. See https://github.com/MILL5/pineapple/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <PackageReleaseNotes>2.0.1: Documentation-only patch correcting the migration-guide link in the packaged README. No runtime behavior, public API, target framework, or external dependency changes. Original 2.0.0 packages remain intact. Migration guide: https://mill5.github.io/pineapple/guides/migration/</PackageReleaseNotes>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>

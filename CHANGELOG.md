@@ -2,6 +2,12 @@
 
 All notable changes to the `Pineapple` and `Pineapple.Data` packages.
 
+## 2.0.1 — 2026-11-03
+
+- Documentation-only patch for both `Pineapple` and `Pineapple.Data`: the embedded README now uses the published [migration guide](https://mill5.github.io/pineapple/guides/migration/) URL instead of the relative `docs/guides/migration.md` link shipped in 2.0.0. The source correction was merged after the 2.0.0 release build (PRs #221 and #222).
+- Both packages advance together to 2.0.1; `Pineapple.Data` references `Pineapple` 2.0.1. Runtime behavior, public APIs, framework targets, external dependencies, and assembly version remain unchanged. The original 2.0.0 packages are not replaced or modified.
+- Package verification checks the embedded README and its NuGet metadata before publication, with regression coverage for missing or relative migration links.
+
 ## Unreleased
 
 - Explicit .NET 8, 9, 10, and 11 RC targets, matching-runtime tests, and local-package consumer checks. Build with the .NET 11 SDK pinned in `global.json`; .NET 11 uses stable EF Core 10 until EF Core 11 GA.
